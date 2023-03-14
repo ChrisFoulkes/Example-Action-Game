@@ -24,10 +24,11 @@ namespace EventCallbacks
     public class SetPlayerFacingDirectionEvent : Event<SetPlayerFacingDirectionEvent>
     {
         public Vector2 direction;
-
-        public SetPlayerFacingDirectionEvent(Vector2 direction)
+        public float duration;
+        public SetPlayerFacingDirectionEvent(Vector2 direction, float time)
         {
             this.direction = direction;
+            duration = time;
         }   
     }
 

@@ -8,10 +8,9 @@ public class Enemy : MonoBehaviour, IDeath
     public Animator animator;
     public HpBarController HpBar;
     public bool deathComplete = false;
-    private SpriteRenderer sprite;
 
     public bool IsAvailable = true;
-    public float damage = 1f;
+    public float damage = -1f;
     public float tickRate = 1f;
     private Pathfinding.AIPath aiPath;
     private BoxCollider2D boxCollider2D;
@@ -22,6 +21,11 @@ public class Enemy : MonoBehaviour, IDeath
         boxCollider2D = GetComponent<BoxCollider2D>();
         aiPath = GetComponent<Pathfinding.AIPath>();
         combatText = GetComponent<FloatingCombatTextController>();
+    }
+
+    public void Start()
+    {
+        boxCollider2D.enabled = true;
     }
 
 

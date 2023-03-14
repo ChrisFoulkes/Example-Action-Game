@@ -28,11 +28,23 @@ public class PlayerAnimationController : MonoBehaviour
 
     private void Update()
     {
+
+        float horizontalInput = Input.GetAxisRaw("Horizontal");
+        float verticalInput = Input.GetAxisRaw("Vertical");
+
+        if (horizontalInput != 0 || verticalInput != 0)
+        {
+            animator.SetBool("isMovementKey", true);
+        }
+        else
+        {
+            animator.SetBool("isMovementKey", false);
+        }
         // Calculate the object's movement direction
         Vector2 movement = (Vector2)transform.position - lastPosition;
 
         // Set the animator parameters based on the movement direction
-        if (Mathf.Abs(movement.x) > Mathf.Abs(movement.y))
+        if (Mathf.Abs(movement.x) > Mathf.Abs(movement.y) *0.75f) //*75% to force diagonals horizontal
         {
             animator.SetFloat("Horizontal", movement.x);
             animator.SetFloat("Vertical", 0f);
@@ -51,12 +63,14 @@ public class PlayerAnimationController : MonoBehaviour
     {
         if (directionEvent.direction == Vector2.left)
         {
-            animator.SetTrigger("forceFaceLeft");
+            animator.SetBool("forceFaceLeft", true);
+            //animator.SetTrigger("forceFaceLeft");
         }
         if (directionEvent.direction == Vector2.right)
         {
 
-            animator.SetTrigger("forceFaceRight");
+            animator.SetBool("forceFaceRight", true);
+            //animator.SetTrigger("forceFaceRight");
         }
         if (directionEvent.direction == Vector2.up)
         {
@@ -68,6 +82,8 @@ public class PlayerAnimationController : MonoBehaviour
 
             animator.SetTrigger("forceFaceDown");
         }
+
+        StartCoroutine(StopForcingDirection(directionEvent.duration));
     }
 
     private void StopMovement()
@@ -85,5 +101,17 @@ public class PlayerAnimationController : MonoBehaviour
     {
         StopMovement();
         animator.SetTrigger("IsDead");
+    }
+
+    private IEnumerator StopForcingDirection(float stopDuration)
+    {
+
+        yield return new WaitForSeconds(stopDuration);
+        {
+            animator.SetBool("forceFaceLeft", false);
+            animator.SetBool("forceFaceRight", false);
+            //animator.SetTrigger("forceFaceUp");
+            //animator.SetTrigger("forceFaceDown");
+        }
     }
 }

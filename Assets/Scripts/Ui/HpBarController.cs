@@ -22,6 +22,10 @@ public class HpBarController : MonoBehaviour
 
     void OnHealthChange(object sender, HealthEventArgs changeEvent) 
     {
+        if (currentValue > maxValue) 
+        {
+            currentValue = maxValue;
+        }
         currentValue += changeEvent.amount;
 
         UpdateHealthBar();

@@ -10,7 +10,7 @@ public class clickToMove : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-
+        ResetPlayerDestination();
         GamePauseEvent.RegisterListener(OnPauseEvent);
 
     }
@@ -25,6 +25,7 @@ public class clickToMove : MonoBehaviour
         if (!GameManager.Instance.isPaused)
         {
             Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            mousePosition.z = 0;
 
             if (Input.GetMouseButtonDown(0))
             {
@@ -43,8 +44,8 @@ public class clickToMove : MonoBehaviour
 
     void ResetPlayerDestination() 
     {
-        player.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
-        gameObject.transform.position = player.position;
+        player.GetComponent<Rigidbody2D>().velocity = Vector3.zero;
+        gameObject.transform.position = (player.position);
     }
 
     void OnPauseEvent(GamePauseEvent pauseEvent) 

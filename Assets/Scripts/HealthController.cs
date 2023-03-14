@@ -32,14 +32,26 @@ public class HealthController : MonoBehaviour, IHealth
     public void ChangeHealth(float amount)
     {
         //need to implement system to handle amount for damage vs healing changed event should not be - AMOUNT 
-        HealthChangedEvent(this, new HealthEventArgs(-amount));
+        HealthChangedEvent(this, new HealthEventArgs(amount));
 
         if (_currentHP > 0)
         {
-            combatTextController.CreateFloatingCombatText("-" + amount, Color.red);
+            if (amount > 0)
+            {
+                combatTextController.CreateFloatingCombatText("+" + amount, Color.green);
+            }
+            else
+            {
+                combatTextController.CreateFloatingCombatText(amount.ToString(), Color.red);
+            }
         }
 
-        _currentHP -= amount;
+        _currentHP += amount;
+
+        if(_currentHP > maximumHealth) 
+        {
+            _currentHP = maximumHealth;
+        }
         if (_currentHP <= 0)
         {
             deathHandler.StartDeath();

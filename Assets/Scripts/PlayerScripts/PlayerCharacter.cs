@@ -10,9 +10,9 @@ public class PlayerCharacter : MonoBehaviour, IDeath
     public Color endColor;
     public float blendDuration;
     public Animator LevelUpEffect;
-    private Pathfinding.AIPath aiPath;
     private bool isDead = false;
     private FloatingCombatTextController combatText;
+    private IMovement movementController;
 
     private float currentXP = 0;
     private float requiredXP = 10;
@@ -20,29 +20,20 @@ public class PlayerCharacter : MonoBehaviour, IDeath
 
     public void Start()
     {
-        aiPath = GetComponent<Pathfinding.AIPath>();
         combatText = GetComponent<FloatingCombatTextController>();
-
-        PlayerStopMovementEvent.RegisterListener(OnStopMovement);
+        movementController= GetComponent<IMovement>(); 
         EnemyKilledEvent.RegisterListener(EnemyKilled);
     }
 
     void OnDestroy()
     {
         EnemyKilledEvent.UnregisterListener(EnemyKilled);
-        PlayerStopMovementEvent.UnregisterListener(OnStopMovement);
-    }
-
-    private void CanPlayerMove(bool canMove) 
-    {
-        aiPath.canMove = canMove;
     }
 
 
     public void StartDeath() 
     {
         isDead = true;
-        CanPlayerMove(false);
         GetComponent<Rigidbody2D>().simulated = false;
 
         PlayerDeathEvent pDeathEvent = new PlayerDeathEvent();
@@ -85,22 +76,5 @@ public class PlayerCharacter : MonoBehaviour, IDeath
         level++;
         LevelUpEffect.SetTrigger("LevelUp");
         combatText.CreateFloatingCombatText("+1 Level", Color.yellow, 0.65f);
-    }
-
-    void OnStopMovement(PlayerStopMovementEvent stopEvent)
-    {
-        StartCoroutine(StopMovementAnimation(stopEvent.duration));
-    }
-
-    // need to adjust this to not cause issues with the death disabling of moving
-    private IEnumerator StopMovementAnimation(float stopDuration)
-    {
-
-        CanPlayerMove(false); 
-        yield return new WaitForSeconds(stopDuration);
-        if (!isDead)
-        {
-            CanPlayerMove(true);
-        }
     }
 }

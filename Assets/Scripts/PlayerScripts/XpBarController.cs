@@ -6,16 +6,16 @@ using UnityEngine.UI;
 
 public class XpBarController : MonoBehaviour
 {
-        public float maxValue;
-        public float currentValue;
+    public float maxValue;
+    public float currentValue;
 
-        public Image imageSprite;
+    public Image imageSprite;
 
 
-        private void Start()
-        { 
-                PlayerExperienceEvent.RegisterListener(OnExpEvent);
-        }
+    private void Start()
+    { 
+        PlayerExperienceEvent.RegisterListener(OnExpEvent);
+    }
 
     private void OnDestroy()
     {
@@ -25,17 +25,17 @@ public class XpBarController : MonoBehaviour
 
 
     void OnExpEvent(PlayerExperienceEvent pXPEvent)
-        {
-            currentValue = pXPEvent.currentExperience;
-            maxValue = pXPEvent.RequiredExperience;
-            UpdateHealthBar();
-        }
+    {
+        currentValue = pXPEvent.currentExperience;
+        maxValue = pXPEvent.RequiredExperience;
+        UpdateHealthBar();
+    }
 
-        void UpdateHealthBar()
-        {
-            float fillAmount = Mathf.Clamp(currentValue / maxValue, 0, 1);
-            Vector3 xpScale = imageSprite.transform.localScale;
-            imageSprite.transform.localScale = new Vector3(fillAmount, xpScale.y, xpScale.z);
-        }
+    void UpdateHealthBar()
+    {
+        float fillAmount = Mathf.Clamp(currentValue / maxValue, 0, 1);
+        Vector3 xpScale = imageSprite.transform.localScale;
+        imageSprite.transform.localScale = new Vector3(fillAmount, xpScale.y, xpScale.z);
+    }
 
 }
