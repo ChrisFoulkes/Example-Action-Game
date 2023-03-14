@@ -39,13 +39,7 @@ public class MovementController: MonoBehaviour, IMovement
     }
     public void ChangeSpeed(float amount) 
     {
-        //need to alter the stopping distance + end point reached to match increasing speeds 
-        //currently cap at 15)
-        if (currentMaxSpeed < 15)
-        {
-            currentMaxSpeed += amount;
-            if (currentMaxSpeed > 15) { currentMaxSpeed = 15; }
-            aiPath.maxSpeed = currentMaxSpeed;
-        }
+        currentMaxSpeed += amount;
+        aiPath.maxSpeed = currentMaxSpeed;
     }
 }

@@ -8,6 +8,7 @@ public class ProjectileManager : MonoBehaviour
     public GameObject projectilePrefab;
     public Transform projectileSpawnPoint;
     private bool IsAvailable = true;
+    public float duration = 0.4f;
     public float cooldown = 0.5f;
     private PlayerStopMovementEvent stopMovementEvent;
     private SetPlayerFacingDirectionEvent setDirectionEvent;
@@ -62,16 +63,16 @@ public class ProjectileManager : MonoBehaviour
             }
 
             SetTheFiringRotation(firingArc, getIncrement(i, firingArc, numProjectiles));
-            GameObject projectile = Instantiate(projectilePrefab, GetClosestPoint(), projectileSpawnPoint.rotation);
+            //GameObject projectile = Instantiate(projectilePrefab, GetClosestPoint(), projectileSpawnPoint.rotation);
 
-
+            GameObject projectile = Instantiate(projectilePrefab, transform.position, Quaternion.Euler(0f, 0f, 0f));
         }
 
         stopMovementEvent = new PlayerStopMovementEvent();
-        stopMovementEvent.duration = 0.3f;
+        stopMovementEvent.duration = duration;
         stopMovementEvent.FireEvent();
 
-        setDirectionEvent = new SetPlayerFacingDirectionEvent(getFacingDirection(), 0.3f);
+        setDirectionEvent = new SetPlayerFacingDirectionEvent(getFacingDirection(), duration);
         setDirectionEvent.FireEvent();
     }
 
@@ -128,12 +129,10 @@ public class ProjectileManager : MonoBehaviour
         float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
 
 
-        Vector3 closestPoint = new Vector3(Mathf.Cos(angle * Mathf.Deg2Rad), Mathf.Sin(angle * Mathf.Deg2Rad), 0) * 0.4f;
+        Vector3 closestPoint = new Vector3(Mathf.Cos(angle * Mathf.Deg2Rad), Mathf.Sin(angle * Mathf.Deg2Rad), 0) * 0.01f;
         closestPoint += projectileSpawnPoint.position;
-
+        
         return closestPoint;
-
-
     }
 
     void OnPlayerDeath(PlayerDeathEvent death)

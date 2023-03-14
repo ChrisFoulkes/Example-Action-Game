@@ -5,10 +5,6 @@ using EventCallbacks;
 
 public class PlayerCharacter : MonoBehaviour, IDeath
 {
-    public HpBarController HpBar;
-    public Color startColor;
-    public Color endColor;
-    public float blendDuration;
     public Animator LevelUpEffect;
     private bool isDead = false;
     private FloatingCombatTextController combatText;

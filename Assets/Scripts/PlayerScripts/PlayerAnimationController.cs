@@ -9,6 +9,7 @@ public class PlayerAnimationController : MonoBehaviour
     // Start is called before the first frame update
 
     private Vector2 lastPosition;
+    private bool isDead = false;
 
     private void Start()
     {
@@ -100,7 +101,9 @@ public class PlayerAnimationController : MonoBehaviour
     void OnPlayerDeath(PlayerDeathEvent death)
     {
         StopMovement();
+        isDead = true;
         animator.SetTrigger("IsDead");
+        animator.SetBool("Dead", true);
     }
 
     private IEnumerator StopForcingDirection(float stopDuration)
@@ -108,8 +111,8 @@ public class PlayerAnimationController : MonoBehaviour
 
         yield return new WaitForSeconds(stopDuration);
         {
-            animator.SetBool("forceFaceLeft", false);
-            animator.SetBool("forceFaceRight", false);
+                animator.SetBool("forceFaceLeft", false);
+                animator.SetBool("forceFaceRight", false);
             //animator.SetTrigger("forceFaceUp");
             //animator.SetTrigger("forceFaceDown");
         }
