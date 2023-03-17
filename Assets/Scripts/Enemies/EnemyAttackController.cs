@@ -89,7 +89,6 @@ public class EnemyAttackController : MonoBehaviour
         // Get the angle of the direction
         float angle = Mathf.Atan2(difference.y, difference.x) * Mathf.Rad2Deg;
 
-        Debug.Log(angle);
         if (angle > 25f && angle <= 130f)
         {
             yAxis = true;

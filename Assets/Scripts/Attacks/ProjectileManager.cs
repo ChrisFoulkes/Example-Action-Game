@@ -133,15 +133,15 @@ public class ProjectileManager : MonoBehaviour
         
         return closestPoint;
     }
-
-    void OnPlayerDeath(PlayerDeathEvent death)
-    {
-        isDead = true;
-    }
     public IEnumerator StartTickCooldown()
     {
         IsAvailable = false;
         yield return new WaitForSeconds(cooldown);
         IsAvailable = true;
     }
+    void OnPlayerDeath(PlayerDeathEvent death)
+    {
+        isDead = true;
+    }
+
 }

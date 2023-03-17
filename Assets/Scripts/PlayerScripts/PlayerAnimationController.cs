@@ -113,8 +113,6 @@ public class PlayerAnimationController : MonoBehaviour
         {
                 animator.SetBool("forceFaceLeft", false);
                 animator.SetBool("forceFaceRight", false);
-            //animator.SetTrigger("forceFaceUp");
-            //animator.SetTrigger("forceFaceDown");
         }
     }
 }

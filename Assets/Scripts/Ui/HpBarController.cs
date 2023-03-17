@@ -23,13 +23,13 @@ public class HpBarController : MonoBehaviour
         hpText.text = currentValue + "/" + maxValue;
     }
 
-    void OnHealthChange(object sender, HealthEventArgs changeEvent) 
+    void OnHealthChange(object sender, HealthEventArgs changeEvent)
     {
+        currentValue += changeEvent.amount;
         if (currentValue > maxValue) 
         {
             currentValue = maxValue;
         }
-        currentValue += changeEvent.amount;
         hpText.text = currentValue + "/" + maxValue;
         UpdateHealthBar();
     }
