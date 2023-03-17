@@ -28,10 +28,10 @@ public class XpBarController : MonoBehaviour
     {
         currentValue = pXPEvent.currentExperience;
         maxValue = pXPEvent.RequiredExperience;
-        UpdateHealthBar();
+        UpdateXPBar();
     }
 
-    void UpdateHealthBar()
+    void UpdateXPBar()
     {
         float fillAmount = Mathf.Clamp(currentValue / maxValue, 0, 1);
         Vector3 xpScale = imageSprite.transform.localScale;

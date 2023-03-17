@@ -100,7 +100,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   projectileSpeed: 0
   projectileLifetime: 10
-  projectileDamage: 2
+  projectileDamage: -20
   animator: {fileID: 0}
 --- !u!95 &8852463432430628989
 Animator:

@@ -1,65 +1,44 @@
 using EventCallbacks;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Enemy : MonoBehaviour, IDeath
 {
-    public Animator animator;
-    public HpBarController HpBar;
-    public bool deathComplete = false;
+    [Header("Enemy Components")]
+    public CircleCollider2D physCollider;
+    public CircleCollider2D hurtBox;
 
-    public bool IsAvailable = true;
-    public float damage = -1f;
-    public float tickRate = 1f;
-    private Pathfinding.AIPath aiPath;
-    private BoxCollider2D boxCollider2D;
-    private FloatingCombatTextController combatText;
+    private bool isDead = false;
 
-    public void Awake()
+    private void Awake()
     {
-        boxCollider2D = GetComponent<BoxCollider2D>();
-        aiPath = GetComponent<Pathfinding.AIPath>();
-        combatText = GetComponent<FloatingCombatTextController>();
     }
 
-    public void Start()
+    private void Start()
     {
-        boxCollider2D.enabled = true;
+        ToggleColliders(true);
     }
 
+    private void LateUpdate()
+    {
+    }
+
+    public bool IsDead()
+    {
+        return isDead;
+    }
 
     public void StartDeath()
     {
+        isDead = true;
         EnemyKilledEvent killedEvent = new EnemyKilledEvent();
         killedEvent.FireEvent();
 
-        boxCollider2D.enabled = false;
-        aiPath.canMove = false;
-        animator.SetBool("IsDead", true);
+        ToggleColliders(false);
     }
 
-    public void CompleteDeath()
+    public void ToggleColliders(bool toggle)
     {
-        Destroy(gameObject);
-    }
-
-    private void OnCollisionStay2D(Collision2D collision)
-    {
-        if (collision.collider.CompareTag("Player"))
-        {
-            if (IsAvailable)
-            {
-                IHealth healthController = collision.gameObject.GetComponent<IHealth>();
-                healthController.ChangeHealth(damage);
-                StartCoroutine(StartTickCooldown());
-            }
-        }
-    }
-    private IEnumerator StartTickCooldown()
-    {
-        IsAvailable = false;
-        yield return new WaitForSeconds(tickRate);
-        IsAvailable = true;
+        physCollider.enabled = toggle;
+        hurtBox.enabled = toggle;
     }
 }

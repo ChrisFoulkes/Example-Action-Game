@@ -26,6 +26,10 @@ public class PlayerCharacter : MonoBehaviour, IDeath
         EnemyKilledEvent.UnregisterListener(EnemyKilled);
     }
 
+    public bool IsDead() 
+    {
+        return isDead;
+    }
 
     public void StartDeath() 
     {
@@ -71,6 +75,6 @@ public class PlayerCharacter : MonoBehaviour, IDeath
     {
         level++;
         LevelUpEffect.SetTrigger("LevelUp");
-        combatText.CreateFloatingCombatText("+1 Level", Color.yellow, 0.65f);
+        combatText.CreateFloatingCombatText("+1 Level", Color.yellow, false, 0.65f);
     }
 }

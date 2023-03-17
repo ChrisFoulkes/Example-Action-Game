@@ -43,8 +43,12 @@ public class AoeBurn : MonoBehaviour
                 if (TriggerList[i] != null) {
                     if (TriggerList[i].CompareTag("Enemy"))
                     {
-                        HealthController enemy = TriggerList[i].GetComponent<HealthController>();
-                        enemy.ChangeHealth(damage);
+
+                        IHealth enemy = TriggerList[i].GetComponentInParent<IHealth>();
+                        if (enemy.CurrentHealth() > 0)
+                        {
+                            enemy.ChangeHealth(damage);
+                        }
                     }
                 }
             }

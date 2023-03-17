@@ -24,7 +24,7 @@ public class ProjectileAttack : MonoBehaviour
     {
         if (collision.CompareTag("Enemy"))
         {
-            IHealth enemy = collision.GetComponent<IHealth>();
+            IHealth enemy = collision.GetComponentInParent<IHealth>();
             if (enemy.CurrentHealth() > 0){
                 enemy.ChangeHealth(projectileDamage);
                 animator.SetBool("OnHit", true);

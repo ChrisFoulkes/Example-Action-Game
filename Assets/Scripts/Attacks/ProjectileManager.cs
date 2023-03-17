@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using EventCallbacks;
 
@@ -63,9 +62,9 @@ public class ProjectileManager : MonoBehaviour
             }
 
             SetTheFiringRotation(firingArc, getIncrement(i, firingArc, numProjectiles));
-            //GameObject projectile = Instantiate(projectilePrefab, GetClosestPoint(), projectileSpawnPoint.rotation);
+            GameObject projectile = Instantiate(projectilePrefab, GetClosestPoint(), projectileSpawnPoint.rotation);
 
-            GameObject projectile = Instantiate(projectilePrefab, transform.position, Quaternion.Euler(0f, 0f, 0f));
+            //GameObject projectile = Instantiate(projectilePrefab, transform.position, Quaternion.Euler(0f, 0f, 0f));
         }
 
         stopMovementEvent = new PlayerStopMovementEvent();
@@ -129,7 +128,7 @@ public class ProjectileManager : MonoBehaviour
         float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
 
 
-        Vector3 closestPoint = new Vector3(Mathf.Cos(angle * Mathf.Deg2Rad), Mathf.Sin(angle * Mathf.Deg2Rad), 0) * 0.01f;
+        Vector3 closestPoint = new Vector3(Mathf.Cos(angle * Mathf.Deg2Rad), Mathf.Sin(angle * Mathf.Deg2Rad), 0) * 0.5f;
         closestPoint += projectileSpawnPoint.position;
         
         return closestPoint;

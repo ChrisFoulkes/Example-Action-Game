@@ -8,7 +8,7 @@ public class DeathKillScript : MonoBehaviour
     {
         if (other.CompareTag("Enemy"))
         {
-            HealthController enemy = other.GetComponent<HealthController>();
+            HealthController enemy = other.GetComponentInParent<HealthController>();
             enemy.Kill();
         }
     }

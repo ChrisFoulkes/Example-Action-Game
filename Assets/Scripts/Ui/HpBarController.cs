@@ -1,23 +1,26 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using TMPro;
 
 public class HpBarController : MonoBehaviour
 {
     private float maxValue;
     private float currentValue;
 
-    public SpriteRenderer amountSprite;
+    public Image amountSprite;
+    public TextMeshProUGUI hpText;
 
-    IHealth healthController;
+    public HealthController healthController;
 
     private void Start()
     {
-        healthController = GetComponentInParent<IHealth>();
 
         maxValue = healthController.GetMaxHP();
         currentValue = maxValue;
         healthController.HealthChangedEvent += OnHealthChange;
+        hpText.text = currentValue + "/" + maxValue;
     }
 
     void OnHealthChange(object sender, HealthEventArgs changeEvent) 
@@ -27,13 +30,15 @@ public class HpBarController : MonoBehaviour
             currentValue = maxValue;
         }
         currentValue += changeEvent.amount;
-
+        hpText.text = currentValue + "/" + maxValue;
         UpdateHealthBar();
     }
 
-    void UpdateHealthBar() 
+
+    void UpdateHealthBar()
     {
         float fillAmount = Mathf.Clamp(currentValue / maxValue, 0, 1);
-        amountSprite.size = new Vector2(fillAmount, amountSprite.size.y);
+        Vector3 xpScale = amountSprite.transform.localScale;
+        amountSprite.transform.localScale = new Vector3(fillAmount, xpScale.y, xpScale.z);
     }
 }

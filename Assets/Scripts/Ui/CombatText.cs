@@ -4,19 +4,21 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.Animations;
 
+
+
 public class CombatText : MonoBehaviour
 {
-    public float destroyTime;
-    public float moveSpeed;
-    public TextMeshPro textMesh;
-  
+    private float destroyTime;
+    private float moveSpeed;
+
+    private TextMeshPro textMesh;
 
     private void Awake()
     {
         textMesh = GetComponent<TextMeshPro>();
     }
 
-    public void init(float duration, float speed) 
+    public void Init(float duration, float speed)
     {
         destroyTime = duration;
         moveSpeed = speed;
@@ -25,14 +27,26 @@ public class CombatText : MonoBehaviour
     public void SetText(string text, Color color)
     {
         textMesh.SetText(text);
-        textMesh.color = color;        // Start fading out text when it has reached 80% of its lifespan
+        textMesh.color = color;
+
+        // Start fading out text when it has reached 80% of its lifespan
         float fadeOutTime = destroyTime * 0.4f;
-        Invoke("FadeOut", destroyTime - fadeOutTime);
+        Invoke(nameof(FadeOut), destroyTime - fadeOutTime);
     }
 
     private void Update()
     {
+        MoveUpwards();
+        UpdateDestroyTime();
+    }
+
+    private void MoveUpwards()
+    {
         transform.position += new Vector3(0, moveSpeed) * Time.deltaTime;
+    }
+
+    private void UpdateDestroyTime()
+    {
         destroyTime -= Time.deltaTime;
         if (destroyTime <= 0)
         {
@@ -57,7 +71,5 @@ public class CombatText : MonoBehaviour
             textMesh.color = Color.Lerp(startColor, new Color(startColor.r, startColor.g, startColor.b, 0), t);
             yield return null;
         }
-
-        Destroy(gameObject);
     }
 }

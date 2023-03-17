@@ -5,10 +5,9 @@ using Pathfinding;
 
 public class EnemyTarget : AIDestinationSetter
 {
-    // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
-        GameObject player = GameObject.Find("Player");
+        GameObject player = GameObject.Find("EnemyTargetPosition");
         if (player != null)
         {
             target = player.transform;
