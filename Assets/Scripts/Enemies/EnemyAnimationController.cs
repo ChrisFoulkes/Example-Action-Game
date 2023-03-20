@@ -17,14 +17,20 @@ public class EnemyAnimationController : MonoBehaviour
     public EnemyMovementController movementController;
     public GameObject parent;
 
+    public bool stateChanged = false;   
+
     void Awake()
     {
         animator = GetComponent<Animator>();
+
+        //Set Default State
         currentState = EnemyState.Idle;
     }
 
     public void SetState(EnemyState newState)
     {
+        stateChanged = (currentState != newState);
+
         currentState = newState;
         UpdateAnimation();
     }
@@ -56,7 +62,10 @@ public class EnemyAnimationController : MonoBehaviour
                 animator.SetBool("Moving", true);
                 break;
             case EnemyState.Attack:
-                SetAttackingDirection();
+                if (stateChanged)
+                {
+                    SetAttackingDirection();
+                }
                 animator.SetBool("IsAttacking", true);
                 break;
             case EnemyState.Die:
@@ -76,6 +85,7 @@ public class EnemyAnimationController : MonoBehaviour
 
     public void SetAttackingDirection()
     {
+        stateChanged = false;
         AttackAnimationDirection attackDirection = attackController.GetAnimAttackingDirection();
         animator.SetBool("AttackingY", attackDirection.yAxis);
         animator.SetFloat("AttackingDirectionY", attackDirection.difference.y);

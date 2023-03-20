@@ -20,17 +20,22 @@ public class EnemyMovementController : MonoBehaviour, IMovement
 {
     AIPath aiPath;
 
-    public float baseMovementSpeed = 3f;
+    private float baseMovementSpeed = 3f;
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         aiPath= GetComponentInParent<AIPath>();
 
 
 
-        SetInitialMoveSpeed();
     }
 
+
+    public void Initialize(float initialMovement)
+    {
+        baseMovementSpeed = initialMovement; 
+        SetInitialMoveSpeed();
+    }
 
 
     public MovementAnimationState GetMovementAnimState()

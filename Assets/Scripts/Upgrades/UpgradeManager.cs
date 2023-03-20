@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.UIElements;
 
 public class UpgradeManager : MonoBehaviour
 {
@@ -12,31 +13,40 @@ public class UpgradeManager : MonoBehaviour
     public TextMeshProUGUI pendingUpgradesText;
     public GameObject upgradePanel;
 
-    public Button upgradeButton;
-
     public CharacterUpgradeHandler characterUpgradeHandler;
 
-    public List<UpgradeData> upgradeData= new List<UpgradeData>(); 
+    [SerializeField] private List<UpgradeData> upgradeData= new List<UpgradeData>();
 
-    public List<UpgradeData> shownUpgrades = new List<UpgradeData>();
+    [SerializeField] private List<UpgradeData> shownUpgrades = new List<UpgradeData>();
 
-    public List<UpgradePanel> upgradePanels = new List<UpgradePanel>();
+    [SerializeField] private List<UpgradePanel> upgradePanels = new List<UpgradePanel>();
 
     private void Awake()
     {
         characterUpgradeHandler = GetComponent<CharacterUpgradeHandler>();
-        characterUpgradeHandler = new CharacterUpgradeHandler(player);
     }
 
     private void Start()
     {
         PlayerExperienceEvent.RegisterListener(OnExpEvent);
+        characterUpgradeHandler.Initialize(player);
     }
 
     private void OnDestroy()
     {
         PlayerExperienceEvent.UnregisterListener(OnExpEvent);
     }
+    void Update()
+    {
+        if (Input.GetButtonDown("Fire2"))
+        {
+            if (pendingUpgrades > 0 && !GameManager.Instance.isPaused)
+            {
+                OpenUpgradePanel();
+            }
+        }
+    }
+
 
 
     void OnExpEvent(PlayerExperienceEvent pXPEvent)
@@ -51,10 +61,7 @@ public class UpgradeManager : MonoBehaviour
 
     void TogglePendingUpgradesDisplay(bool enable) 
     {
-
         pendingUpgradesText.gameObject.SetActive(enable);
-
-
     }
 
     public void ChooseUpgrade(int positon) 
@@ -70,19 +77,43 @@ public class UpgradeManager : MonoBehaviour
             pendingUpgradesText.text = "+" + pendingUpgrades;
         }
 
+
         UpgradeData udata = shownUpgrades[positon];
 
-        if (udata.baseUpgradeType == BaseUpgradeType.characterUpgrade) 
+        switch (udata.baseUpgradeType)
         {
-            if (udata.GetType() != typeof(CharacterUpgradeData))
-            {
-                Debug.LogWarning(udata.name + "erronious base-type incorrectly flagged as CharacterUpgrade");
-            }
-            else 
-            {
-                characterUpgradeHandler.HandleUpgrade((CharacterUpgradeData)udata);
-            }
+            case BaseUpgradeType.characterUpgrade:
+                if (udata is CharacterUpgradeData characterUpgradeData)
+                {
+                    HandleCharacterUpgrade(characterUpgradeData);
+                }
+                else
+                {
+                    Debug.LogWarning(udata.name + "erroneous base-type incorrectly flagged as CharacterUpgrade");
+                }
+                break;
+
+            case BaseUpgradeType.abilityUpgrade:
+                if (udata is ProjectileUpgradeData abilityUpgradeData)
+                {
+                    HandleAbilityUpgrade(abilityUpgradeData);
+                }
+                else
+                {
+                    Debug.LogWarning(udata.name + "erroneous base-type incorrectly flagged as AbilityUpgrade");
+                }
+                break;
         }
+    }
+
+    private void HandleCharacterUpgrade(CharacterUpgradeData upgradeData)
+    {
+        characterUpgradeHandler.HandleCharacterUpgrade(upgradeData);
+    }
+
+    private void HandleAbilityUpgrade(ProjectileUpgradeData upgradeData)
+    {
+        characterUpgradeHandler.HandleAttackUpgrade(upgradeData);
     }
 
     void GenerateAvailableUpgrades(int noOfUpgrades)
@@ -105,17 +136,6 @@ public class UpgradeManager : MonoBehaviour
             shownUpgrades.Add(selectedUpgrade);
 
             availableUpgrades.RemoveAt(randomIndex);
-        }
-    }
-
-    void Update()
-    {
-        if (Input.GetButtonDown("Fire2"))
-        {
-            if (pendingUpgrades > 0 && !GameManager.Instance.isPaused)
-            {
-                OpenUpgradePanel();
-            }
         }
     }
 

@@ -1,4 +1,6 @@
 using EventCallbacks;
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class Enemy : MonoBehaviour, IDeath
@@ -7,19 +9,16 @@ public class Enemy : MonoBehaviour, IDeath
     public CircleCollider2D physCollider;
     public CircleCollider2D hurtBox;
 
-    private bool isDead = false;
+    [SerializeField] private Vector3 targetScale = new Vector3(5f, 5f, 1);
+    [SerializeField] private float scaleDuration = 0.5f;
 
-    private void Awake()
-    {
-    }
+    public Transform scaleParentTransform;
+
+    private bool isDead = false;
 
     private void Start()
     {
         ToggleColliders(true);
-    }
-
-    private void LateUpdate()
-    {
     }
 
     public bool IsDead()
@@ -29,8 +28,11 @@ public class Enemy : MonoBehaviour, IDeath
 
     public void StartDeath()
     {
+        StartCoroutine(ScaleCoroutine());
         isDead = true;
+
         EnemyKilledEvent killedEvent = new EnemyKilledEvent();
+        killedEvent.xpValue = 10;
         killedEvent.FireEvent();
 
         ToggleColliders(false);
@@ -40,5 +42,23 @@ public class Enemy : MonoBehaviour, IDeath
     {
         physCollider.enabled = toggle;
         hurtBox.enabled = toggle;
+    }
+
+
+    //DeathScaling Effect
+    private IEnumerator ScaleCoroutine()
+    {
+        Vector3 initialScale = scaleParentTransform.localScale;
+        float elapsedTime = 0;
+
+        while (elapsedTime < scaleDuration)
+        {
+            elapsedTime += Time.deltaTime;
+            float progress = elapsedTime / scaleDuration;
+            scaleParentTransform.localScale = Vector3.Lerp(initialScale, targetScale, progress);
+            yield return null;
+        }
+
+        scaleParentTransform.localScale = targetScale;
     }
 }

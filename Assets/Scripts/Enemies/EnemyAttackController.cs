@@ -52,6 +52,11 @@ public class EnemyAttackController : MonoBehaviour
         isAvailable = true;
     }
 
+    public void Initialize(float initialDamage) 
+    {
+        damage = initialDamage;
+    }
+
     // Update is called once per frame
     void FixedUpdate()
     {
@@ -169,12 +174,13 @@ public class EnemyAttackController : MonoBehaviour
 
     public void OnHit(Collider2D collision)
     {
-        IHealth player = collision.GetComponentInParent<IHealth>();
+        IHealth player = collision.GetComponent<IHealth>();
+
         if (player.CurrentHealth() > 0 && !hasHit)
         {
             player.ChangeHealth(damage);
+            hasHit = true;
         }
 
-        hasHit = true;
     }
 }

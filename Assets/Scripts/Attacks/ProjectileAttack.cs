@@ -4,17 +4,26 @@ using UnityEngine;
 
 public class ProjectileAttack : MonoBehaviour
 {
-    public float projectileSpeed;
-    public float projectileLifetime;
-    public int projectileDamage;
+    private float projectileSpeed;
+    private float projectileLifetime;
+    private float projectileDamage;
+
 
     public Animator animator;
     private Rigidbody2D rb2d;
 
-    private void Start()
+    private void Awake()
     {
         rb2d = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
+
+    }
+
+    public void Initialize(float dam, float liftime, float speed) 
+    {
+        projectileSpeed = speed;
+        projectileLifetime = liftime;
+        projectileDamage = dam;
 
         rb2d.velocity = transform.up * projectileSpeed;
         StartCoroutine(Lifespan(projectileLifetime));

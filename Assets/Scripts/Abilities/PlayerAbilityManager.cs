@@ -38,6 +38,43 @@ public class PlayerAbilityManager : MonoBehaviour
         }
     }
 
+
+    public void UpgradeAbility(int slot, ProjectileUpgradeTypes upgradeType, float amount) 
+    {
+        if (slot > abilities.Count) 
+        {
+            Debug.LogWarning("altering ability in empty slot: " + slot);
+            return;
+        }
+
+        if (abilities[slot].abilityType == AbilityType.projectile)
+        {
+            ProjectileAbility projAbility = abilities[0] as ProjectileAbility;
+
+            if (upgradeType == ProjectileUpgradeTypes.projectileDamage)
+            {
+                projAbility.projData.projectileDamage += Mathf.RoundToInt(amount);
+            }
+            if (upgradeType == ProjectileUpgradeTypes.projectileCount)
+            {
+                projAbility.projData.projectileCount += Mathf.RoundToInt(amount);
+            }
+            if (upgradeType == ProjectileUpgradeTypes.projectileArc) 
+            {
+                if (projAbility.projData.firingArc + amount < 360)
+                {
+                    projAbility.projData.firingArc += amount;
+                }
+                else 
+                {
+                    projAbility.projData.firingArc = 360;
+                }
+
+            }
+        }
+
+
+    }
     private IEnumerator StartTickCooldown(Ability ability)
     {
         ability.SetCoolDown(true);

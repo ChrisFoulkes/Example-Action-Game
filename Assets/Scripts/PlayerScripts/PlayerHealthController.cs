@@ -2,6 +2,10 @@ using UnityEngine;
 
 public class PlayerHealthController : HealthController
 {
+    public void Start()
+    {
+        Initialize(maximumHealth);
+    }
     protected override void GenerateCombatText(float amount)
     {
         if (amount > 0)

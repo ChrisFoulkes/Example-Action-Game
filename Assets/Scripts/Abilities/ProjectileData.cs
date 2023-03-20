@@ -5,7 +5,7 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "Projectile", menuName = "Abilities/ProjectileData")]
 public class ProjectileData : AbilityData
 {
-    [Header("Projectile Data")]
+    [Header("Projectile Base Data")]
     public float projectileSpeed;
     public float projectileLifetime;
     public int projectileDamage;

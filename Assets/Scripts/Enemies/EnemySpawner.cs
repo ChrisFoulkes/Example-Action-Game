@@ -6,18 +6,14 @@ using EventCallbacks;
 public class EnemySpawner : MonoBehaviour
 {
     public float count = 0;
-    public GameObject enemyPrefab;
-    public float spawnDelay = 1f;
     public float spawnRadius = 5f;
     public float minSpawnDistance = 2f;
 
-    private float timeSinceLastSpawn;
     private Transform[] enemyPositions;
-    private bool spawnActive = true; 
+    private bool spawnActive = true;
 
     void Start()
     {
-
 
         PlayerDeathEvent.RegisterListener(OnPlayerDeath);
     }
@@ -29,27 +25,20 @@ public class EnemySpawner : MonoBehaviour
 
     void FixedUpdate()
     {
-        if (spawnActive)
-        {
-            timeSinceLastSpawn += Time.deltaTime;
-
-            if (timeSinceLastSpawn >= spawnDelay)
-            {
-                SpawnEnemy();
-            }
-
-        }
     }
 
-    private void SpawnEnemy()
+    public bool IsSpawnActive() 
+    {
+        return spawnActive;
+    }
+
+    public GameObject SpawnEnemy(GameObject enemyPrefab)
     {
         enemyPositions = new Transform[transform.childCount];
         for (int i = 0; i < transform.childCount; i++)
         {
             enemyPositions[i] = transform.GetChild(i);
         }
-
-        timeSinceLastSpawn = 0f;
 
         Vector2 spawnPosition = GetRandomPosition();
         count = 0;
@@ -65,6 +54,8 @@ public class EnemySpawner : MonoBehaviour
 
         enemyobj.name = "enemy-" + count; 
         count++;
+
+        return enemyobj;
     }
 
     Vector2 GetRandomPosition()

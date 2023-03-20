@@ -8,6 +8,7 @@ using EventCallbacks;
 
 public class HealthController : MonoBehaviour, IHealth
 {
+    //needs to be replaced with event system
     public event EventHandler<HealthEventArgs> HealthChangedEvent;
     public bool shouldUpdateHealthBar;
     public float maximumHealth = 20;
@@ -25,11 +26,18 @@ public class HealthController : MonoBehaviour, IHealth
     public void Awake()
     {
         deathHandler = GetComponent<IDeath>();
-        _currentHP = maximumHealth;
         combatTextController = GetComponent<FloatingCombatTextController>();
     }
 
-    public void ChangeHealth(float amount)
+
+    public void Initialize(float initialHealth)
+    {
+        maximumHealth = initialHealth;
+        _currentHP = maximumHealth;
+
+    }
+
+        public void ChangeHealth(float amount)
     {
         //need to implement system to handle amount for damage vs healing changed event should not be - AMOUNT 
 

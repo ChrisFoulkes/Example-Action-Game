@@ -40,11 +40,13 @@ namespace EventCallbacks
     public class PlayerExperienceEvent : Event<PlayerExperienceEvent>
     {
         public float currentExperience;
+        public int currentLevel;
         public float RequiredExperience;
         public bool isLevelUP;
 
-        public PlayerExperienceEvent(bool isLevel, float reqXP, float xp)
+        public PlayerExperienceEvent(bool isLevel, float reqXP, float xp, int Level)
         {
+            currentLevel = Level;
             isLevelUP = isLevel;
             RequiredExperience = reqXP;
             currentExperience = xp;

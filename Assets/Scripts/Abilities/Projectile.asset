@@ -15,10 +15,10 @@ MonoBehaviour:
   abilityName: Fireball
   abilityIcon: {fileID: 21300000, guid: 5d4f4b894f2892941803d328c0320b2e, type: 3}
   abilityType: 0
-  cooldown: 2
+  cooldown: 0.4
   projectileSpeed: 1
   projectileLifetime: 2
-  projectileDamage: 5
+  projectileDamage: -1
   castTime: 0.4
   ProjectileCount: 3
   firingArc: 15

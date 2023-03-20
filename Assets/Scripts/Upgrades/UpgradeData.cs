@@ -14,7 +14,7 @@ public enum UpgradeTier
 public enum BaseUpgradeType
 { 
     characterUpgrade, 
-    attackUpgrade
+    abilityUpgrade
 }
 
 [CreateAssetMenu(fileName = "UpgradeData", menuName = "ScriptableObjects/UpgradeData")]

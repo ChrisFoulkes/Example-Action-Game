@@ -8,4 +8,9 @@ namespace EventCallbacks
     {
         public bool isPaused;
     }
+
+    public class WaveCompleteEvent : Event<WaveCompleteEvent> 
+    {
+        public int completedWave;
+    }
 }

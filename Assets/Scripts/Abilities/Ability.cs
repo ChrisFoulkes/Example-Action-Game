@@ -8,6 +8,8 @@ public abstract class Ability
     private bool IsAvailable = true;
     public float cooldown { get; private set; }
 
+    public AbilityType abilityType { get; private set; }
+
     public void SetCoolDown(bool isOnCooldown) 
     {
         IsAvailable = !isOnCooldown;
@@ -15,6 +17,7 @@ public abstract class Ability
     public Ability(AbilityData aData) 
     {
         cooldown = aData.cooldown;
+        abilityType = aData.abilityType;
     }
     public abstract void CastAbility();
 

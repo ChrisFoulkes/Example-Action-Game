@@ -225,6 +225,7 @@ GameObject:
   - component: {fileID: 8652212903738027419}
   - component: {fileID: 532766896}
   - component: {fileID: 5825696153760021267}
+  - component: {fileID: 6423310324667571686}
   m_Layer: 7
   m_Name: EnemyController
   m_TagString: Untagged
@@ -277,6 +278,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   physCollider: {fileID: 8652212902047824168}
   hurtBox: {fileID: 8652212903805053213}
+  targetScale: {x: 1.3, y: 1.3, z: 1}
+  scaleDuration: 0.5
+  scaleParentTransform: {fileID: 8652212902664573222}
 --- !u!114 &4813520092227955515
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -322,7 +326,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 18e4aa85e03304c449bc1e359bfc3235, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  baseMovementSpeed: 3.5
 --- !u!114 &5825696153760021267
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -350,6 +353,26 @@ MonoBehaviour:
   isInRange: 0
   isInAttack: 0
   prefabHitbox: {fileID: 5645769922236084490, guid: a3bf5e131105f9e4a89464827c3180db, type: 3}
+--- !u!114 &6423310324667571686
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8652212903738027423}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f781ddc888d2a8049806690f9a6477e2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enemyStats:
+    health: 2
+    healthGrowthFactor: 0.33
+    attackDamage: -1
+    damageGrowthFactor: 1
+    movementSpeed: 1.5
+    movementSpeedGrowthFactor: 0.33
+  scaleParentTransform: {fileID: 8652212902664573222}
 --- !u!1 &8652212903805053187
 GameObject:
   m_ObjectHideFlags: 0

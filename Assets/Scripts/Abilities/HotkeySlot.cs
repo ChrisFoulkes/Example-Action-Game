@@ -26,14 +26,12 @@ public class HotkeySlot : MonoBehaviour
             currentCooldown -= Time.deltaTime;
             if (currentCooldown <= 0)
             {
-                Debug.Log("cooldown complete!");
                 isOnCooldown = false;
                 //KeytextObj.SetActive(true);
                 cooldownImage.fillAmount = 0;
             }
             else
             {
-                Debug.Log("TIME: " + currentCooldown/ cooldownDuration);
                 cooldownImage.fillAmount = (currentCooldown/ cooldownDuration);
             }
 

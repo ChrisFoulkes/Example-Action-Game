@@ -3,16 +3,32 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ProjectileAbility : Ability
+
+public class ActiveProjectileData 
 {
     //projectile activity --
-    private float projectileSpeed;
-    private float projectileLifetime;
-    private int projectileDamage;
+    public float projectileSpeed;
+    public float projectileLifetime;
+    public int projectileDamage;
     //projectile firing -- 
-    private int ProjectileCount;
-    private float firingArc;
-    private float castTime;
+    public int projectileCount;
+    public float firingArc;
+    public float castTime;
+
+    public ActiveProjectileData(float projectileSpeed, float projectileLifetime, int projectileDamage, int projectileCount, float firingArc, float castTime)
+    {
+        this.projectileSpeed = projectileSpeed;
+        this.projectileLifetime = projectileLifetime;
+        this.projectileDamage = projectileDamage;
+        this.projectileCount = projectileCount;
+        this.firingArc = firingArc;
+        this.castTime = castTime;
+    }
+
+}
+public class ProjectileAbility : Ability
+{
+    public  ActiveProjectileData projData;
 
     private ProjectileAttack projectileAttack;
     private Transform caster;
@@ -20,13 +36,8 @@ public class ProjectileAbility : Ability
 
     public ProjectileAbility(ProjectileData aData, Transform casterTransform, Transform projectileSpawnPos): base(aData)
     {
-        projectileSpeed = aData.projectileSpeed;
-        projectileLifetime = aData.projectileLifetime;
-        projectileDamage= aData.projectileDamage;
+        projData = new ActiveProjectileData(aData.projectileSpeed, aData.projectileLifetime, aData.projectileDamage, aData.ProjectileCount, aData.firingArc, aData.castTime);
 
-        ProjectileCount = aData.ProjectileCount;
-        firingArc= aData.firingArc;
-        castTime = aData.castTime;
         projectileAttack = aData.projectilePrefab;
 
         caster = casterTransform;
@@ -37,26 +48,25 @@ public class ProjectileAbility : Ability
      public override void CastAbility()
     {
 
-        for (int i = 0; i < ProjectileCount; i++)
+        for (int i = 0; i < projData.projectileCount; i++)
         {
 
             //ignore firing arc for singular projectiles 
-            if (ProjectileCount == 1)
+            if (projData.projectileCount == 1)
             {
-                firingArc = 0;
+                projData.firingArc = 0;
             }
 
-            SetTheFiringRotation(firingArc, getIncrement(i, firingArc, ProjectileCount));
-            GameObject projectile = Object.Instantiate(projectileAttack.gameObject, GetClosestPoint(), projectileSpawnPoint.rotation);
-
-            //GameObject projectile = Instantiate(projectilePrefab, transform.position, Quaternion.Euler(0f, 0f, 0f));
+            SetTheFiringRotation(projData.firingArc, getIncrement(i, projData.firingArc, projData.projectileCount));
+            GameObject projectile = Object.Instantiate(projectileAttack.gameObject, GetClosestPointToMouse(caster.position, projectileSpawnPoint.position), projectileSpawnPoint.rotation);
+            projectile.GetComponent<ProjectileAttack>().Initialize(projData.projectileDamage, projData.projectileSpeed, projData.projectileLifetime);
         }
 
         PlayerStopMovementEvent stopMovementEvent = new PlayerStopMovementEvent();
-        stopMovementEvent.duration = castTime;
+        stopMovementEvent.duration = projData.castTime;
         stopMovementEvent.FireEvent();
 
-        SetPlayerFacingDirectionEvent setDirectionEvent = new SetPlayerFacingDirectionEvent(getFacingDirection(), castTime);
+        SetPlayerFacingDirectionEvent setDirectionEvent = new SetPlayerFacingDirectionEvent(getFacingDirection(), projData.castTime);
         setDirectionEvent.FireEvent();
     }
 
@@ -109,13 +119,13 @@ public class ProjectileAbility : Ability
         }
     }
 
-    Vector3 GetClosestPoint()
+    Vector3 GetClosestPointToMouse(Vector3 CasterPosition, Vector3 spawnPoint, float distanceFromCaster = -0.2f)
     {
         Vector2 direction = Camera.main.ScreenToWorldPoint(Input.mousePosition) - caster.position;
         float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
 
 
-        Vector3 closestPoint = new Vector3(Mathf.Cos(angle * Mathf.Deg2Rad), Mathf.Sin(angle * Mathf.Deg2Rad), 0) * 0.5f;
+        Vector3 closestPoint = new Vector3(Mathf.Cos(angle * Mathf.Deg2Rad), Mathf.Sin(angle * Mathf.Deg2Rad), 0) * distanceFromCaster;
         closestPoint += projectileSpawnPoint.position;
 
         return closestPoint;
