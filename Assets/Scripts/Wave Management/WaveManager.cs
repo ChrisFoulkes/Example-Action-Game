@@ -14,7 +14,7 @@ public class WaveManager : MonoBehaviour
     private int currentWave = 1;
    
 
-    private float waveDuration = 10f;
+    private float waveDuration = 30f;
     private float spawnRate = 3f;
 
     private bool isWaveRunning = true;
@@ -32,8 +32,6 @@ public class WaveManager : MonoBehaviour
     public void StartWave() 
     {
 
-
-
         StartCoroutine(IncrementWaveCount());
 
         StartCoroutine(ProcessWave());
@@ -47,12 +45,11 @@ public class WaveManager : MonoBehaviour
         
         currentWave++;
         WaveCompleteEvent waveEvent = new WaveCompleteEvent();
+
         waveEvent.completedWave = currentWave;
-        waveEvent.FireEvent();
+        EventManager.Raise(waveEvent);
 
         StartCoroutine(IncrementWaveCount());
-
-       
     }
 
      private IEnumerator ProcessWave()

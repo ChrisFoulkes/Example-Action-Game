@@ -14,8 +14,6 @@ public class PlayerExperienceController : MonoBehaviour
     private bool isLevelUP = false;
 
     public Animator LevelUpEffect;
-    private bool isDead = false;
-    private FloatingCombatTextController combatText;
     private IDeath deathController;
 
     public int CurrentLevel { get { return currentLevel; } }
@@ -23,13 +21,15 @@ public class PlayerExperienceController : MonoBehaviour
     public void Start()
     {
         deathController = GetComponent<IDeath>();
-        combatText = GetComponent<FloatingCombatTextController>();
-        EnemyKilledEvent.RegisterListener(EnemyKilled);
     }
 
-    void OnDestroy()
+    private void OnEnable()
     {
-        EnemyKilledEvent.UnregisterListener(EnemyKilled);
+        EventManager.AddGlobalListener<EnemyKilledEvent>(EnemyKilled);
+    }
+    void OnDisable()
+    {
+        EventManager.RemoveGlobalListener<EnemyKilledEvent>(EnemyKilled);
     }
 
     private float CalculateXPForLevel(int level)
@@ -51,7 +51,7 @@ public class PlayerExperienceController : MonoBehaviour
 
 
         PlayerExperienceEvent pXPEvent = new PlayerExperienceEvent(isLevelUP, currentRequired, currentXP, CurrentLevel);
-        pXPEvent.FireEvent();
+        EventManager.Raise(pXPEvent);
 
         isLevelUP = false;
     }
@@ -62,7 +62,7 @@ public class PlayerExperienceController : MonoBehaviour
         currentXP -= CalculateXPForLevel(currentLevel);
         currentLevel++;
         LevelUpEffect.SetTrigger("LevelUp");
-        combatText.CreateFloatingCombatText("+1 Level", Color.yellow, false, 0.65f);
+        FloatingCombatTextController.Instance.CreateFloatingCombatText("+1 Level", transform, FloatingColourType.levelUp, false, 0.65f);
     }
 
     public void EnemyKilled(EnemyKilledEvent killEvent)

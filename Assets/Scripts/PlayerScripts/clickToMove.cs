@@ -11,14 +11,18 @@ public class clickToMove : MonoBehaviour
     void Start()
     {
         ResetPlayerDestination();
-        GamePauseEvent.RegisterListener(OnPauseEvent);
 
     }
 
-    void OnDestroy()
+    void OnEnable()
     {
-        GamePauseEvent.UnregisterListener(OnPauseEvent);
+        EventManager.AddGlobalListener<GamePauseEvent>(OnPauseEvent);
     }
+    void OnDisable()
+    {
+        EventManager.RemoveGlobalListener<GamePauseEvent>(OnPauseEvent);
+    }
+
     // Update is called once per frame
     void Update()
     {

@@ -15,7 +15,8 @@ public class EnemyAnimationController : MonoBehaviour
     [SerializeField]private EnemyState currentState;
     public EnemyAttackController attackController;
     public EnemyMovementController movementController;
-    public GameObject parent;
+
+    public Enemy deathController;
 
     public bool stateChanged = false;   
 
@@ -45,7 +46,7 @@ public class EnemyAnimationController : MonoBehaviour
 
     public void CompleteDeathAnimation()
     {
-        GameObject.Destroy(parent);
+        deathController.CompleteDeath();
     }
 
     void UpdateAnimation()

@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 611f646a3a4f7b74198f2bf8b2cc8dff, type: 3}
+  m_Name: IgniteStatus
+  m_EditorClassIdentifier: 
+  statusName: Ignite
+  duration: 3
+  tickRate: 1
+  statusPrefab: {fileID: 3525420400329839086, guid: 7377eb4a33b44cc4084b4c248358f0a0, type: 3}
+  damagePerTick: -1
+  chanceToApply: 100
+  canMultiApply: 0

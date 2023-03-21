@@ -16,4 +16,6 @@ public class ProjectileData : AbilityData
 
     public float firingArc; [Header("Ability Prefab")]
     public ProjectileAttack projectilePrefab;
+
+    public List<StatusEffect> effects;
 }

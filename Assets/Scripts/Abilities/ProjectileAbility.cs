@@ -34,10 +34,14 @@ public class ProjectileAbility : Ability
     private Transform caster;
     private Transform projectileSpawnPoint;
 
+    //testing -- version 
+    private List<StatusEffect> statusEffects;
+
     public ProjectileAbility(ProjectileData aData, Transform casterTransform, Transform projectileSpawnPos): base(aData)
     {
         projData = new ActiveProjectileData(aData.projectileSpeed, aData.projectileLifetime, aData.projectileDamage, aData.ProjectileCount, aData.firingArc, aData.castTime);
 
+        statusEffects = aData.effects;
         projectileAttack = aData.projectilePrefab;
 
         caster = casterTransform;
@@ -57,29 +61,21 @@ public class ProjectileAbility : Ability
                 projData.firingArc = 0;
             }
 
-            SetTheFiringRotation(projData.firingArc, getIncrement(i, projData.firingArc, projData.projectileCount));
-            GameObject projectile = Object.Instantiate(projectileAttack.gameObject, GetClosestPointToMouse(caster.position, projectileSpawnPoint.position), projectileSpawnPoint.rotation);
-            projectile.GetComponent<ProjectileAttack>().Initialize(projData.projectileDamage, projData.projectileSpeed, projData.projectileLifetime);
+            SetTheFiringRotation(projData.firingArc, AbilityUtils.getFiringArcIncrement(i, projData.firingArc, projData.projectileCount));
+            GameObject projectile = Object.Instantiate(projectileAttack.gameObject, AbilityUtils.GetClosestPointToMouse(caster.position, projectileSpawnPoint.position), projectileSpawnPoint.rotation);
+            projectile.GetComponent<ProjectileAttack>().Initialize(this);
         }
 
+        //currently global events maybe should be local 
         PlayerStopMovementEvent stopMovementEvent = new PlayerStopMovementEvent();
         stopMovementEvent.duration = projData.castTime;
-        stopMovementEvent.FireEvent();
+        EventManager.Raise(stopMovementEvent);
 
-        SetPlayerFacingDirectionEvent setDirectionEvent = new SetPlayerFacingDirectionEvent(getFacingDirection(), projData.castTime);
-        setDirectionEvent.FireEvent();
+        SetPlayerFacingDirectionEvent setDirectionEvent = new SetPlayerFacingDirectionEvent(AbilityUtils.getFacingDirection(caster.position), projData.castTime);
+        EventManager.Raise(setDirectionEvent);
     }
 
 
-
-    float getIncrement(float index, float arc, int count)
-    {
-        if (count == 1)
-            return 0;
-
-        return index * arc / (count - 1);
-
-    }
     void SetTheFiringRotation(float arc, float increment)
     {
         Vector2 lookDirection = Camera.main.ScreenToWorldPoint(Input.mousePosition) - caster.position;
@@ -88,46 +84,19 @@ public class ProjectileAbility : Ability
         projectileSpawnPoint.rotation = Quaternion.Euler(0f, 0f, lookAngle - 90f + increment);
     }
 
-    Vector2 getFacingDirection()
+    public void OnHit(Collider2D collision, ProjectileAttack attack) 
     {
-        Vector2 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        Vector2 playerPosition = caster.position;
+        IHealth hitHealth = collision.GetComponentInParent<IHealth>();
+        hitHealth.ChangeHealth(projData.projectileDamage);
 
-        // Get the direction from the player to the mouse
-        Vector2 direction = mousePosition - playerPosition;
-
-        // Get the angle of the direction
-        float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-
-        // Get the facing direction based on the angle
-        Vector2 facingDirection;
-        if (angle > -45f && angle <= 45f)
+        if(statusEffects.Count> 0) 
         {
-            return facingDirection = Vector2.right; // Right
-        }
-        else if (angle > 45f && angle <= 135f)
-        {
-            return facingDirection = Vector2.up; // Up
-        }
-        else if (angle > 135f || angle <= -135f)
-        {
-            return facingDirection = Vector2.left; // Left
-        }
-        else
-        {
-            return facingDirection = Vector2.down; // Down
-        }
-    }
+            StatusEffectController statusController = collision.GetComponentInParent<StatusEffectController>();
 
-    Vector3 GetClosestPointToMouse(Vector3 CasterPosition, Vector3 spawnPoint, float distanceFromCaster = -0.2f)
-    {
-        Vector2 direction = Camera.main.ScreenToWorldPoint(Input.mousePosition) - caster.position;
-        float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-
-
-        Vector3 closestPoint = new Vector3(Mathf.Cos(angle * Mathf.Deg2Rad), Mathf.Sin(angle * Mathf.Deg2Rad), 0) * distanceFromCaster;
-        closestPoint += projectileSpawnPoint.position;
-
-        return closestPoint;
+            foreach (var effect in statusEffects) 
+            {
+                effect.ApplyEffect(statusController);
+            }
+        }
     }
 }

@@ -11,14 +11,15 @@ public class WaveCountUi : MonoBehaviour
     {
         textObj = GetComponent<TextMeshProUGUI>();
     }
-    void Start()
+
+    void OnEnable()
     {
-        WaveCompleteEvent.RegisterListener(OnWaveComplete);
+        EventManager.AddGlobalListener<WaveCompleteEvent>(OnWaveComplete);
     }
 
-    void OnDestroy()
+    void OnDisable()
     {
-        WaveCompleteEvent.UnregisterListener(OnWaveComplete);
+        EventManager.RemoveGlobalListener<WaveCompleteEvent>(OnWaveComplete);
     }
 
 

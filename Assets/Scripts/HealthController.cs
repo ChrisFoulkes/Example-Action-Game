@@ -8,25 +8,25 @@ using EventCallbacks;
 
 public class HealthController : MonoBehaviour, IHealth
 {
-    //needs to be replaced with event system
-    public event EventHandler<HealthEventArgs> HealthChangedEvent;
+    //needs to be replaced with event syste
     public bool shouldUpdateHealthBar;
-    public float maximumHealth = 20;
+
+    [SerializeField] private float maximumHealth = 20;
+
 
     [SerializeField]
     private float _currentHP;
-    protected FloatingCombatTextController combatTextController;
     public Color startColor;
     public Color endColor;
     public float blendDuration;
     public SpriteRenderer sprite;
     IDeath deathHandler;
 
+    private HealthChangedEvent healthChangedEvent = new HealthChangedEvent();
 
     public void Awake()
     {
         deathHandler = GetComponent<IDeath>();
-        combatTextController = GetComponent<FloatingCombatTextController>();
     }
 
 
@@ -37,18 +37,23 @@ public class HealthController : MonoBehaviour, IHealth
 
     }
 
-        public void ChangeHealth(float amount)
+    public void AddListener(GameEvent.EventDelegate<GameEvent> listener)
     {
-        //need to implement system to handle amount for damage vs healing changed event should not be - AMOUNT 
+        healthChangedEvent.AddLocalListener(listener);
+    }
 
-        if (shouldUpdateHealthBar)
-        {
-            HealthChangedEvent(this, new HealthEventArgs(amount));
-        }
+    public void RemoveListener(GameEvent.EventDelegate<GameEvent> listener)
+    {
+        healthChangedEvent.RemoveLocalListener(listener);
+    }
+
+    public virtual void ChangeHealth(float amount, FloatingColourType colourType = FloatingColourType.Generic)
+    {
+
 
         if (_currentHP > 0)
         {
-            GenerateCombatText(amount);
+            GenerateCombatText(amount, colourType);
         }
 
         _currentHP += amount;
@@ -62,27 +67,26 @@ public class HealthController : MonoBehaviour, IHealth
             deathHandler.StartDeath();
         }
 
+        healthChangedEvent.ChangeValue = amount;
+        healthChangedEvent.RaiseLocal();
+
         FlashColour();
     }
 
-    protected virtual void GenerateCombatText(float amount)
+    protected virtual void GenerateCombatText(float amount, FloatingColourType colourType)
     {
         if (amount > 0)
         {
-            combatTextController.CreateFloatingCombatText("+" + amount, Color.green, true);
+            FloatingCombatTextController.Instance.CreateFloatingCombatText("+" + amount, transform, FloatingColourType.Heal, false);
         }
-        else
+        else if (amount < 0)
         {
-            combatTextController.CreateFloatingCombatText(amount.ToString(), Color.red, true);
+            FloatingCombatTextController.Instance.CreateFloatingCombatText(Mathf.Abs(amount).ToString(), transform, colourType, false);
         }
     }
 
     public void Kill()
     {
-        if (shouldUpdateHealthBar)
-        {
-            HealthChangedEvent(this, new HealthEventArgs(-(maximumHealth - _currentHP)));
-        }
         _currentHP = 0; 
 
         FlashColour();

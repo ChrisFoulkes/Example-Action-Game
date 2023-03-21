@@ -43,7 +43,6 @@ public class GameManager : MonoBehaviour
             Time.timeScale = 1;
         }
 
-
-        pauseEvent.FireEvent();
+        EventManager.Raise(pauseEvent);
     }
 }

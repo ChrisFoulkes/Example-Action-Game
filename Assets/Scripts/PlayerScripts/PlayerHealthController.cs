@@ -1,20 +1,22 @@
+using Pathfinding;
 using UnityEngine;
 
 public class PlayerHealthController : HealthController
 {
     public void Start()
     {
-        Initialize(maximumHealth);
+        Initialize(20);
     }
-    protected override void GenerateCombatText(float amount)
+    protected override void GenerateCombatText(float amount, FloatingColourType colourType = FloatingColourType.Generic)
     {
         if (amount > 0)
         {
-            combatTextController.CreateFloatingCombatText("+" + amount, Color.green, false);
+            FloatingCombatTextController.Instance.CreateFloatingCombatText("+" + amount, transform, FloatingColourType.Heal, false);
         }
-        else
+        else if (amount < 0)
         {
-            combatTextController.CreateFloatingCombatText(amount.ToString(), Color.red, false);
+            FloatingCombatTextController.Instance.CreateFloatingCombatText(amount.ToString(), transform, colourType, false);
         }
     }
+
 }

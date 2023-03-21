@@ -11,14 +11,14 @@ public class LevelUi : MonoBehaviour
     {
         textObj = GetComponent<TextMeshProUGUI>();
     }
-    void Start()
+    void OnEnable()
     {
-        PlayerExperienceEvent.RegisterListener(OnEXP);
+        EventManager.AddGlobalListener<PlayerExperienceEvent>(OnEXP);
     }
 
-    void OnDestroy()
+    void OnDisable()
     {
-        PlayerExperienceEvent.UnregisterListener(OnEXP);
+        EventManager.RemoveGlobalListener<PlayerExperienceEvent>(OnEXP);
     }
 
 

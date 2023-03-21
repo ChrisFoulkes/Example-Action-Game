@@ -6,15 +6,14 @@ using EventCallbacks;
 public class DeathUiHandler : MonoBehaviour
 {
     public GameObject DisplayParent;
-    private void Start()
+    private void OnEnable()
     {
-        DisplayDeathUiEvent.RegisterListener(DisplayUI);
-
+        EventManager.AddGlobalListener<DisplayDeathUiEvent>(DisplayUI);
     }
 
-    void OnDestroy()
+    void OnDisable()
     {
-        DisplayDeathUiEvent.UnregisterListener(DisplayUI);
+        EventManager.RemoveGlobalListener<DisplayDeathUiEvent>(DisplayUI);
     }
 
 

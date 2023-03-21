@@ -14,15 +14,20 @@ public class PlayerMovement : MonoBehaviour, IMovement
     private void Start()
     {
         rb = GetComponent<Rigidbody2D>();
-        PlayerStopMovementEvent.RegisterListener(OnStopMovement);
-        PlayerDeathEvent.RegisterListener(OnDeath);
     }
 
-    private void OnDestroy()
+    private void OnEnable()
     {
 
-        PlayerStopMovementEvent.UnregisterListener(OnStopMovement);
-        PlayerDeathEvent.RegisterListener(OnDeath);
+        EventManager.AddGlobalListener<PlayerStopMovementEvent>(OnStopMovement);
+        EventManager.AddGlobalListener<PlayerDeathEvent>(OnDeath);
+    }
+
+    private void OnDisable()
+    {   
+
+        EventManager.RemoveGlobalListener<PlayerStopMovementEvent>(OnStopMovement);
+        EventManager.RemoveGlobalListener<PlayerDeathEvent>(OnDeath);
     }
 
     public void CanMove(bool Move) 

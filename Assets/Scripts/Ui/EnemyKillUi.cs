@@ -12,14 +12,14 @@ public class EnemyKillUi : MonoBehaviour
     {
         textObj = GetComponent<TextMeshProUGUI>();
     }
-    void Start()
+    void OnEnable()
     {
-        EnemyKilledEvent.RegisterListener(OnKill);
+        EventManager.AddGlobalListener<EnemyKilledEvent>(OnKill);
     }
 
-    void OnDestroy()
+    void OnDisable()
     {
-        EnemyKilledEvent.UnregisterListener(OnKill);
+        EventManager.AddGlobalListener<EnemyKilledEvent>(OnKill);
     }
 
 

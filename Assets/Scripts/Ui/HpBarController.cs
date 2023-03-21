@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using EventCallbacks;
 
 public class HpBarController : MonoBehaviour
 {
@@ -14,22 +15,31 @@ public class HpBarController : MonoBehaviour
 
     public HealthController healthController;
 
+    void OnEnable()
+    {
+        healthController.AddListener(OnHealthChange);
+    }
+
+    void OnDisable()
+    {
+        healthController.RemoveListener(OnHealthChange);
+    }
+
     private void Start()
     {
 
         maxValue = healthController.GetMaxHP();
-        currentValue = maxValue;
-        healthController.HealthChangedEvent += OnHealthChange;
+        currentValue = healthController.CurrentHealth();
         hpText.text = currentValue + "/" + maxValue;
     }
 
-    void OnHealthChange(object sender, HealthEventArgs changeEvent)
+    void OnHealthChange(GameEvent changeEvent)
     {
-        currentValue += changeEvent.amount;
-        if (currentValue > maxValue) 
-        {
-            currentValue = maxValue;
-        }
+        HealthChangedEvent healthEvent = changeEvent as HealthChangedEvent;
+
+        currentValue = healthController.CurrentHealth();
+        maxValue = healthController.GetMaxHP();
+
         hpText.text = currentValue + "/" + maxValue;
         UpdateHealthBar();
     }

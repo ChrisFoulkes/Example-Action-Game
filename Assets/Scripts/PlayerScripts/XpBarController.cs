@@ -11,17 +11,15 @@ public class XpBarController : MonoBehaviour
 
     public Image imageSprite;
 
-
-    private void Start()
-    { 
-        PlayerExperienceEvent.RegisterListener(OnExpEvent);
-    }
-
-    private void OnDestroy()
+    void OnEnable()
     {
-        PlayerExperienceEvent.UnregisterListener(OnExpEvent);
+        EventManager.AddGlobalListener<PlayerExperienceEvent>(OnExpEvent);
     }
 
+    void OnDisable()
+    {
+        EventManager.RemoveGlobalListener<PlayerExperienceEvent>(OnExpEvent);
+    }
 
 
     void OnExpEvent(PlayerExperienceEvent pXPEvent)

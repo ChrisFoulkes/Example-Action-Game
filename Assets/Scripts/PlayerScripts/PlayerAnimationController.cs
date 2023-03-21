@@ -9,23 +9,29 @@ public class PlayerAnimationController : MonoBehaviour
     // Start is called before the first frame update
 
     private Vector2 lastPosition;
-    private bool isDead = false;
 
     private void Start()
     {
         lastPosition = transform.position;
-        PlayerDeathEvent.RegisterListener(OnPlayerDeath);
-        SetPlayerFacingDirectionEvent.RegisterListener(SetPlayerRotation);
-        PlayerStopMovementEvent.RegisterListener(OnStopMovementEvent);
 
     }
 
-    void OnDestroy()
+    private void OnEnable()
     {
-        PlayerDeathEvent.UnregisterListener(OnPlayerDeath);
-        SetPlayerFacingDirectionEvent.UnregisterListener(SetPlayerRotation);
-        PlayerStopMovementEvent.UnregisterListener(OnStopMovementEvent);
+
+        EventManager.AddGlobalListener<PlayerDeathEvent>(OnPlayerDeath);
+        EventManager.AddGlobalListener<PlayerStopMovementEvent>(OnStopMovementEvent);
+        EventManager.AddGlobalListener<SetPlayerFacingDirectionEvent>(SetPlayerRotation);
     }
+
+    private void OnDisable()
+    {
+
+        EventManager.RemoveGlobalListener<PlayerDeathEvent>(OnPlayerDeath);
+        EventManager.RemoveGlobalListener<PlayerStopMovementEvent>(OnStopMovementEvent);
+        EventManager.RemoveGlobalListener<SetPlayerFacingDirectionEvent>(SetPlayerRotation);
+    }
+
 
     private void Update()
     {
@@ -101,7 +107,6 @@ public class PlayerAnimationController : MonoBehaviour
     void OnPlayerDeath(PlayerDeathEvent death)
     {
         StopMovement();
-        isDead = true;
         animator.SetTrigger("IsDead");
         animator.SetBool("Dead", true);
     }

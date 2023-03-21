@@ -5,23 +5,23 @@ using UnityEngine.Rendering;
 
 namespace EventCallbacks
 {
-    public class PlayerDeathEvent : Event<PlayerDeathEvent>
-    {
+    public class PlayerDeathEvent : GameEvent
+        {
         /*
         Info about cause of death, our killer, etc...
         */
     }
 
-    public class DisplayDeathUiEvent : Event<DisplayDeathUiEvent>
+    public class DisplayDeathUiEvent : GameEvent
     { 
     }
 
-    public class PlayerStopMovementEvent : Event<PlayerStopMovementEvent>
+    public class PlayerStopMovementEvent : GameEvent
     {
         public float duration = 0.2f;
     }
 
-    public class SetPlayerFacingDirectionEvent : Event<SetPlayerFacingDirectionEvent>
+    public class SetPlayerFacingDirectionEvent : GameEvent
     {
         public Vector2 direction;
         public float duration;
@@ -32,12 +32,12 @@ namespace EventCallbacks
         }   
     }
 
-    public class EnemyKilledEvent : Event<EnemyKilledEvent>
+    public class EnemyKilledEvent : GameEvent
     {
         public float xpValue = 1;
     }
 
-    public class PlayerExperienceEvent : Event<PlayerExperienceEvent>
+    public class PlayerExperienceEvent : GameEvent
     {
         public float currentExperience;
         public int currentLevel;

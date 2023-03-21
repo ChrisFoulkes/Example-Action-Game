@@ -12,15 +12,15 @@ public class EnemySpawner : MonoBehaviour
     private Transform[] enemyPositions;
     private bool spawnActive = true;
 
-    void Start()
+    void OnEnable()
     {
 
-        PlayerDeathEvent.RegisterListener(OnPlayerDeath);
+        EventManager.AddGlobalListener<PlayerDeathEvent>(OnPlayerDeath);
     }
 
-    void OnDestroy()
+    void OnDisable()
     {
-        PlayerDeathEvent.UnregisterListener(OnPlayerDeath);
+        EventManager.RemoveGlobalListener<PlayerDeathEvent>(OnPlayerDeath);
     }
 
     void FixedUpdate()

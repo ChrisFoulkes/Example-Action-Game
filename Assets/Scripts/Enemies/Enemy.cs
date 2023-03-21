@@ -16,6 +16,9 @@ public class Enemy : MonoBehaviour, IDeath
 
     private bool isDead = false;
 
+    private EnemyKilledEvent killedEvent = new EnemyKilledEvent();
+
+
     private void Start()
     {
         ToggleColliders(true);
@@ -25,17 +28,30 @@ public class Enemy : MonoBehaviour, IDeath
     {
         return isDead;
     }
+    public void AddListener(GameEvent.EventDelegate<GameEvent> listener)
+    {
+        killedEvent.AddLocalListener(listener);
+    }
+
+    public void RemoveListener(GameEvent.EventDelegate<GameEvent> listener)
+    {
+        killedEvent.RemoveLocalListener(listener);
+    }
 
     public void StartDeath()
     {
         StartCoroutine(ScaleCoroutine());
         isDead = true;
 
-        EnemyKilledEvent killedEvent = new EnemyKilledEvent();
         killedEvent.xpValue = 10;
-        killedEvent.FireEvent();
+        EventManager.Raise(killedEvent);
 
         ToggleColliders(false);
+    }
+
+    public void CompleteDeath() 
+    {
+        GameObject.Destroy(transform.parent.gameObject);
     }
 
     public void ToggleColliders(bool toggle)

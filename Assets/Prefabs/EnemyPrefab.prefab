@@ -166,7 +166,8 @@ MonoBehaviour:
   currentState: 0
   attackController: {fileID: 5825696153760021267}
   movementController: {fileID: 532766896}
-  parent: {fileID: 8652212903993137680}
+  deathController: {fileID: 8652212903738027417}
+  stateChanged: 0
 --- !u!1 &8652212902664573221
 GameObject:
   m_ObjectHideFlags: 0
@@ -219,13 +220,13 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8652212903738027416}
-  - component: {fileID: 8652212903738027418}
   - component: {fileID: 8652212903738027417}
   - component: {fileID: 4813520092227955515}
   - component: {fileID: 8652212903738027419}
   - component: {fileID: 532766896}
   - component: {fileID: 5825696153760021267}
   - component: {fileID: 6423310324667571686}
+  - component: {fileID: 34259936054344928}
   m_Layer: 7
   m_Name: EnemyController
   m_TagString: Untagged
@@ -248,22 +249,6 @@ Transform:
   m_Father: {fileID: 8652212903993137681}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &8652212903738027418
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8652212903738027423}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 775c798817d2aac48903daa4f33734d3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  offset: {x: 0, y: 0.3, z: 0}
-  moveSpeed: 1
-  bufferTime: 0.02
-  textPrefab: {fileID: 2339586058551366515, guid: a5c42528fd413d54599ef593fa68a733, type: 3}
 --- !u!114 &8652212903738027417
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -308,7 +293,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   shouldUpdateHealthBar: 0
-  maximumHealth: 3
+  maximumHealth: 10
   _currentHP: 0
   startColor: {r: 0.735849, g: 0, b: 0, a: 1}
   endColor: {r: 1, g: 1, b: 1, a: 1}
@@ -366,13 +351,26 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyStats:
-    health: 2
+    health: 10
     healthGrowthFactor: 0.33
     attackDamage: -1
     damageGrowthFactor: 1
     movementSpeed: 1.5
     movementSpeedGrowthFactor: 0.33
   scaleParentTransform: {fileID: 8652212902664573222}
+--- !u!114 &34259936054344928
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8652212903738027423}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7e23e654d17d9a74a82f8001ef21bbb5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  activeEffects: []
 --- !u!1 &8652212903805053187
 GameObject:
   m_ObjectHideFlags: 0

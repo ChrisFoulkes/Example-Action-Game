@@ -6,8 +6,7 @@ public class ProjectileAttack : MonoBehaviour
 {
     private float projectileSpeed;
     private float projectileLifetime;
-    private float projectileDamage;
-
+    ProjectileAbility ability;
 
     public Animator animator;
     private Rigidbody2D rb2d;
@@ -19,11 +18,12 @@ public class ProjectileAttack : MonoBehaviour
 
     }
 
-    public void Initialize(float dam, float liftime, float speed) 
+    public void Initialize(ProjectileAbility ability) 
     {
-        projectileSpeed = speed;
-        projectileLifetime = liftime;
-        projectileDamage = dam;
+        projectileSpeed = ability.projData.projectileSpeed;
+        projectileLifetime = ability.projData.projectileLifetime;
+
+        this.ability = ability;
 
         rb2d.velocity = transform.up * projectileSpeed;
         StartCoroutine(Lifespan(projectileLifetime));
@@ -35,7 +35,7 @@ public class ProjectileAttack : MonoBehaviour
         {
             IHealth enemy = collision.GetComponentInParent<IHealth>();
             if (enemy.CurrentHealth() > 0){
-                enemy.ChangeHealth(projectileDamage);
+                ability.OnHit(collision, this);
                 animator.SetBool("OnHit", true);
             }
         }

@@ -5,7 +5,7 @@ using Pathfinding;
 
 public class EnemyTarget : AIDestinationSetter
 {
-    void Awake()
+    private new void Awake()
     {
         GameObject player = GameObject.Find("EnemyTargetPosition");
         if (player != null)

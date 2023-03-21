@@ -28,14 +28,20 @@ public class UpgradeManager : MonoBehaviour
 
     private void Start()
     {
-        PlayerExperienceEvent.RegisterListener(OnExpEvent);
         characterUpgradeHandler.Initialize(player);
     }
 
-    private void OnDestroy()
+    private void OnEnable()
     {
-        PlayerExperienceEvent.UnregisterListener(OnExpEvent);
+
+        EventManager.AddGlobalListener<PlayerExperienceEvent>(OnExpEvent);
     }
+
+    private void OnDisable()
+    {
+        EventManager.RemoveGlobalListener<PlayerExperienceEvent>(OnExpEvent);
+    }
+
     void Update()
     {
         if (Input.GetButtonDown("Fire2"))

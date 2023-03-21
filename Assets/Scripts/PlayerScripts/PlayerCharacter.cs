@@ -8,12 +8,21 @@ public class PlayerCharacter : MonoBehaviour, IDeath
     private bool isDead = false;
     private IMovement movementController;
 
+    PlayerDeathEvent pDeathEvent = new PlayerDeathEvent();
 
     public void Start()
     {
         movementController = GetComponent<IMovement>();
     }
+    public void AddListener(GameEvent.EventDelegate<GameEvent> listener)
+    {
+        pDeathEvent.AddLocalListener(listener);
+    }
 
+    public void RemoveListener(GameEvent.EventDelegate<GameEvent> listener)
+    {
+        pDeathEvent.RemoveLocalListener(listener);
+    }
     public bool IsDead() 
     {
         return isDead;
@@ -23,15 +32,13 @@ public class PlayerCharacter : MonoBehaviour, IDeath
     {
         isDead = true;
         GetComponent<Rigidbody2D>().simulated = false;
-
-        PlayerDeathEvent pDeathEvent = new PlayerDeathEvent();
-        pDeathEvent.FireEvent();
+        EventManager.Raise(pDeathEvent);
     }
 
 
-    public void DeathAnimationComplete()
+    public void CompleteDeath()
     {
         DisplayDeathUiEvent DeathUIEvent = new DisplayDeathUiEvent();
-        DeathUIEvent.FireEvent();
+        EventManager.Raise(DeathUIEvent);
     }
 }

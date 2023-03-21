@@ -5,21 +5,13 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-public class HealthEventArgs : EventArgs
-{
-    public float amount;
 
-    public HealthEventArgs(float health)
-    {
-        this.amount = health;
-    }
-}
+public interface IHealth {
 
-public interface IHealth
-{
-    public event EventHandler<HealthEventArgs> HealthChangedEvent;
+    void AddListener(GameEvent.EventDelegate<GameEvent> listener);
+    void RemoveListener(GameEvent.EventDelegate<GameEvent> listener);
 
-    void ChangeHealth(float amount);
+    void ChangeHealth(float amount, FloatingColourType colourType = FloatingColourType.Generic);
 
     float CurrentHealth();
 
