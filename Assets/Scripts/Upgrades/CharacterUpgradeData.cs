@@ -2,6 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[System.Serializable]
+public class CharacterUpgradeEffect : UpgradeEffect
+{
+    public CharacterUpgradeTypes upgradeType;
+}
+
 public enum CharacterUpgradeTypes 
 {
     speed,
@@ -10,8 +16,5 @@ public enum CharacterUpgradeTypes
 [CreateAssetMenu(fileName = "CharacterUpgrade", menuName = "ScriptableObjects/CharacterUpgrade")]
 public class CharacterUpgradeData : UpgradeData
 {
-    public CharacterUpgradeTypes upgradeType;
-
-    public float amount;
+    public new List<CharacterUpgradeEffect> upgradeEffects;
 }
-

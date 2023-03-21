@@ -36,7 +36,6 @@ public class ProjectileAbility : Ability
     private Transform caster;
     private Transform projectileSpawnPoint;
 
-    //testing -- version 
     private List<StatusEffect> statusEffects;
 
     public ProjectileAbility(ProjectileData aData, Transform casterTransform, Transform projectileSpawnPos): base(aData)
@@ -53,6 +52,8 @@ public class ProjectileAbility : Ability
 
      public override void CastAbility()
     {
+
+        if (projData.castTime > cooldown) { adjustCooldowm(projData.castTime); }
 
         for (int i = 0; i < projData.projectileCount; i++)
         {

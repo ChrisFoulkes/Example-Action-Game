@@ -15,7 +15,7 @@ public class WaveManager : MonoBehaviour
    
 
     private float waveDuration = 30f;
-    private float spawnRate = 3f;
+    [SerializeField]private float spawnRate = 3f;
 
     private bool isWaveRunning = true;
 
@@ -54,16 +54,19 @@ public class WaveManager : MonoBehaviour
 
      private IEnumerator ProcessWave()
     {
-
+        int spawnIndex = 0;
         while (isWaveRunning)
         {
-            GameObject spawnedEnemy = enemySpawners[0].SpawnEnemy(waveData[0].waveEnemyCounts[0].EnemyPrefab);
+            GameObject spawnedEnemy = enemySpawners[spawnIndex].SpawnEnemy(waveData[0].waveEnemyCounts[0].EnemyPrefab);
             spawnedEnemy.GetComponentInChildren<EnemyStatController>().InitializeControllers(currentWave);
 
             if(spawnRate > 1f) 
             {
-                spawnRate = spawnRate - 0.1f;
+                spawnRate = spawnRate - 0.05f;
             }
+
+            spawnIndex++;
+            if (spawnIndex >= enemySpawners.Count) { spawnIndex = 0; }
             yield return new WaitForSeconds(spawnRate);
         }
      }

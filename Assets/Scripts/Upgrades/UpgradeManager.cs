@@ -48,8 +48,12 @@ public class UpgradeManager : MonoBehaviour
         foreach (var ability in playerAbilityManager.GetEquippedAbilities())
         {
             // Assuming AbilityData has a unique ID
-            var abilityUpgrades = Resources.LoadAll<ProjectileUpgradeData>("UpgradeData").Where(a => a.ability.AbilityID == ability);
-            upgradeData.AddRange(abilityUpgrades);
+            var projectileUpgrades = Resources.LoadAll<ProjectileUpgradeData>("UpgradeData").Where(a => a.ability.AbilityID == ability);
+            upgradeData.AddRange(projectileUpgrades);
+
+            // Assuming AbilityData has a unique ID
+            var meleeUpgrades = Resources.LoadAll<MeleeUpgradeData>("UpgradeData").Where(a => a.ability.AbilityID == ability);
+            upgradeData.AddRange(meleeUpgrades);
         }
     }
 
@@ -108,41 +112,10 @@ public class UpgradeManager : MonoBehaviour
 
         UpgradeData udata = shownUpgrades[positon];
 
-        switch (udata.baseUpgradeType)
-        {
-            case BaseUpgradeType.characterUpgrade:
-                if (udata is CharacterUpgradeData characterUpgradeData)
-                {
-                    HandleCharacterUpgrade(characterUpgradeData);
-                }
-                else
-                {
-                    Debug.LogWarning(udata.name + "erroneous base-type incorrectly flagged as CharacterUpgrade");
-                }
-                break;
-
-            case BaseUpgradeType.abilityUpgrade:
-                if (udata is ProjectileUpgradeData abilityUpgradeData)
-                {
-                    HandleAbilityUpgrade(abilityUpgradeData);
-                }
-                else
-                {
-                    Debug.LogWarning(udata.name + "erroneous base-type incorrectly flagged as AbilityUpgrade");
-                }
-                break;
-        }
+        characterUpgradeHandler.HandleUpgrade(udata);
+       
     }
 
-    private void HandleCharacterUpgrade(CharacterUpgradeData upgradeData)
-    {
-        characterUpgradeHandler.HandleCharacterUpgrade(upgradeData);
-    }
-
-    private void HandleAbilityUpgrade(ProjectileUpgradeData upgradeData)
-    {
-        characterUpgradeHandler.HandleAttackUpgrade(upgradeData);
-    }
 
     void GenerateAvailableUpgrades(int noOfUpgrades)
     {

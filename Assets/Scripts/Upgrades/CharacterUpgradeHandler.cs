@@ -24,25 +24,50 @@ public class CharacterUpgradeHandler : MonoBehaviour
     {
         playerMovement.ChangeSpeed(amount);
     }
-
-    public void HandleCharacterUpgrade(CharacterUpgradeData uData)
+    public void ApplyCharacterUpgrade(CharacterUpgradeTypes upgradeType, float amount)
     {
-        switch (uData.upgradeType)
+        switch (upgradeType)
         {
             case CharacterUpgradeTypes.speed:
-                ChangeMovementSpeed(uData.amount);
+                ChangeMovementSpeed(amount);
                 break;
             case CharacterUpgradeTypes.heal:
-                playerHealth.ChangeHealth(uData.amount);
+                playerHealth.ChangeHealth(amount);
+                break;
+            default:
+                Debug.LogWarning("Unsupported character upgrade type: " + upgradeType);
                 break;
         }
     }
 
-    public void HandleAttackUpgrade(ProjectileUpgradeData uData)
+    public void HandleUpgrade(UpgradeData uData)
     {
-        foreach(UpgradeEffect upgrade in uData.upgradeEffects)
+        int abilityID = -1;
+
+        if (uData is ProjectileUpgradeData projectileUpgradeData)
         {
-            playerAbilityManager.UpgradeAbility(uData.ability.AbilityID, upgrade.upgradeType, upgrade.amount);
+            abilityID = projectileUpgradeData.ability.AbilityID; 
+            
+            foreach (UpgradeEffect upgradeEffect in projectileUpgradeData.upgradeEffects)
+            {
+                playerAbilityManager.UpgradeAbility(abilityID, upgradeEffect);
+            }
+        }
+        else if (uData is MeleeUpgradeData meleeUpgradeData)
+        {
+            abilityID = meleeUpgradeData.ability.AbilityID;
+            
+            foreach (MeleeUpgradeEffect upgradeEffect in meleeUpgradeData.upgradeEffects)
+            {
+                playerAbilityManager.UpgradeAbility(abilityID, upgradeEffect);
+            }
+        }
+        else if (uData is CharacterUpgradeData characterUpgradeData)
+        {
+            foreach (CharacterUpgradeEffect upgradeEffect in characterUpgradeData.upgradeEffects)
+            {
+                ApplyCharacterUpgrade(upgradeEffect.upgradeType, upgradeEffect.amount);
+            }
         }
     }
 }

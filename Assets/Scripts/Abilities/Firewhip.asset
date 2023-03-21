@@ -16,10 +16,10 @@ MonoBehaviour:
   abilityName: FlameWhip
   abilityIcon: {fileID: 21300000, guid: 194ad2300d707ea4483acb1a2f607c3c, type: 3}
   abilityType: 0
-  cooldown: 0.5
+  cooldown: 0.2
   projectileSpeed: 0
   projectileLifetime: 1
-  projectileDamage: -4
+  projectileDamage: -8
   castTime: 0.4
   distanceFromCaster: 0.38
   ProjectileCount: 1

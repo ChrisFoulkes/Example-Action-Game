@@ -23,6 +23,10 @@ using UnityEngine;
             {
                 abilities.Add(aData.AbilityID, new ProjectileAbility((ProjectileData)aData, caster.transform, projectileSpawnPos));
             }
+            if (aData.abilityType == AbilityType.melee)
+            {
+                abilities.Add(aData.AbilityID, new MeleeAbility((MeleeData)aData, caster.transform, projectileSpawnPos));
+            }
         }
 
         int slotIndex = 0;
@@ -79,36 +83,51 @@ using UnityEngine;
             }
         }
 
-        public void UpgradeAbility(int abilityID, ProjectileUpgradeTypes upgradeType, float amount)
+    public void UpgradeAbility(int abilityID, UpgradeEffect upgradeEffect)
+    {
+        if (!abilities.ContainsKey(abilityID))
         {
-            if (!abilities.ContainsKey(abilityID))
+            Debug.LogWarning("No ability found with ID: " + abilityID);
+            return;
+        }
+
+        Ability foundAbility = abilities[abilityID];
+
+        if (foundAbility.abilityType == AbilityType.projectile && upgradeEffect is ProjectileUpgradeEffect projectileUpgradeEffect)
+        {
+            ProjectileAbility projAbility = foundAbility as ProjectileAbility;
+
+            switch (projectileUpgradeEffect.upgradeType)
             {
-                Debug.LogWarning("No ability found with ID: " + abilityID);
-                return;
-            }
-
-            Ability foundAbility = abilities[abilityID];
-
-            if (foundAbility.abilityType == AbilityType.projectile)
-            {
-                ProjectileAbility projAbility = foundAbility as ProjectileAbility;
-
-                switch (upgradeType)
-                {
-                    case ProjectileUpgradeTypes.projectileDamage:
-                        projAbility.projData.projectileDamage += Mathf.RoundToInt(amount);
-                        break;
-                    case ProjectileUpgradeTypes.projectileCount:
-                        projAbility.projData.projectileCount += Mathf.RoundToInt(amount);
-                        break;
-                    case ProjectileUpgradeTypes.projectileArc:
-                        projAbility.projData.firingArc = Mathf.Clamp(projAbility.projData.firingArc + amount, 0, 360);
-                        break;
-                }
+                case ProjectileUpgradeTypes.projectileDamage:
+                    projAbility.projData.projectileDamage += Mathf.RoundToInt(projectileUpgradeEffect.amount);
+                    break;
+                case ProjectileUpgradeTypes.projectileCount:
+                    projAbility.projData.projectileCount += Mathf.RoundToInt(projectileUpgradeEffect.amount);
+                    break;
+                case ProjectileUpgradeTypes.projectileArc:
+                    projAbility.projData.firingArc = Mathf.Clamp(projAbility.projData.firingArc + projectileUpgradeEffect.amount, 0, 360);
+                    break;
             }
         }
 
-        private IEnumerator HandleAbilityCooldown(Ability ability)
+        if (foundAbility.abilityType == AbilityType.melee && upgradeEffect is MeleeUpgradeEffect meleeUpgradeEffect)
+        {
+            MeleeAbility meleeAbility = foundAbility as MeleeAbility;
+
+            switch (meleeUpgradeEffect.upgradeType)
+            {
+                case MeleeUpgradeTypes.meleeDamage:
+                    meleeAbility.meleeData.meleeDamage += Mathf.RoundToInt(meleeUpgradeEffect.amount);
+                    break;
+                case MeleeUpgradeTypes.meleeCastSpeed:
+                    meleeAbility.meleeData.castTime = Mathf.Max(meleeAbility.meleeData.castTime + meleeUpgradeEffect.amount,(meleeAbility.meleeData.originalCastTime * 0.75f));
+                    break;
+            }
+        }
+    }
+
+    private IEnumerator HandleAbilityCooldown(Ability ability)
         {
             ability.SetCoolDown(true);
             AbilityIDToHotkeySlot[ability.ID].StartCoolDown(ability.cooldown);

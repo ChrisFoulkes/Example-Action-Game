@@ -3,17 +3,22 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public enum UpgradeTier 
+public class UpgradeEffect
 {
-    normal, 
-    rare, 
+    public float amount;
+}
+
+public enum UpgradeTier
+{
+    normal,
+    rare,
     epic,
     legendary
 }
 
 public enum BaseUpgradeType
-{ 
-    characterUpgrade, 
+{
+    characterUpgrade,
     abilityUpgrade
 }
 
@@ -24,7 +29,6 @@ public class UpgradeData : ScriptableObject
     public string upgradeDescription;
     public Sprite upgradeIcon;
     public BaseUpgradeType baseUpgradeType;
-
     public UpgradeTier tier;
+    public List<UpgradeEffect> upgradeEffects = new List<UpgradeEffect>();
 }
-

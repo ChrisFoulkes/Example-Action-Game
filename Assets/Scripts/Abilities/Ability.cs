@@ -13,6 +13,11 @@ public abstract class Ability
 
     public AbilityType abilityType { get; private set; }
 
+    public void adjustCooldowm(float adjustedValue) 
+    {
+        cooldown = adjustedValue;
+    
+    }
 
     public void SetCoolDown(bool isOnCooldown) 
     {

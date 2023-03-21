@@ -19,7 +19,7 @@ MonoBehaviour:
   tier: 0
   ability: {fileID: 11400000, guid: 30ef6173ac0689a439799b1332e66a0d, type: 2}
   upgradeEffects:
-  - upgradeType: 0
-    amount: 1
-  - upgradeType: 1
-    amount: 30
+  - amount: 1
+    upgradeType: 0
+  - amount: 90
+    upgradeType: 1

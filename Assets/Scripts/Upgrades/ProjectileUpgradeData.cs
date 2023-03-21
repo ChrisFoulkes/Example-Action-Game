@@ -2,12 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
 [System.Serializable]
-public class UpgradeEffect 
+public class ProjectileUpgradeEffect : UpgradeEffect
 {
     public ProjectileUpgradeTypes upgradeType;
-    public float amount;
 }
+
 
 public enum ProjectileUpgradeTypes
 {
@@ -15,11 +16,15 @@ public enum ProjectileUpgradeTypes
     projectileArc,
     projectileDamage
 }
+
+
 [CreateAssetMenu(fileName = "ProjectileUpgrade", menuName = "ScriptableObjects/ProjectileUpgrades")]
 public class ProjectileUpgradeData : UpgradeData
 {
     public ProjectileData ability;
-    public List<UpgradeEffect> upgradeEffects;
+    public new List<ProjectileUpgradeEffect> upgradeEffects;
 }
+
+
 
 
