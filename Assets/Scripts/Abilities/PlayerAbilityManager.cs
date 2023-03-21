@@ -3,83 +3,116 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class PlayerAbilityManager : MonoBehaviour
-{
-    [SerializeField] private PlayerCharacter caster;
-    [SerializeField] private HotkeySlot hotkeySlot;
-
-    [SerializeField] private List<AbilityData>  abilityData = new List<AbilityData>();
-    [SerializeField] private List<Ability> abilities = new List<Ability>();
-
-    public Transform projectileSpawnPos;
-    void Start()
+    public class PlayerAbilityManager : MonoBehaviour
     {
-        foreach (AbilityData aData in abilityData) 
+        [SerializeField] private PlayerCharacter caster;
+        [SerializeField] private List<HotkeySlot> hotkeySlots;
+        private Dictionary<int, HotkeySlot> AbilityIDToHotkeySlot = new Dictionary<int, HotkeySlot>();
+
+
+        [SerializeField] private List<AbilityData> abilityDataList = new List<AbilityData>();
+        private Dictionary<int, Ability> abilities = new Dictionary<int, Ability>();
+
+        public Transform projectileSpawnPos;
+
+    private void Awake()
+    {
+        foreach (AbilityData aData in abilityDataList)
         {
-            if (aData.abilityType == AbilityType.projectile) 
+            if (aData.abilityType == AbilityType.projectile)
             {
-                abilities.Add(new ProjectileAbility((ProjectileData)aData, caster.transform, projectileSpawnPos));
+                abilities.Add(aData.AbilityID, new ProjectileAbility((ProjectileData)aData, caster.transform, projectileSpawnPos));
+            }
+        }
+
+        int slotIndex = 0;
+        foreach (var abilityEntry in abilities)
+        {
+            if (slotIndex < hotkeySlots.Count)
+            {
+                hotkeySlots[slotIndex].Icon.sprite = abilityEntry.Value.sprite;
+                AbilityIDToHotkeySlot.Add(abilityEntry.Key, hotkeySlots[slotIndex]);
+                slotIndex++;
+            }
+            else
+            {
+                break;
             }
         }
     }
 
-    void Update()
-    {
-        if (!GameManager.Instance.isPaused && !caster.IsDead())
+        private void Update()
         {
-            if (Input.GetButtonDown("Fire1"))
+            if (!GameManager.Instance.isPaused && !caster.IsDead())
             {
-                if (abilities[0].IsCastable())
+                if (Input.GetButtonDown("Fire1"))
                 {
-                    abilities[0].CastAbility();
-                    StartCoroutine(StartTickCooldown(abilities[0]));
+                    var ability = abilities.Values.ElementAt(0);
+                    CastAbility(ability);
+                }
+                if (Input.GetButtonDown("Fire2"))
+                {
+                    var ability = abilities.Values.ElementAt(1);
+                    CastAbility(ability);
                 }
             }
         }
-    }
 
-
-    public void UpgradeAbility(int slot, ProjectileUpgradeTypes upgradeType, float amount) 
+    public List<int> GetEquippedAbilities()
     {
-        if (slot > abilities.Count) 
+        List<int> equippedAbilityIDs = new List<int>();
+
+        foreach (var abilityEntry in abilities)
         {
-            Debug.LogWarning("altering ability in empty slot: " + slot);
-            return;
+            equippedAbilityIDs.Add(abilityEntry.Key);
         }
 
-        if (abilities[slot].abilityType == AbilityType.projectile)
+        return equippedAbilityIDs;
+    }
+
+    private void CastAbility(Ability ability)
         {
-            ProjectileAbility projAbility = abilities[0] as ProjectileAbility;
-
-            if (upgradeType == ProjectileUpgradeTypes.projectileDamage)
+            if (ability.IsCastable())
             {
-                projAbility.projData.projectileDamage += Mathf.RoundToInt(amount);
-            }
-            if (upgradeType == ProjectileUpgradeTypes.projectileCount)
-            {
-                projAbility.projData.projectileCount += Mathf.RoundToInt(amount);
-            }
-            if (upgradeType == ProjectileUpgradeTypes.projectileArc) 
-            {
-                if (projAbility.projData.firingArc + amount < 360)
-                {
-                    projAbility.projData.firingArc += amount;
-                }
-                else 
-                {
-                    projAbility.projData.firingArc = 360;
-                }
-
+                ability.CastAbility();
+                StartCoroutine(HandleAbilityCooldown(ability));
             }
         }
 
+        public void UpgradeAbility(int abilityID, ProjectileUpgradeTypes upgradeType, float amount)
+        {
+            if (!abilities.ContainsKey(abilityID))
+            {
+                Debug.LogWarning("No ability found with ID: " + abilityID);
+                return;
+            }
 
+            Ability foundAbility = abilities[abilityID];
+
+            if (foundAbility.abilityType == AbilityType.projectile)
+            {
+                ProjectileAbility projAbility = foundAbility as ProjectileAbility;
+
+                switch (upgradeType)
+                {
+                    case ProjectileUpgradeTypes.projectileDamage:
+                        projAbility.projData.projectileDamage += Mathf.RoundToInt(amount);
+                        break;
+                    case ProjectileUpgradeTypes.projectileCount:
+                        projAbility.projData.projectileCount += Mathf.RoundToInt(amount);
+                        break;
+                    case ProjectileUpgradeTypes.projectileArc:
+                        projAbility.projData.firingArc = Mathf.Clamp(projAbility.projData.firingArc + amount, 0, 360);
+                        break;
+                }
+            }
+        }
+
+        private IEnumerator HandleAbilityCooldown(Ability ability)
+        {
+            ability.SetCoolDown(true);
+            AbilityIDToHotkeySlot[ability.ID].StartCoolDown(ability.cooldown);
+            yield return new WaitForSeconds(ability.cooldown);
+            ability.SetCoolDown(false);
+        }
     }
-    private IEnumerator StartTickCooldown(Ability ability)
-    {
-        ability.SetCoolDown(true);
-        hotkeySlot.StartCoolDown(ability.cooldown);
-        yield return new WaitForSeconds(ability.cooldown);
-        ability.SetCoolDown(false);
-    }
-}

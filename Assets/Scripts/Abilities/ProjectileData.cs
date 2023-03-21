@@ -10,6 +10,7 @@ public class ProjectileData : AbilityData
     public float projectileLifetime;
     public int projectileDamage;
     public float castTime;
+    public float distanceFromCaster = -0.2f;
 
     public int ProjectileCount;
 

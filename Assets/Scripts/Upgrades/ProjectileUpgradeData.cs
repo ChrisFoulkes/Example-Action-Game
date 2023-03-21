@@ -18,6 +18,7 @@ public enum ProjectileUpgradeTypes
 [CreateAssetMenu(fileName = "ProjectileUpgrade", menuName = "ScriptableObjects/ProjectileUpgrades")]
 public class ProjectileUpgradeData : UpgradeData
 {
+    public ProjectileData ability;
     public List<UpgradeEffect> upgradeEffects;
 }
 

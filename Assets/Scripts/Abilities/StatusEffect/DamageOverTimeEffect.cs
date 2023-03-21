@@ -26,7 +26,8 @@ public class DamageOverTimeEffect : StatusEffect
 
     public override void UpdateEffect(GameObject target, ActiveStatusEffect activeStatusEffect)
     {
-        target.GetComponent<IHealth>().ChangeHealth(damagePerTick, FloatingColourType.Ignite);
+        target.GetComponent<IHealth>().ChangeHealth(damagePerTick, false, FloatingColourType.Ignite);
+
         GameObject effectPrefab = Instantiate(statusPrefab, target.transform);
 
         activeStatusEffect.effectAsset = effectPrefab;

@@ -50,8 +50,8 @@ public class StatusEffectController : MonoBehaviour
         else
         {
             ActiveStatusEffect newEffect = new ActiveStatusEffect { StatusEffect = statusEffect, ElapsedTime = 0f };
-            activeEffects.Add(newEffect);
             newEffect.ActiveCoroutine = StartCoroutine(ApplyStatusEffectCoroutine(newEffect));
+            activeEffects.Add(newEffect);
         }
     }
 

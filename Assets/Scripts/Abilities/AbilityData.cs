@@ -11,6 +11,7 @@ public enum AbilityType
 public class AbilityData : ScriptableObject
 {
     [Header("Generic Ability")]
+    public int AbilityID;
     public string abilityName;
     public Sprite abilityIcon;
     public AbilityType abilityType;

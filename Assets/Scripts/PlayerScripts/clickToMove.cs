@@ -39,7 +39,7 @@ public class clickToMove : MonoBehaviour
 
             // need to update the click to move to better support cancelling movement 
 
-            if (Input.GetButtonDown("Fire1"))
+            if (Input.GetButtonDown("Fire1") || Input.GetButtonDown("Fire2"))
             {
                 ResetPlayerDestination();
             }
@@ -48,7 +48,6 @@ public class clickToMove : MonoBehaviour
 
     void ResetPlayerDestination() 
     {
-        player.GetComponent<Rigidbody2D>().velocity = Vector3.zero;
         gameObject.transform.position = (player.position);
     }
 

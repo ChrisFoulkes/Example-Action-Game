@@ -7,7 +7,7 @@ public class PlayerHealthController : HealthController
     {
         Initialize(20);
     }
-    protected override void GenerateCombatText(float amount, FloatingColourType colourType = FloatingColourType.Generic)
+    protected override void GenerateCombatText(float amount, FloatingColourType colourType = FloatingColourType.Generic, bool isCriticalHit = false)
     {
         if (amount > 0)
         {

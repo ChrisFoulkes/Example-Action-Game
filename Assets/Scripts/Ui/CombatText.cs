@@ -74,7 +74,22 @@ public class CombatText : MonoBehaviour
     private void ScaleText()
     {
         float t = 1 - (destroyTime / duration);
-        float scaleFactor = 1 + scalingFactor * Mathf.Sin(t * Mathf.PI);
+        float scaleFactor = 1.0f;
+
+        if (t <= 1f / 3f) // Scaling up
+        {
+            scaleFactor = 1 + scalingFactor * Mathf.Sin(t * Mathf.PI * 1.5f);
+        }
+        else if (t >= 2.5f / 3f) // Scaling down
+        {
+            float tScaled = (t - 2f / 3f) * 3f;
+            scaleFactor = 1 + scalingFactor * Mathf.Sin((1 - tScaled) * Mathf.PI * 1.5f);
+        }
+        else // Maximum scale
+        {
+            scaleFactor = 1 + scalingFactor;
+        }
+
         transform.localScale = initialScale * scaleFactor;
     }
 

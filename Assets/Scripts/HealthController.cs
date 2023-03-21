@@ -47,13 +47,18 @@ public class HealthController : MonoBehaviour, IHealth
         healthChangedEvent.RemoveLocalListener(listener);
     }
 
-    public virtual void ChangeHealth(float amount, FloatingColourType colourType = FloatingColourType.Generic)
+    public virtual void ChangeHealth(float amount, bool isCriticalHit = false, FloatingColourType colourType = FloatingColourType.Generic)
     {
-
-
         if (_currentHP > 0)
         {
-            GenerateCombatText(amount, colourType);
+            if (isCriticalHit) 
+            {
+                GenerateCombatText(amount, FloatingColourType.levelUp, true);
+            }
+            else
+            {
+                GenerateCombatText(amount, colourType);
+            }
         }
 
         _currentHP += amount;
@@ -73,7 +78,7 @@ public class HealthController : MonoBehaviour, IHealth
         FlashColour();
     }
 
-    protected virtual void GenerateCombatText(float amount, FloatingColourType colourType)
+    protected virtual void GenerateCombatText(float amount, FloatingColourType colourType, bool isCriticalHit = false)
     {
         if (amount > 0)
         {
@@ -81,7 +86,15 @@ public class HealthController : MonoBehaviour, IHealth
         }
         else if (amount < 0)
         {
-            FloatingCombatTextController.Instance.CreateFloatingCombatText(Mathf.Abs(amount).ToString(), transform, colourType, false);
+            if (isCriticalHit)
+            {
+
+                FloatingCombatTextController.Instance.CreateFloatingCombatText(Mathf.Abs(amount).ToString(), transform, colourType, false, 0.9f, 0.8f);
+            }
+            else 
+            {
+                FloatingCombatTextController.Instance.CreateFloatingCombatText(Mathf.Abs(amount).ToString(), transform, colourType, false);
+            }
         }
     }
 

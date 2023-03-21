@@ -60,19 +60,19 @@ public class FloatingCombatTextController : MonoBehaviour
         }
     }
 
-    public void CreateFloatingCombatText(string text, Transform origin, FloatingColourType colourType, bool shouldAttachToSelf = false, float destroyTime = 0.9f)
+    public void CreateFloatingCombatText(string text, Transform origin, FloatingColourType colourType, bool shouldAttachToSelf = false, float destroyTime = 0.9f, float scaleValue = 0.3f)
     {
         if (!lastTimeByOrigin.ContainsKey(origin))
         {
             lastTimeByOrigin[origin] = Time.time;
-            StartCoroutine(SpawnText(text, origin, GetDamageTypeColour(colourType), 0, destroyTime, shouldAttachToSelf));
+            StartCoroutine(SpawnText(text, origin, GetDamageTypeColour(colourType), 0, destroyTime, shouldAttachToSelf, 0, scaleValue));
             numOfInstances = 0;
         }
         else
         {
             numOfInstances++;
             lastTimeByOrigin[origin] = Time.time + (bufferTime * numOfInstances);
-            StartCoroutine(SpawnText(text, origin, GetDamageTypeColour(colourType),(bufferTime * numOfInstances), destroyTime, shouldAttachToSelf, numOfInstances));
+            StartCoroutine(SpawnText(text, origin, GetDamageTypeColour(colourType),(bufferTime * numOfInstances), destroyTime, shouldAttachToSelf, numOfInstances, scaleValue));
          
         }
 
@@ -92,7 +92,7 @@ public class FloatingCombatTextController : MonoBehaviour
         }
     }
 
-    private IEnumerator SpawnText(string text, Transform origin, FloatingCombatTextColour colourType, float bufferTime, float destroyTime, bool shouldAttachToSelf, float instance = 0)
+    private IEnumerator SpawnText(string text, Transform origin, FloatingCombatTextColour colourType, float bufferTime, float destroyTime, bool shouldAttachToSelf, float instance = 0, float scaleValue = 0.3f)
     {
         yield return new WaitForSeconds(bufferTime);
 
@@ -117,8 +117,10 @@ public class FloatingCombatTextController : MonoBehaviour
 
             GameObject textObj = Instantiate(textPrefab, spawnPosition, spawnRotation, parentTransform);
             CombatText combatText = textObj.GetComponent<CombatText>();
-            textObj.GetComponent<TextMeshPro>().sortingOrder = Mathf.RoundToInt(10f + instance);
-            combatText.Init(destroyTime, moveSpeed, 0.3f);
+
+            textObj.GetComponent<TextMeshPro>().sortingOrder = Mathf.RoundToInt(10f + (10f * scaleValue));
+
+            combatText.Init(destroyTime, moveSpeed, scaleValue);
             combatText.SetText(text, colourType);
 
         }

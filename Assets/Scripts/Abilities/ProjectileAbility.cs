@@ -14,8 +14,9 @@ public class ActiveProjectileData
     public int projectileCount;
     public float firingArc;
     public float castTime;
+    public float distanceFromCaster;
 
-    public ActiveProjectileData(float projectileSpeed, float projectileLifetime, int projectileDamage, int projectileCount, float firingArc, float castTime)
+    public ActiveProjectileData(float projectileSpeed, float projectileLifetime, int projectileDamage, int projectileCount, float firingArc, float castTime, float distanceFromCaster)
     {
         this.projectileSpeed = projectileSpeed;
         this.projectileLifetime = projectileLifetime;
@@ -23,6 +24,7 @@ public class ActiveProjectileData
         this.projectileCount = projectileCount;
         this.firingArc = firingArc;
         this.castTime = castTime;
+        this.distanceFromCaster = distanceFromCaster;
     }
 
 }
@@ -39,7 +41,7 @@ public class ProjectileAbility : Ability
 
     public ProjectileAbility(ProjectileData aData, Transform casterTransform, Transform projectileSpawnPos): base(aData)
     {
-        projData = new ActiveProjectileData(aData.projectileSpeed, aData.projectileLifetime, aData.projectileDamage, aData.ProjectileCount, aData.firingArc, aData.castTime);
+        projData = new ActiveProjectileData(aData.projectileSpeed, aData.projectileLifetime, aData.projectileDamage, aData.ProjectileCount, aData.firingArc, aData.castTime, aData.distanceFromCaster);
 
         statusEffects = aData.effects;
         projectileAttack = aData.projectilePrefab;
@@ -62,7 +64,7 @@ public class ProjectileAbility : Ability
             }
 
             SetTheFiringRotation(projData.firingArc, AbilityUtils.getFiringArcIncrement(i, projData.firingArc, projData.projectileCount));
-            GameObject projectile = Object.Instantiate(projectileAttack.gameObject, AbilityUtils.GetClosestPointToMouse(caster.position, projectileSpawnPoint.position), projectileSpawnPoint.rotation);
+            GameObject projectile = Object.Instantiate(projectileAttack.gameObject, AbilityUtils.GetClosestPointToMouse(caster.position, projectileSpawnPoint.position, projData.distanceFromCaster), projectileSpawnPoint.rotation);
             projectile.GetComponent<ProjectileAttack>().Initialize(this);
         }
 
@@ -87,7 +89,18 @@ public class ProjectileAbility : Ability
     public void OnHit(Collider2D collision, ProjectileAttack attack) 
     {
         IHealth hitHealth = collision.GetComponentInParent<IHealth>();
-        hitHealth.ChangeHealth(projData.projectileDamage);
+
+        float randomNumber = Random.Range(0, 100);
+
+        if (randomNumber < 10)
+        {
+            hitHealth.ChangeHealth((projData.projectileDamage * 2), true);
+        }
+        else 
+        {
+
+            hitHealth.ChangeHealth(projData.projectileDamage);
+        }
 
         if(statusEffects.Count> 0) 
         {

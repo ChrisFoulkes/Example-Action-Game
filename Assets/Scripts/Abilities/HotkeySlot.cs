@@ -11,6 +11,7 @@ public class HotkeySlot : MonoBehaviour
     private float currentCooldown = 0f;
 
     public Image cooldownImage;
+    public Image Icon;
     public GameObject KeytextObj;
     // Start is called before the first frame update
     void Start()

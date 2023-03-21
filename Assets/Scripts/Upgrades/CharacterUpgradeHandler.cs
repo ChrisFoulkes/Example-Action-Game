@@ -42,7 +42,7 @@ public class CharacterUpgradeHandler : MonoBehaviour
     {
         foreach(UpgradeEffect upgrade in uData.upgradeEffects)
         {
-            playerAbilityManager.UpgradeAbility(0, upgrade.upgradeType, upgrade.amount);
+            playerAbilityManager.UpgradeAbility(uData.ability.AbilityID, upgrade.upgradeType, upgrade.amount);
         }
     }
 }

@@ -33,6 +33,12 @@ public class PlayerMovement : MonoBehaviour, IMovement
     public void CanMove(bool Move) 
     {
         canMove = Move;
+
+        if(!canMove)
+        {
+
+            rb.velocity = Vector3.zero;
+        }
     }
     public void ChangeSpeed(float amount)
     {

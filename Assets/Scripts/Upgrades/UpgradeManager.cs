@@ -1,6 +1,7 @@
 using EventCallbacks;
 using Pathfinding;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -29,6 +30,27 @@ public class UpgradeManager : MonoBehaviour
     private void Start()
     {
         characterUpgradeHandler.Initialize(player);
+        PopulateUpgradeData();
+    }
+
+    private void PopulateUpgradeData()
+    {
+        // Clear any existing data
+        upgradeData.Clear();
+
+        // Retrieve and add all character upgrades
+        var characterUpgrades = Resources.LoadAll<CharacterUpgradeData>("UpgradeData");
+        upgradeData.AddRange(characterUpgrades);
+
+        // Retrieve and add ability upgrades for currently equipped abilities
+        var playerAbilityManager = player.GetComponentInChildren<PlayerAbilityManager>();
+
+        foreach (var ability in playerAbilityManager.GetEquippedAbilities())
+        {
+            // Assuming AbilityData has a unique ID
+            var abilityUpgrades = Resources.LoadAll<ProjectileUpgradeData>("UpgradeData").Where(a => a.ability.AbilityID == ability);
+            upgradeData.AddRange(abilityUpgrades);
+        }
     }
 
     private void OnEnable()
@@ -44,7 +66,7 @@ public class UpgradeManager : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetButtonDown("Fire2"))
+        if (Input.GetButtonDown("Fire3"))
         {
             if (pendingUpgrades > 0 && !GameManager.Instance.isPaused)
             {
