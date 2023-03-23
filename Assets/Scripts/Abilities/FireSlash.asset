@@ -17,7 +17,11 @@ MonoBehaviour:
   abilityIcon: {fileID: 21300000, guid: 853e7f57af798974ca495f86aa89f131, type: 3}
   abilityType: 1
   cooldown: 0.5
-  meleeDamage: -9
+  meleeDamage:
+    propertyName: Melee Damage
+    baseValue: -6
+    associatedStats:
+    - {fileID: 11400000, guid: a6219336b88ab074ea899f8cdec7cbcd, type: 2}
   critChance:
     propertyName: Crit Chance
     baseValue: 0

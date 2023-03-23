@@ -13,14 +13,25 @@ public class WaveManager : MonoBehaviour
     private float waveDuration = 30f;
     [SerializeField] private float spawnRate = 3f;
 
-    private bool isWaveRunning = true;
+    [SerializeField] private bool isWaveRunning = true;
 
     public void Start()
     {
         StartWave();
     }
 
-    public void FixedUpdate()
+    private void OnEnable()
+    {
+        EventManager.AddGlobalListener<PlayerDeathEvent>(OnPlayerDeath);
+    }
+
+    private void OnDisable()
+    {
+
+        EventManager.RemoveGlobalListener<PlayerDeathEvent>(OnPlayerDeath);
+    }
+
+    private void FixedUpdate()
     {
     }
     public void StartWave()
@@ -84,5 +95,10 @@ public class WaveManager : MonoBehaviour
             if (spawnIndex >= enemySpawners.Count) { spawnIndex = 0; }
             yield return new WaitForSeconds(spawnRate);
         }
+    }
+
+    private void  OnPlayerDeath(PlayerDeathEvent deathEvent) 
+    {
+        isWaveRunning = false;
     }
 }

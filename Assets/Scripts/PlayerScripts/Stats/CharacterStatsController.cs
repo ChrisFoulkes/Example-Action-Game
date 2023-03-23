@@ -45,6 +45,8 @@ public class CharacterStatsController : MonoBehaviour
 
     public void GenerateActiveStats()
     {
+        activeStats.Clear();
+
         foreach (StatData stat in Stats)
         {
             StatType newStatType;

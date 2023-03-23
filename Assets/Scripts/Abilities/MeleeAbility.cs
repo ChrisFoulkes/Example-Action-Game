@@ -21,7 +21,7 @@ public class MeleeUpgradeHandler : UpgradeHandler
             switch (meleeUpgradeEffect.upgradeType)
             {
                 case MeleeUpgradeTypes.meleeDamage:
-                    parentAbility.meleeData.meleeDamage += Mathf.RoundToInt(meleeUpgradeEffect.amount);
+                    parentAbility.meleeData.meleeDamage.baseValue += Mathf.RoundToInt(meleeUpgradeEffect.amount);
                     break;
                 case MeleeUpgradeTypes.meleeCastSpeed:
                     parentAbility.meleeData.castTime = Mathf.Max(parentAbility.meleeData.castTime + meleeUpgradeEffect.amount, (parentAbility.meleeData.originalCastTime * 0.75f));
@@ -33,12 +33,12 @@ public class MeleeUpgradeHandler : UpgradeHandler
 
 public class ActiveMeleeData
 {
-    public int meleeDamage;
+    public StatAssociation meleeDamage;
     public StatAssociation critChance;
     public float originalCastTime;
     public float castTime;
 
-    public ActiveMeleeData(int meleeDamage, float castTime, StatAssociation critChance)
+    public ActiveMeleeData(StatAssociation meleeDamage, float castTime, StatAssociation critChance)
     {
         this.critChance = critChance;
         this.meleeDamage = meleeDamage;
@@ -56,7 +56,6 @@ public class MeleeAbility : Ability
     private Transform caster;
     private Transform projectileSpawnPoint;
     public CharacterStatsController CharacterStatsController;
-
 
     private List<StatusEffect> statusEffects;
 
@@ -83,7 +82,6 @@ public class MeleeAbility : Ability
 
         melee.GetComponent<MeleeAttack>().Initialize(this);
 
-
         //currently global events maybe should be local 
         PlayerStopMovementEvent stopMovementEvent = new PlayerStopMovementEvent();
         stopMovementEvent.duration = meleeData.castTime;
@@ -91,6 +89,10 @@ public class MeleeAbility : Ability
 
         SetPlayerFacingDirectionEvent setDirectionEvent = new SetPlayerFacingDirectionEvent(AbilityUtils.getFacingDirection(caster.position), meleeData.castTime);
         EventManager.Raise(setDirectionEvent);
+
+
+        // Add this line to call the Recast method
+        Recast();
     }
     public override void ApplyUpgrade(UpgradeEffect upgradeEffect)
     {
@@ -128,14 +130,16 @@ public class MeleeAbility : Ability
 
         float randomNumber = UnityEngine.Random.Range(0f, 1f);
 
+        float damageValue = Mathf.FloorToInt(meleeData.meleeDamage.CalculateModifiedValue(CharacterStatsController));
+
         if (randomNumber < meleeData.critChance.CalculateModifiedValue(CharacterStatsController))
         {
-            hitHealth.ChangeHealth((meleeData.meleeDamage * 2), true);
+            hitHealth.ChangeHealth((damageValue * 2), true);
         }
         else
         {
 
-            hitHealth.ChangeHealth(meleeData.meleeDamage);
+            hitHealth.ChangeHealth(damageValue);
         }
 
         if (statusEffects.Count > 0)

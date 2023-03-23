@@ -8,7 +8,6 @@ using UnityEngine;
 [Serializable]
 public class MovementController: MonoBehaviour, IMovement
 {
-    float normalMaxSpeed = 5;
     float currentMaxSpeed = 5;
 
     private Pathfinding.AIPath aiPath;

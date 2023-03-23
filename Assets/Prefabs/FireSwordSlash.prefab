@@ -121,7 +121,7 @@ MonoBehaviour:
   hitCooldown: 0.1
   disableRepeatedHits: 1
   knockbackForce: {x: 10, y: 10}
-  shouldKnockback: 1
+  shouldKnockback: 0
 --- !u!50 &8533877508382327353
 Rigidbody2D:
   serializedVersion: 4

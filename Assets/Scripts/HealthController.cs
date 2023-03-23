@@ -105,7 +105,7 @@ public class HealthController : MonoBehaviour, IHealth
         FlashColour();
 
 
-        deathHandler.StartDeath();
+        deathHandler.CompleteDeath();
     }
 
     public float CurrentHealth() 

@@ -25,8 +25,3 @@ public class AdditiveStatData : StatData
     public AdditiveStatData(int id, string name, float value) : base(id, name, value) { }
 }
 
-[CreateAssetMenu(fileName = "MultiplicativestatData", menuName = "Stats/MultiplicativeStat", order = 3)]
-public class MultiplicativeStatData : StatData
-{
-    public MultiplicativeStatData(int id, string name, float value) : base(id, name, value) { }
-}
