@@ -1,25 +1,19 @@
 using EventCallbacks;
 using System.Collections;
 using System.Collections.Generic;
-using System.Transactions;
 using UnityEngine;
-using UnityEngine.Rendering;
 
 public class WaveManager : MonoBehaviour
 {
     public List<WaveData> waveData = new List<WaveData>();
-
-    public List<EnemySpawner> enemySpawners= new List<EnemySpawner>();
+    public List<EnemySpawner> enemySpawners = new List<EnemySpawner>();
 
     private int currentWave = 1;
-   
 
     private float waveDuration = 30f;
-    [SerializeField]private float spawnRate = 3f;
+    [SerializeField] private float spawnRate = 3f;
 
     private bool isWaveRunning = true;
-
-
 
     public void Start()
     {
@@ -29,20 +23,16 @@ public class WaveManager : MonoBehaviour
     public void FixedUpdate()
     {
     }
-    public void StartWave() 
+    public void StartWave()
     {
-
         StartCoroutine(IncrementWaveCount());
-
         StartCoroutine(ProcessWave());
-
     }
 
-    private IEnumerator IncrementWaveCount() 
+    private IEnumerator IncrementWaveCount()
     {
+        yield return new WaitForSeconds(waveDuration);
 
-        yield return new WaitForSeconds(waveDuration); 
-        
         currentWave++;
         WaveCompleteEvent waveEvent = new WaveCompleteEvent();
 
@@ -52,15 +42,40 @@ public class WaveManager : MonoBehaviour
         StartCoroutine(IncrementWaveCount());
     }
 
-     private IEnumerator ProcessWave()
+    private GameObject ChooseEnemyToSpawn(WaveData wave)
+    {
+        float totalSpawnChance = 0f;
+
+        foreach (WaveEnemyCount enemyCount in wave.waveEnemyCounts)
+        {
+            totalSpawnChance += enemyCount.spawnChance;
+        }
+
+        float randomValue = Random.Range(0f, totalSpawnChance);
+        float currentChance = 0f;
+
+        foreach (WaveEnemyCount enemyCount in wave.waveEnemyCounts)
+        {
+            currentChance += enemyCount.spawnChance;
+            if (randomValue <= currentChance)
+            {
+                return enemyCount.EnemyPrefab;
+            }
+        }
+
+        return null;
+    }
+
+    private IEnumerator ProcessWave()
     {
         int spawnIndex = 0;
         while (isWaveRunning)
         {
-            GameObject spawnedEnemy = enemySpawners[spawnIndex].SpawnEnemy(waveData[0].waveEnemyCounts[0].EnemyPrefab);
+            GameObject enemyToSpawn = ChooseEnemyToSpawn(waveData[0]);
+            GameObject spawnedEnemy = enemySpawners[spawnIndex].SpawnEnemy(enemyToSpawn);
             spawnedEnemy.GetComponentInChildren<EnemyStatController>().InitializeControllers(currentWave);
 
-            if(spawnRate > 1f) 
+            if (spawnRate > 1f)
             {
                 spawnRate = spawnRate - 0.05f;
             }
@@ -69,7 +84,5 @@ public class WaveManager : MonoBehaviour
             if (spawnIndex >= enemySpawners.Count) { spawnIndex = 0; }
             yield return new WaitForSeconds(spawnRate);
         }
-     }
-
+    }
 }
-

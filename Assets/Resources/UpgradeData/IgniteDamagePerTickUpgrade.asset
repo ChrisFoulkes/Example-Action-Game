@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0a476fa8c22d5b94cb3a6961cf8d3ccd, type: 3}
+  m_Name: IgniteDamagePerTickUpgrade
+  m_EditorClassIdentifier: 
+  upgradeName: IgniteDamage
+  upgradeDescription: Increases your ignite ticks damage
+  upgradeIcon: {fileID: 21300004, guid: bc1e72832b9cbb345b13408b557b76af, type: 3}
+  baseUpgradeType: 0
+  tier: 0
+  upgradeEffects:
+  - amount: -1
+    upgradeType: 2
+    statData: {fileID: 11400000, guid: ef354b02ee5e20940a573d8b50bc6991, type: 2}

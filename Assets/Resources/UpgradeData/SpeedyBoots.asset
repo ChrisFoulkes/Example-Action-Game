@@ -17,5 +17,7 @@ MonoBehaviour:
   upgradeIcon: {fileID: 21300000, guid: 584efbfe0d602154e9587c41381d4293, type: 3}
   baseUpgradeType: 0
   tier: 0
-  upgradeType: 0
-  amount: 1
+  upgradeEffects:
+  - amount: 1
+    upgradeType: 0
+    statData: {fileID: 0}

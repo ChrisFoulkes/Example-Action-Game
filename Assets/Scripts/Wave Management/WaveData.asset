@@ -10,10 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6fcbd725c3e500c4d81f0a3e5d08524c, type: 3}
-  m_Name: SkeletonWave2
+  m_Name: WaveData
   m_EditorClassIdentifier: 
   waveEnemyCounts:
-  - EnemyPrefab: {fileID: 8652212903993137680, guid: 2f1ad7c4531080b429afcc5fbcbabd0a, type: 3}
-    enemyCount: 18
-  spawnRate: 0.4
+  - EnemyPrefab: {fileID: 6352923336266398879, guid: 6d4b3e74da3a86a448d516e21d3160ab, type: 3}
+    enemyCount: 5
+    spawnChance: 0.05
+  spawnRate: 1
   splitSpawn: 0

@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0a476fa8c22d5b94cb3a6961cf8d3ccd, type: 3}
+  m_Name: CritChance
+  m_EditorClassIdentifier: 
+  upgradeName: Crit Chance
+  upgradeDescription: increases your crit chance by 0.05
+  upgradeIcon: {fileID: 21300000, guid: 5badfea5544c20646b29f7511bede7b9, type: 3}
+  baseUpgradeType: 0
+  tier: 0
+  upgradeEffects:
+  - amount: 0.05
+    upgradeType: 2
+    statData: {fileID: 11400000, guid: 65f80ef0b593f3042bebf02e2877640d, type: 2}

@@ -431,7 +431,7 @@ GameObject:
   - component: {fileID: 8652212903993137710}
   - component: {fileID: 8652212903993137709}
   - component: {fileID: 8652212903993137708}
-  - component: {fileID: 8652212903993137711}
+  - component: {fileID: 4368121808373780572}
   m_Layer: 7
   m_Name: EnemyPrefab
   m_TagString: Enemy
@@ -596,7 +596,7 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
---- !u!114 &8652212903993137711
+--- !u!114 &4368121808373780572
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

@@ -91,40 +91,7 @@ using UnityEngine;
             return;
         }
 
-        Ability foundAbility = abilities[abilityID];
-
-        if (foundAbility.abilityType == AbilityType.projectile && upgradeEffect is ProjectileUpgradeEffect projectileUpgradeEffect)
-        {
-            ProjectileAbility projAbility = foundAbility as ProjectileAbility;
-
-            switch (projectileUpgradeEffect.upgradeType)
-            {
-                case ProjectileUpgradeTypes.projectileDamage:
-                    projAbility.projData.projectileDamage += Mathf.RoundToInt(projectileUpgradeEffect.amount);
-                    break;
-                case ProjectileUpgradeTypes.projectileCount:
-                    projAbility.projData.projectileCount += Mathf.RoundToInt(projectileUpgradeEffect.amount);
-                    break;
-                case ProjectileUpgradeTypes.projectileArc:
-                    projAbility.projData.firingArc = Mathf.Clamp(projAbility.projData.firingArc + projectileUpgradeEffect.amount, 0, 360);
-                    break;
-            }
-        }
-
-        if (foundAbility.abilityType == AbilityType.melee && upgradeEffect is MeleeUpgradeEffect meleeUpgradeEffect)
-        {
-            MeleeAbility meleeAbility = foundAbility as MeleeAbility;
-
-            switch (meleeUpgradeEffect.upgradeType)
-            {
-                case MeleeUpgradeTypes.meleeDamage:
-                    meleeAbility.meleeData.meleeDamage += Mathf.RoundToInt(meleeUpgradeEffect.amount);
-                    break;
-                case MeleeUpgradeTypes.meleeCastSpeed:
-                    meleeAbility.meleeData.castTime = Mathf.Max(meleeAbility.meleeData.castTime + meleeUpgradeEffect.amount,(meleeAbility.meleeData.originalCastTime * 0.75f));
-                    break;
-            }
-        }
+        abilities[abilityID].ApplyUpgrade(upgradeEffect);
     }
 
     private IEnumerator HandleAbilityCooldown(Ability ability)

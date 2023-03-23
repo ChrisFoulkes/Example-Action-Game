@@ -4,6 +4,8 @@ using UnityEngine;
 
 public abstract class Ability
 {
+    public UpgradeHandler upgradeHandler;
+
     //cooldown --
     private bool IsAvailable = true;
     public float cooldown { get; private set; }
@@ -16,8 +18,9 @@ public abstract class Ability
     public void adjustCooldowm(float adjustedValue) 
     {
         cooldown = adjustedValue;
-    
+
     }
+    public abstract void ApplyUpgrade(UpgradeEffect upgradeEffect);
 
     public void SetCoolDown(bool isOnCooldown) 
     {

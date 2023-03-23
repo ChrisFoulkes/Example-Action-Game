@@ -8,6 +8,7 @@ public class WaveEnemyCount
 {
     public GameObject EnemyPrefab;
     public int enemyCount = 1;
+    public float spawnChance = 0.05f;
 
     public WaveEnemyCount(int numEnemy, GameObject prefab) 
     {

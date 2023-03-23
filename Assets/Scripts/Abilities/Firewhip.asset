@@ -20,6 +20,11 @@ MonoBehaviour:
   projectileSpeed: 0
   projectileLifetime: 1
   projectileDamage: -8
+  critChance:
+    propertyName: Crit Chance
+    baseValue: 0
+    associatedStats:
+    - {fileID: 11400000, guid: 65f80ef0b593f3042bebf02e2877640d, type: 2}
   castTime: 0.4
   distanceFromCaster: 0.38
   ProjectileCount: 1

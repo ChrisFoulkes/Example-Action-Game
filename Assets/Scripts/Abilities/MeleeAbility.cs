@@ -5,14 +5,42 @@ using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEngine;
 
+public class MeleeUpgradeHandler : UpgradeHandler
+{
+    private MeleeAbility parentAbility;
+
+    public MeleeUpgradeHandler(MeleeAbility parentAbility)
+    {
+        this.parentAbility = parentAbility;
+    }
+
+    public override void ApplyUpgrade(UpgradeEffect upgradeEffect)
+    {
+        if (upgradeEffect is MeleeUpgradeEffect meleeUpgradeEffect)
+        {
+            switch (meleeUpgradeEffect.upgradeType)
+            {
+                case MeleeUpgradeTypes.meleeDamage:
+                    parentAbility.meleeData.meleeDamage += Mathf.RoundToInt(meleeUpgradeEffect.amount);
+                    break;
+                case MeleeUpgradeTypes.meleeCastSpeed:
+                    parentAbility.meleeData.castTime = Mathf.Max(parentAbility.meleeData.castTime + meleeUpgradeEffect.amount, (parentAbility.meleeData.originalCastTime * 0.75f));
+                    break;
+            }
+        }
+    }
+}
+
 public class ActiveMeleeData
 {
     public int meleeDamage;
+    public StatAssociation critChance;
     public float originalCastTime;
     public float castTime;
 
-    public ActiveMeleeData(int meleeDamage, float castTime)
+    public ActiveMeleeData(int meleeDamage, float castTime, StatAssociation critChance)
     {
+        this.critChance = critChance;
         this.meleeDamage = meleeDamage;
         this.castTime = castTime;
 
@@ -27,19 +55,23 @@ public class MeleeAbility : Ability
     private MeleeAttack meleeAttack;
     private Transform caster;
     private Transform projectileSpawnPoint;
+    public CharacterStatsController CharacterStatsController;
 
 
     private List<StatusEffect> statusEffects;
 
     public MeleeAbility(MeleeData aData, Transform casterTransform, Transform projectileSpawnPos) : base(aData)
     {
-        meleeData = new ActiveMeleeData(aData.meleeDamage, aData.castTime);
+        meleeData = new ActiveMeleeData(aData.meleeDamage, aData.castTime, aData.critChance);
 
         statusEffects = aData.effects;
         meleeAttack = aData.meleePrefab;
 
         caster = casterTransform;
         projectileSpawnPoint = projectileSpawnPos;
+        upgradeHandler = new MeleeUpgradeHandler(this);
+        //need to update the way we handle passing caster data this is dumb
+        CharacterStatsController = caster.gameObject.GetComponent<CharacterStatsController>();
     }
 
 
@@ -60,7 +92,10 @@ public class MeleeAbility : Ability
         SetPlayerFacingDirectionEvent setDirectionEvent = new SetPlayerFacingDirectionEvent(AbilityUtils.getFacingDirection(caster.position), meleeData.castTime);
         EventManager.Raise(setDirectionEvent);
     }
-
+    public override void ApplyUpgrade(UpgradeEffect upgradeEffect)
+    {
+        upgradeHandler.ApplyUpgrade(upgradeEffect);
+    }
 
     Quaternion SetTheFiringRotation()
     {
@@ -91,9 +126,9 @@ public class MeleeAbility : Ability
     {
         IHealth hitHealth = collision.GetComponentInParent<IHealth>();
 
-        float randomNumber = UnityEngine.Random.Range(0, 100);
+        float randomNumber = UnityEngine.Random.Range(0f, 1f);
 
-        if (randomNumber < 10)
+        if (randomNumber < meleeData.critChance.CalculateModifiedValue(CharacterStatsController))
         {
             hitHealth.ChangeHealth((meleeData.meleeDamage * 2), true);
         }
@@ -109,7 +144,7 @@ public class MeleeAbility : Ability
 
             foreach (var effect in statusEffects)
             {
-                effect.ApplyEffect(statusController);
+                effect.ApplyEffect(statusController, caster.gameObject);
             }
         }
     }

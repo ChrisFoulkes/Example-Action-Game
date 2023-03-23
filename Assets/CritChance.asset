@@ -9,11 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6fcbd725c3e500c4d81f0a3e5d08524c, type: 3}
-  m_Name: SkeletonWave3
+  m_Script: {fileID: 11500000, guid: 63f6cd2fd59dfd648a34079fc9cfb2e1, type: 3}
+  m_Name: CritChance
   m_EditorClassIdentifier: 
-  waveEnemyCounts:
-  - EnemyPrefab: {fileID: 8652212903993137680, guid: 2f1ad7c4531080b429afcc5fbcbabd0a, type: 3}
-    enemyCount: 30
-  spawnRate: 0.2
-  splitSpawn: 0
+  ID: 1
+  Name: Crit Chance
+  baseValue: 0.01

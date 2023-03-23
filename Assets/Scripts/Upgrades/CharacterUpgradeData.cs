@@ -6,12 +6,15 @@ using UnityEngine;
 public class CharacterUpgradeEffect : UpgradeEffect
 {
     public CharacterUpgradeTypes upgradeType;
+
+    public StatData statData = null;
 }
 
 public enum CharacterUpgradeTypes 
 {
     speed,
-    heal
+    heal, 
+    stat
 }
 [CreateAssetMenu(fileName = "CharacterUpgrade", menuName = "ScriptableObjects/CharacterUpgrade")]
 public class CharacterUpgradeData : UpgradeData

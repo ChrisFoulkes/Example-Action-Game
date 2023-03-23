@@ -118,6 +118,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   animator: {fileID: 0}
+  hitCooldown: 0.1
+  disableRepeatedHits: 1
 --- !u!58 &8471474761391112647
 CircleCollider2D:
   m_ObjectHideFlags: 0

@@ -7,6 +7,7 @@ public class MeleeData : AbilityData
 {
     [Header("Melee Base Data")]
     public int meleeDamage;
+    public StatAssociation critChance;
     public float castTime;
     public float distanceFromCaster = -0.2f;
 

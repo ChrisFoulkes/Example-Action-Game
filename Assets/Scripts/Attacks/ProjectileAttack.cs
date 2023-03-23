@@ -1,24 +1,20 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
-public class ProjectileAttack : MonoBehaviour
+public class ProjectileAttack : Attack
 {
     private float projectileSpeed;
     private float projectileLifetime;
+    private Rigidbody2D rb2d;
     ProjectileAbility ability;
 
-    public Animator animator;
-    private Rigidbody2D rb2d;
-
-    private void Awake()
+    protected override void Awake()
     {
+        base.Awake();
         rb2d = GetComponent<Rigidbody2D>();
-        animator = GetComponent<Animator>();
-
     }
 
-    public void Initialize(ProjectileAbility ability) 
+    public void Initialize(ProjectileAbility ability)
     {
         projectileSpeed = ability.projData.projectileSpeed;
         projectileLifetime = ability.projData.projectileLifetime;
@@ -29,31 +25,30 @@ public class ProjectileAttack : MonoBehaviour
         StartCoroutine(Lifespan(projectileLifetime));
     }
 
-    private void OnTriggerEnter2D(Collider2D collision)
+    private void OnTriggerStay2D(Collider2D collision)
     {
-        if (collision.CompareTag("Enemy"))
+        if (disableRepeatedHits)
         {
-            IHealth enemy = collision.GetComponentInParent<IHealth>();
-            if (enemy.CurrentHealth() > 0){
-                ability.OnHit(collision, this);
-                animator.SetBool("OnHit", true);
-            }
-        }
-        else 
-        {
-            if (collision.CompareTag("Background"))
+            if (!hitTimeDict.ContainsKey(collision))
             {
-                animator.SetBool("OnHit", true);
+                PerformHit(collision);
+                hitTimeDict[collision] = Time.time;
             }
         }
-
+        else
+        {
+            if (!hitTimeDict.ContainsKey(collision) || Time.time - hitTimeDict[collision] > hitCooldown)
+            {
+                PerformHit(collision);
+                hitTimeDict[collision] = Time.time;
+            }
+        }
     }
 
-    public void HitAnimationComplete() 
+    protected override void OnHit(Collider2D collision)
     {
-        Destroy(gameObject);
+        ability.OnHit(collision, this);
     }
-
     IEnumerator Lifespan(float delay)
     {
         yield return new WaitForSeconds(delay);

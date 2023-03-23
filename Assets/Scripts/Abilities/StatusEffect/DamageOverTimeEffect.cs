@@ -5,12 +5,18 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Status Effects/Damage Over Time")]
 public class DamageOverTimeEffect : StatusEffect
 {
-    public float damagePerTick;
+    public StatAssociation damagePerTick;
     public float chanceToApply;
     public bool canMultiApply = false;
 
-    public override void ApplyEffect(StatusEffectController controller)
+    public GameObject caster;
+    public CharacterStatsController characterStatsController;
+
+    public override void ApplyEffect(StatusEffectController controller, GameObject caster)
     {
+        this.caster = caster;
+        characterStatsController = caster.GetComponentInChildren<CharacterStatsController>();
+
         float randomNumber = Random.Range(0, 100);
 
         if (randomNumber < chanceToApply)
@@ -26,7 +32,7 @@ public class DamageOverTimeEffect : StatusEffect
 
     public override void UpdateEffect(GameObject target, ActiveStatusEffect activeStatusEffect)
     {
-        target.GetComponent<IHealth>().ChangeHealth(damagePerTick, false, FloatingColourType.Ignite);
+        target.GetComponent<IHealth>().ChangeHealth(damagePerTick.CalculateModifiedValue(characterStatsController), false, FloatingColourType.Ignite);
 
         GameObject effectPrefab = Instantiate(statusPrefab, target.transform);
 

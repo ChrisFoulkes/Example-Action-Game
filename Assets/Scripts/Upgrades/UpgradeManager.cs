@@ -1,11 +1,25 @@
 using EventCallbacks;
 using Pathfinding;
+using Sirenix.Utilities;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.UIElements;
+
+[System.Serializable]
+public class UpgradeDataWrapper
+{
+    public UpgradeData upgradeData;
+    public int timesChosen;
+
+    public UpgradeDataWrapper(UpgradeData upgradeData)
+    {
+        this.upgradeData = upgradeData;
+        timesChosen = 0;
+    }
+}
 
 public class UpgradeManager : MonoBehaviour
 {
@@ -15,6 +29,7 @@ public class UpgradeManager : MonoBehaviour
     public GameObject upgradePanel;
 
     public CharacterUpgradeHandler characterUpgradeHandler;
+    [SerializeField] private List<UpgradeDataWrapper> upgradeDataWrappers = new List<UpgradeDataWrapper>();
 
     [SerializeField] private List<UpgradeData> upgradeData= new List<UpgradeData>();
 
@@ -34,13 +49,18 @@ public class UpgradeManager : MonoBehaviour
     }
 
     private void PopulateUpgradeData()
-    {
+    { 
         // Clear any existing data
         upgradeData.Clear();
+        upgradeDataWrappers.Clear();
 
         // Retrieve and add all character upgrades
         var characterUpgrades = Resources.LoadAll<CharacterUpgradeData>("UpgradeData");
-        upgradeData.AddRange(characterUpgrades);
+        foreach (var upgrade in characterUpgrades)
+        {
+            upgradeData.Add(upgrade);
+            upgradeDataWrappers.Add(new UpgradeDataWrapper(upgrade));
+        }
 
         // Retrieve and add ability upgrades for currently equipped abilities
         var playerAbilityManager = player.GetComponentInChildren<PlayerAbilityManager>();
@@ -49,11 +69,18 @@ public class UpgradeManager : MonoBehaviour
         {
             // Assuming AbilityData has a unique ID
             var projectileUpgrades = Resources.LoadAll<ProjectileUpgradeData>("UpgradeData").Where(a => a.ability.AbilityID == ability);
-            upgradeData.AddRange(projectileUpgrades);
-
+            foreach (var upgrade in projectileUpgrades)
+            {
+                upgradeData.Add(upgrade);
+                upgradeDataWrappers.Add(new UpgradeDataWrapper(upgrade));
+            }
             // Assuming AbilityData has a unique ID
             var meleeUpgrades = Resources.LoadAll<MeleeUpgradeData>("UpgradeData").Where(a => a.ability.AbilityID == ability);
-            upgradeData.AddRange(meleeUpgrades);
+            foreach (var upgrade in meleeUpgrades)
+            {
+                upgradeData.Add(upgrade);
+                upgradeDataWrappers.Add(new UpgradeDataWrapper(upgrade));
+            }
         }
     }
 
@@ -96,7 +123,7 @@ public class UpgradeManager : MonoBehaviour
         pendingUpgradesText.gameObject.SetActive(enable);
     }
 
-    public void ChooseUpgrade(int positon) 
+    public void ChooseUpgrade(int position)
     {
         pendingUpgrades--;
 
@@ -104,16 +131,27 @@ public class UpgradeManager : MonoBehaviour
         {
             TogglePendingUpgradesDisplay(false);
         }
-        else 
+        else
         {
             pendingUpgradesText.text = "+" + pendingUpgrades;
         }
 
 
-        UpgradeData udata = shownUpgrades[positon];
+        UpgradeDataWrapper udataWrapper = upgradeDataWrappers.FirstOrDefault(wrapper => wrapper.upgradeData == shownUpgrades[position]);
+        if (udataWrapper != null)
+        {
+            // Increment the timesChosen counter
+            udataWrapper.timesChosen++;
 
-        characterUpgradeHandler.HandleUpgrade(udata);
-       
+            // Remove the upgrade if it reaches the limit
+            if (udataWrapper.upgradeData.upgradeLimit > -1 && udataWrapper.timesChosen >=  udataWrapper.upgradeData.upgradeLimit)
+            {
+                upgradeData.Remove(udataWrapper.upgradeData);
+            }
+        }
+
+        characterUpgradeHandler.HandleUpgrade(shownUpgrades[position]);
+
     }
 
 
