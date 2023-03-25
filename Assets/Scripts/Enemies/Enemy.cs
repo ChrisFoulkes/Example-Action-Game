@@ -9,6 +9,12 @@ public class Enemy : MonoBehaviour, IDeath
     public CircleCollider2D physCollider;
     public CircleCollider2D hurtBox;
 
+    public GameObject xpGem;
+    private int minGems = 5;
+    private int maxGems = 10;
+    public float gemSpawnRadius = 1f;
+
+
     [SerializeField] private Vector3 targetScale = new Vector3(5f, 5f, 1);
     [SerializeField] private float scaleDuration = 0.5f;
 
@@ -42,11 +48,24 @@ public class Enemy : MonoBehaviour, IDeath
     {
         StartCoroutine(ScaleCoroutine());
         isDead = true;
-
-        killedEvent.xpValue = 10;
         EventManager.Raise(killedEvent);
 
+        SpawnXpGemFountain();
+
         ToggleColliders(false);
+    }
+
+    private void SpawnXpGemFountain()
+    {
+        int gemCount = Random.Range(minGems, maxGems + 1);
+
+        for (int i = 0; i < gemCount; i++)
+        {
+            Vector2 randomOffset = Random.insideUnitCircle * gemSpawnRadius;
+            Vector3 spawnPosition = transform.position + new Vector3(randomOffset.x, randomOffset.y, 0);
+
+            GameObject createdXpGem = Instantiate(xpGem, spawnPosition, Quaternion.identity);
+        }
     }
 
     public void CompleteDeath() 

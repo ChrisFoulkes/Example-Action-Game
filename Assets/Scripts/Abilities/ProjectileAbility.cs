@@ -60,7 +60,7 @@ public class ActiveProjectileData
         this.firingArc = firingArc;
         this.castTime = castTime;
         this.distanceFromCaster = distanceFromCaster;
-        this.critChance = critChance;
+        this.critChance = new StatAssociation(critChance);
     }
 }
 
@@ -81,7 +81,6 @@ public class ProjectileAbility : Ability
 
         statusEffects = aData.effects;
         projectileAttack = aData.projectilePrefab;
-
         caster = casterTransform;
         projectileSpawnPoint = projectileSpawnPos;
         upgradeHandler = new ProjectileUpgradeHandler(this);

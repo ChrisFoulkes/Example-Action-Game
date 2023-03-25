@@ -10,10 +10,11 @@ public class StatAssociation
     public List<StatData> associatedStats;
 
 
-    public StatAssociation(string propertyName, float baseValue)
+    public StatAssociation(StatAssociation stat)
     {
-        this.propertyName = propertyName;
-        this.baseValue = baseValue;
+        this.propertyName = stat.propertyName;
+        this.baseValue = stat.baseValue;
+        this.associatedStats = stat.associatedStats;
     }
 
     public float CalculateModifiedValue(CharacterStatsController caster)
@@ -54,6 +55,7 @@ public class StatAssociation
             }
         }
 
+        Debug.Log(modifiedValue);
         modifiedValue += modifiedValue * additiveValue;
         modifiedValue *= multiplicativeValue;
 

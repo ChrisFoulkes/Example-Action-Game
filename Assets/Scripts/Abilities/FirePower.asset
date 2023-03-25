@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 44d93b7a5e4aa0547b659863c8be9126, type: 3}
+  m_Name: FirePower
+  m_EditorClassIdentifier: 
+  AbilityID: 13
+  abilityName: Fire Power
+  abilityIcon: {fileID: 21300000, guid: 79828cda0bff1a540a717ce8a62adc7f, type: 3}
+  abilityType: 2
+  cooldown: 0.5
+  castTime: 0.1
+  affectStats: []

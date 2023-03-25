@@ -6,7 +6,8 @@ public enum AbilityType
 {
     projectile,
     melee,
-    buff
+    buff,
+    movement
 }
 public class AbilityData : ScriptableObject
 {
@@ -16,4 +17,5 @@ public class AbilityData : ScriptableObject
     public Sprite abilityIcon;
     public AbilityType abilityType;
     public float cooldown = 0.5f;
+    public float castTime = 0.1f;
 }

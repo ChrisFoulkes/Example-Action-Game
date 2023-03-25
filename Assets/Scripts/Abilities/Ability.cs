@@ -9,7 +9,8 @@ public abstract class Ability
     //cooldown --
     private bool IsAvailable = true;
     public float cooldown { get; private set; }
-    
+    public float castTime = 0.1f;
+
     public Sprite sprite { get; private set; }
     public int ID { get; private set; }
 
@@ -32,6 +33,7 @@ public abstract class Ability
         abilityType = aData.abilityType;
         sprite = aData.abilityIcon;
         ID = aData.AbilityID;
+        castTime = aData.castTime;
 
     }
     public abstract void CastAbility();

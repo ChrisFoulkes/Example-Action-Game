@@ -10,6 +10,8 @@ public class PlayerMovement : MonoBehaviour, IMovement
 
     private bool canMove = true;
     private bool isDead = false;
+    public GameObject ghostPrefab;
+    public SpriteRenderer sprite;
 
     private void Start()
     {
@@ -84,5 +86,38 @@ public class PlayerMovement : MonoBehaviour, IMovement
                 CanMove(true);
             
         }
+    }
+    public IEnumerator ApplyMovement(Vector2 inputDirection, float movementSpeed, float movementDuration)
+    {
+        // Store the original moveSpeed
+        float originalMoveSpeed = moveSpeed;
+        float ghostSpawnInterval = 0.04f;
+        moveSpeed = movementSpeed;
+
+        canMove = false;
+        rb.velocity = inputDirection * movementSpeed;
+
+        float startTime = Time.time;
+        float nextGhostSpawnTime = Time.time;
+        while (Time.time - startTime < movementDuration)
+        {
+            rb.velocity = inputDirection * movementSpeed;        
+            
+            // Spawn ghost sprite
+            if (Time.time >= nextGhostSpawnTime)
+            {
+                ghostPrefab.GetComponent<SpriteRenderer>().sprite = sprite.sprite;
+                ghostPrefab.transform.localScale = sprite.transform.localScale;
+                Instantiate(ghostPrefab, transform.position, transform.rotation);
+                nextGhostSpawnTime = Time.time + ghostSpawnInterval;
+            }
+            yield return null;
+        }
+
+        rb.velocity = Vector2.zero;
+        canMove = true;
+
+        // Restore the original moveSpeed
+        moveSpeed = originalMoveSpeed;
     }
 }

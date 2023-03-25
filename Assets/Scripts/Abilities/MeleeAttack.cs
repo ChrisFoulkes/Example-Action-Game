@@ -1,13 +1,11 @@
 using Pathfinding;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using static UnityEngine.GraphicsBuffer;
 
 public class MeleeAttack : Attack
 {
     MeleeAbility ability;
-    public Vector2 knockbackForce = new Vector2(300f, 300f);
+    public Vector2 knockbackForce = new Vector2(10f, 10f);
 
     public bool shouldKnockback = false;
 
@@ -41,25 +39,7 @@ public class MeleeAttack : Attack
     {
         ability.OnHit(collision, this);
 
-        if (shouldKnockback)
-        {
-            StartCoroutine(KnockbackDelay(collision, 0.2f));
-        }
-    
-    }
+        //needs to be moved into ability logic
 
-    // massive bug this needs to be shifted into the movecontroller on the mob 
-    // if the attack speed is high enough the attack will be deleted before movement is re-enaabled 
-    IEnumerator KnockbackDelay(Collider2D collision, float delay)
-    {
-
-        collision.GetComponentInParent<AIPath>().canMove = false; Rigidbody2D targetRb = collision.GetComponentInParent<Rigidbody2D>();
-        if (targetRb != null)
-        {
-            Vector2 knockbackDirection = (collision.transform.position - transform.position).normalized;
-            targetRb.AddForce(knockbackDirection * knockbackForce, ForceMode2D.Impulse);
-        }
-        yield return new WaitForSeconds(delay);
-        collision.GetComponentInParent<AIPath>().canMove = true;
     }
 }

@@ -24,4 +24,3 @@ public class AdditiveStatData : StatData
 {
     public AdditiveStatData(int id, string name, float value) : base(id, name, value) { }
 }
-

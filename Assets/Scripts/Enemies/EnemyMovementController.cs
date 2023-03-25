@@ -19,13 +19,15 @@ public class MovementAnimationState
 public class EnemyMovementController : MonoBehaviour, IMovement
 {
     AIPath aiPath;
+    private Rigidbody2D Rb2D;
 
+    public bool isKnockbackAble = true;
     private float baseMovementSpeed = 3f;
     // Start is called before the first frame update
     void Awake()
     {
         aiPath= GetComponentInParent<AIPath>();
-
+        Rb2D= GetComponentInParent<Rigidbody2D>();
 
 
     }
@@ -65,5 +67,29 @@ public class EnemyMovementController : MonoBehaviour, IMovement
     public void ChangeSpeed(float amount) 
     {
         Debug.Log("Slowing Enemies not implemented!");
+    }
+
+    public void HandleKnockback(Vector2 knockbackDirection, Vector2 knockbackForce, float delay) 
+    {
+        if (isKnockbackAble)
+        {
+            StartCoroutine(ApplyKnockback(knockbackDirection, knockbackForce, delay));
+        }
+    
+    }
+    public IEnumerator ApplyKnockback(Vector2 knockbackDirection, Vector2 knockbackForce, float delay)
+    {
+        aiPath.canMove = false;
+        CanMove(false);
+
+
+        if (Rb2D != null)
+        {
+            Rb2D.AddForce(knockbackDirection * knockbackForce, ForceMode2D.Impulse);
+        }
+
+        yield return new WaitForSeconds(delay);
+        CanMove(true);
+        aiPath.canMove = true;
     }
 }

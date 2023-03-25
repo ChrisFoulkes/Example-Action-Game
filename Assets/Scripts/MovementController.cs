@@ -41,4 +41,5 @@ public class MovementController: MonoBehaviour, IMovement
         currentMaxSpeed += amount;
         aiPath.maxSpeed = currentMaxSpeed;
     }
+
 }

@@ -263,6 +263,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   physCollider: {fileID: 8652212902047824168}
   hurtBox: {fileID: 8652212903805053213}
+  xpGem: {fileID: 2502383956207357572, guid: 34685b7749b55b9479a2571dc2d96c25, type: 3}
+  minGems: 5
+  maxGems: 10
+  gemSpawnRadius: 1
   targetScale: {x: 1.3, y: 1.3, z: 1}
   scaleDuration: 0.5
   scaleParentTransform: {fileID: 8652212902664573222}
@@ -311,6 +315,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 18e4aa85e03304c449bc1e359bfc3235, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isKnockbackAble: 1
 --- !u!114 &5825696153760021267
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -8,10 +8,9 @@ public class MeleeData : AbilityData
     [Header("Melee Base Data")]
     public StatAssociation meleeDamage;
     public StatAssociation critChance;
-    public float castTime;
     public float distanceFromCaster = -0.2f;
 
-    public MeleeAttack meleePrefab;
+    public MeleeAttack meleePrefab; 
 
     public List<StatusEffect> effects;
 }

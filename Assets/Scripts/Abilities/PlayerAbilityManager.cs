@@ -15,6 +15,8 @@ using UnityEngine;
 
         public Transform projectileSpawnPos;
 
+    public bool isCasting;
+
     private void Awake()
     {
         foreach (AbilityData aData in abilityDataList)
@@ -26,6 +28,10 @@ using UnityEngine;
             if (aData.abilityType == AbilityType.melee)
             {
                 abilities.Add(aData.AbilityID, new MeleeAbility((MeleeData)aData, caster.transform, projectileSpawnPos));
+            }
+            if (aData.abilityType == AbilityType.movement)
+            {
+                abilities.Add(aData.AbilityID, new MovementAbility((MovementData)aData, caster.transform));
             }
         }
 
@@ -58,8 +64,13 @@ using UnityEngine;
                 {
                     var ability = abilities.Values.ElementAt(1);
                     CastAbility(ability);
-                }
             }
+                if (Input.GetButtonDown("Jump"))
+                {
+                    var ability = abilities.Values.ElementAt(2);
+                    CastAbility(ability);
+                }
+        }
         }
 
     public List<int> GetEquippedAbilities()
@@ -76,10 +87,11 @@ using UnityEngine;
 
     private void CastAbility(Ability ability)
         {
-            if (ability.IsCastable())
+            if (ability.IsCastable() && !isCasting)
             {
                 ability.CastAbility();
                 StartCoroutine(HandleAbilityCooldown(ability));
+                StartCoroutine(HandleAbilityCasting(ability));
             }
         }
 
@@ -100,5 +112,14 @@ using UnityEngine;
             AbilityIDToHotkeySlot[ability.ID].StartCoolDown(ability.cooldown);
             yield return new WaitForSeconds(ability.cooldown);
             ability.SetCoolDown(false);
-        }
     }
+
+
+    //Bug (if casting time < 
+    private IEnumerator HandleAbilityCasting(Ability ability)
+    {
+        isCasting = true;
+        yield return new WaitForSeconds(ability.castTime);
+        isCasting = false;
+    }
+}
