@@ -16,6 +16,8 @@ using UnityEngine;
         public Transform projectileSpawnPos;
 
     public bool isCasting;
+    private Ability bufferedAbility;
+    private bool hasBufferedAbility = false;
 
     private void Awake()
     {
@@ -32,6 +34,10 @@ using UnityEngine;
             if (aData.abilityType == AbilityType.movement)
             {
                 abilities.Add(aData.AbilityID, new MovementAbility((MovementData)aData, caster.transform));
+            }
+            if (aData.abilityType == AbilityType.buff)
+            {
+                abilities.Add(aData.AbilityID, new BuffAbility((BuffData)aData, this));
             }
         }
 
@@ -61,16 +67,16 @@ using UnityEngine;
                     CastAbility(ability);
                 }
                 if (Input.GetButtonDown("Fire2"))
-                {
+            {
                     var ability = abilities.Values.ElementAt(1);
-                    CastAbility(ability);
+                CastAbility(ability);
             }
                 if (Input.GetButtonDown("Jump"))
                 {
                     var ability = abilities.Values.ElementAt(2);
                     CastAbility(ability);
                 }
-        }
+            }
         }
 
     public List<int> GetEquippedAbilities()
@@ -86,14 +92,24 @@ using UnityEngine;
     }
 
     private void CastAbility(Ability ability)
+    {
+        if (ability.IsCastable() && !isCasting)
         {
-            if (ability.IsCastable() && !isCasting)
+            ability.CastAbility();
+            StartCoroutine(HandleAbilityCooldown(ability));
+            StartCoroutine(HandleAbilityCasting(ability));
+        }
+        else if (ability.RemainingCooldown() <= 1)
+        {
+            // Buffer the ability if another ability is not being cast and cooldown is 1 second or lower
+            if (ability.isBufferable)
             {
-                ability.CastAbility();
-                StartCoroutine(HandleAbilityCooldown(ability));
-                StartCoroutine(HandleAbilityCasting(ability));
+                bufferedAbility = ability;
+                hasBufferedAbility = true;
+                StartCoroutine(HandleBufferedAbility());
             }
         }
+    }
 
     public void UpgradeAbility(int abilityID, UpgradeEffect upgradeEffect)
     {
@@ -121,5 +137,20 @@ using UnityEngine;
         isCasting = true;
         yield return new WaitForSeconds(ability.castTime);
         isCasting = false;
+    }
+    private IEnumerator HandleBufferedAbility()
+    {
+        while (hasBufferedAbility)
+        {
+            if (bufferedAbility.IsCastable() && !isCasting)
+            {
+                hasBufferedAbility = false;
+                CastAbility(bufferedAbility);
+            }
+            else
+            {
+                yield return null; // Wait for the next frame before checking again
+            }
+        }
     }
 }

@@ -18,6 +18,7 @@ MonoBehaviour:
   abilityType: 0
   cooldown: 1.2
   castTime: 0.3
+  isBufferable: 1
   projectileSpeed: 4
   projectileLifetime: 2
   projectileDamage: -1

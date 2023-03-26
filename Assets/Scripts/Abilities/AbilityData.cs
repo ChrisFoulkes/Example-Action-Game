@@ -18,4 +18,5 @@ public class AbilityData : ScriptableObject
     public AbilityType abilityType;
     public float cooldown = 0.5f;
     public float castTime = 0.1f;
+    public bool isBufferable = false;
 }

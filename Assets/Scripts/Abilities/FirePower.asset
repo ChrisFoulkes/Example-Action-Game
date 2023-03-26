@@ -16,6 +16,11 @@ MonoBehaviour:
   abilityName: Fire Power
   abilityIcon: {fileID: 21300000, guid: 79828cda0bff1a540a717ce8a62adc7f, type: 3}
   abilityType: 2
-  cooldown: 0.5
+  cooldown: 3
   castTime: 0.1
-  affectStats: []
+  isBufferable: 1
+  BuffID: 10
+  affectStats:
+  - stat: {fileID: 11400000, guid: a6219336b88ab074ea899f8cdec7cbcd, type: 2}
+    amount: 1
+  baseBuffDuration: 5

@@ -48,17 +48,15 @@ public class ActiveProjectileData
     //projectile firing -- 
     public int projectileCount;
     public float firingArc;
-    public float castTime;
     public float distanceFromCaster;
 
-    public ActiveProjectileData(float projectileSpeed, float projectileLifetime, int projectileDamage, int projectileCount, float firingArc, float castTime, float distanceFromCaster, StatAssociation critChance)
+    public ActiveProjectileData(float projectileSpeed, float projectileLifetime, int projectileDamage, int projectileCount, float firingArc, float distanceFromCaster, StatAssociation critChance)
     {
         this.projectileSpeed = projectileSpeed;
         this.projectileLifetime = projectileLifetime;
         this.projectileDamage = projectileDamage;
         this.projectileCount = projectileCount;
         this.firingArc = firingArc;
-        this.castTime = castTime;
         this.distanceFromCaster = distanceFromCaster;
         this.critChance = new StatAssociation(critChance);
     }
@@ -77,7 +75,7 @@ public class ProjectileAbility : Ability
 
     public ProjectileAbility(ProjectileData aData, Transform casterTransform, Transform projectileSpawnPos): base(aData)
     {
-        projData = new ActiveProjectileData(aData.projectileSpeed, aData.projectileLifetime, aData.projectileDamage, aData.ProjectileCount, aData.firingArc, aData.castTime, aData.distanceFromCaster,  aData.critChance);
+        projData = new ActiveProjectileData(aData.projectileSpeed, aData.projectileLifetime, aData.projectileDamage, aData.ProjectileCount, aData.firingArc, aData.distanceFromCaster,  aData.critChance);
 
         statusEffects = aData.effects;
         projectileAttack = aData.projectilePrefab;
@@ -95,7 +93,7 @@ public class ProjectileAbility : Ability
 
     public override void CastAbility()
     {
-        if (projData.castTime > cooldown) { adjustCooldowm(projData.castTime); }
+        if (castTime > cooldown) { adjustCooldowm(castTime); }
 
         for (int i = 0; i < projData.projectileCount; i++)
         {
@@ -113,10 +111,10 @@ public class ProjectileAbility : Ability
 
         //currently global events maybe should be local 
         PlayerStopMovementEvent stopMovementEvent = new PlayerStopMovementEvent();
-        stopMovementEvent.duration = projData.castTime;
+        stopMovementEvent.duration = castTime;
         EventManager.Raise(stopMovementEvent);
 
-        SetPlayerFacingDirectionEvent setDirectionEvent = new SetPlayerFacingDirectionEvent(AbilityUtils.getFacingDirection(caster.position), projData.castTime);
+        SetPlayerFacingDirectionEvent setDirectionEvent = new SetPlayerFacingDirectionEvent(AbilityUtils.getFacingDirection(caster.position), castTime);
         EventManager.Raise(setDirectionEvent);
     }
 

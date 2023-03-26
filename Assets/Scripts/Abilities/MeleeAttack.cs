@@ -12,7 +12,7 @@ public class MeleeAttack : Attack
     public  void Initialize(MeleeAbility ability)
     {
         this.ability = ability;
-        animator.SetFloat("AnimMulti", ability.meleeData.originalCastTime / ability.meleeData.castTime);
+        animator.SetFloat("AnimMulti", ability.meleeData.originalCastTime / ability.castTime);
     }
 
     private void OnTriggerEnter2D(Collider2D collision)

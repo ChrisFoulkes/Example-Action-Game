@@ -24,7 +24,7 @@ public class MeleeUpgradeHandler : UpgradeHandler
                     parentAbility.meleeData.meleeDamage.baseValue += Mathf.RoundToInt(meleeUpgradeEffect.amount);
                     break;
                 case MeleeUpgradeTypes.meleeCastSpeed:
-                    parentAbility.meleeData.castTime = Mathf.Max(parentAbility.meleeData.castTime + meleeUpgradeEffect.amount, (parentAbility.meleeData.originalCastTime * 0.70f));
+                    parentAbility.castTime = Mathf.Max(parentAbility.castTime + meleeUpgradeEffect.amount, (parentAbility.meleeData.originalCastTime * 0.70f));
                     break;
             }
         }
@@ -36,7 +36,6 @@ public class ActiveMeleeData
     public StatAssociation meleeDamage;
     public StatAssociation critChance;
     public float originalCastTime;
-    public float castTime;
 
     public ActiveMeleeData(StatAssociation meleeDamage, float castTime, StatAssociation critChance)
     {
@@ -44,8 +43,6 @@ public class ActiveMeleeData
         this.critChance.associatedStats = critChance.associatedStats;
         this.meleeDamage = new StatAssociation(meleeDamage);
         this.meleeDamage.associatedStats = meleeDamage.associatedStats;
-        this.castTime = castTime;
-
         this.originalCastTime = castTime;
     }
 
@@ -57,29 +54,28 @@ public class MeleeAbility : Ability
     private MeleeAttack meleeAttack;
     private Transform caster;
     private Transform projectileSpawnPoint;
-    public CharacterStatsController CharacterStatsController;
+    public CharacterStatsController characterStatsController;
 
     private List<StatusEffect> statusEffects;
 
     public MeleeAbility(MeleeData aData, Transform casterTransform, Transform projectileSpawnPos) : base(aData)
     {
         meleeData = new ActiveMeleeData(aData.meleeDamage, aData.castTime, aData.critChance);
-
-        castTime= aData.castTime;
         statusEffects = aData.effects;
         meleeAttack = aData.meleePrefab;
+        castTime = aData.castTime;
 
         caster = casterTransform;
         projectileSpawnPoint = projectileSpawnPos;
         upgradeHandler = new MeleeUpgradeHandler(this);
         //need to update the way we handle passing caster data this is dumb
-        CharacterStatsController = caster.gameObject.GetComponent<CharacterStatsController>();
+        characterStatsController = caster.gameObject.GetComponent<CharacterStatsController>();
     }
 
 
     public override void CastAbility()
     {
-        if (meleeData.castTime > cooldown){ adjustCooldowm(meleeData.castTime); }
+        if (castTime > cooldown){ adjustCooldowm(castTime); }
 
         GameObject melee = Object.Instantiate(meleeAttack.gameObject, projectileSpawnPoint.position, SetTheFiringRotation());
 
@@ -87,10 +83,10 @@ public class MeleeAbility : Ability
 
         //currently global events maybe should be local 
         PlayerStopMovementEvent stopMovementEvent = new PlayerStopMovementEvent();
-        stopMovementEvent.duration = meleeData.castTime;
+        stopMovementEvent.duration = castTime;
         EventManager.Raise(stopMovementEvent); 
 
-        SetPlayerFacingDirectionEvent setDirectionEvent = new SetPlayerFacingDirectionEvent(AbilityUtils.getFacingDirection(caster.position), meleeData.castTime);
+        SetPlayerFacingDirectionEvent setDirectionEvent = new SetPlayerFacingDirectionEvent(AbilityUtils.getFacingDirection(caster.position), castTime);
         EventManager.Raise(setDirectionEvent);
     }
     public override void ApplyUpgrade(UpgradeEffect upgradeEffect)
@@ -129,12 +125,12 @@ public class MeleeAbility : Ability
 
         float randomNumber = UnityEngine.Random.Range(0f, 1f);
 
-        float damageValue = Mathf.FloorToInt(meleeData.meleeDamage.CalculateModifiedValue(CharacterStatsController));
+        float damageValue = Mathf.FloorToInt(meleeData.meleeDamage.CalculateModifiedValue(characterStatsController));
 
-        Debug.Log(meleeData.critChance.CalculateModifiedValue(CharacterStatsController));
-        Debug.Log(randomNumber < meleeData.critChance.CalculateModifiedValue(CharacterStatsController));
+        Debug.Log(meleeData.critChance.CalculateModifiedValue(characterStatsController));
+        Debug.Log(randomNumber < meleeData.critChance.CalculateModifiedValue(characterStatsController));
 
-        if (randomNumber < meleeData.critChance.CalculateModifiedValue(CharacterStatsController))
+        if (randomNumber < meleeData.critChance.CalculateModifiedValue(characterStatsController))
         {
             hitHealth.ChangeHealth((damageValue * 2), true);
         }

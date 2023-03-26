@@ -18,6 +18,7 @@ MonoBehaviour:
   abilityType: 1
   cooldown: 0
   castTime: 0.433
+  isBufferable: 0
   meleeDamage:
     propertyName: Melee Damage
     baseValue: -5

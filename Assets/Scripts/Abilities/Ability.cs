@@ -9,12 +9,15 @@ public abstract class Ability
     //cooldown --
     private bool IsAvailable = true;
     public float cooldown { get; private set; }
-    public float castTime = 0.1f;
+    public float cooldownEndTime;
+    public float castTime = 0.1f; 
 
     public Sprite sprite { get; private set; }
     public int ID { get; private set; }
 
     public AbilityType abilityType { get; private set; }
+
+    public bool isBufferable = false;
 
     public void adjustCooldowm(float adjustedValue) 
     {
@@ -26,7 +29,18 @@ public abstract class Ability
     public void SetCoolDown(bool isOnCooldown) 
     {
         IsAvailable = !isOnCooldown;
+        cooldownEndTime = Time.time + cooldown;
+        Debug.Log("Cooldown set: " + cooldown);
     }
+    public float RemainingCooldown()
+    {
+        if (!IsAvailable)
+        {
+            return cooldownEndTime - Time.time;
+        }
+        return 0;
+    }
+
     public Ability(AbilityData aData) 
     {
         cooldown = aData.cooldown;
@@ -34,8 +48,10 @@ public abstract class Ability
         sprite = aData.abilityIcon;
         ID = aData.AbilityID;
         castTime = aData.castTime;
+        isBufferable = aData.isBufferable;
 
-    }
+
+}
     public abstract void CastAbility();
 
 
