@@ -45,28 +45,24 @@ public class ActiveBuffData
 public class BuffAbility : Ability
 {
     public ActiveBuffData buffData;
-    public PlayerAbilityManager caster;
-    public CharacterStatsController casterStats;
-    public BuffEffectController buffController;
-    public BuffAbility(BuffData aData, PlayerAbilityManager playerAbilityManager) : base(aData)
-    {
-        buffData = new ActiveBuffData(aData.affectStats, aData.baseBuffDuration, aData.BuffID);
+    AbilityContext caster;
 
+    public BuffAbility(BuffData aData, AbilityContext caster) : base(aData)
+    {
+        this.caster = caster;
+
+        buffData = new ActiveBuffData(aData.affectStats, aData.baseBuffDuration, aData.BuffID);
         castTime = aData.castTime;
 
-        caster = playerAbilityManager;
         upgradeHandler = new BuffUpgradeHandler(this);
 
-        //need to update the way we handle passing caster data this is dumb
-        casterStats = caster.gameObject.GetComponent<CharacterStatsController>();
-        buffController = caster.GetComponentInParent<BuffEffectController>();
     }
 
     public override void CastAbility()
     {
-        if (castTime > cooldown) { adjustCooldowm(castTime); }
+        if (castTime > cooldown) { AdjustCooldown(castTime); }
 
-        buffController.ApplyBuff(buffData);
+        caster.BuffEffectController.ApplyBuff(buffData);
 
 
         //currently global events maybe should be local 
@@ -74,7 +70,7 @@ public class BuffAbility : Ability
         stopMovementEvent.duration = castTime;
         EventManager.Raise(stopMovementEvent);
 
-        SetPlayerFacingDirectionEvent setDirectionEvent = new SetPlayerFacingDirectionEvent(AbilityUtils.getFacingDirection(caster.transform.position), castTime);
+        SetPlayerFacingDirectionEvent setDirectionEvent = new SetPlayerFacingDirectionEvent(AbilityUtils.GetFacingDirection(caster.transform.position), castTime);
         EventManager.Raise(setDirectionEvent);
     }
 

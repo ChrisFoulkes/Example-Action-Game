@@ -15,7 +15,7 @@ public class MeleeAttack : Attack
         animator.SetFloat("AnimMulti", ability.meleeData.originalCastTime / ability.castTime);
     }
 
-    private void OnTriggerEnter2D(Collider2D collision)
+    private void OnTriggerStay2D(Collider2D collision)
     {
         if (disableRepeatedHits)
         {
@@ -38,8 +38,5 @@ public class MeleeAttack : Attack
     protected override void OnHit(Collider2D collision)
     {
         ability.OnHit(collision, this);
-
-        //needs to be moved into ability logic
-
     }
 }

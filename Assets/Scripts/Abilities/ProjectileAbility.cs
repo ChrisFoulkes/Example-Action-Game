@@ -2,50 +2,46 @@ using EventCallbacks;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
-public abstract class UpgradeHandler 
+public class ProjectileUpgradeHandler : UpgradeHandler
 {
-    public abstract void ApplyUpgrade(UpgradeEffect upgradeEffect);
-}
-
-
-public class ProjectileUpgradeHandler: UpgradeHandler
-{
-    private ProjectileAbility parentAbility;
+    private readonly ProjectileAbility _parentAbility;
 
     public ProjectileUpgradeHandler(ProjectileAbility parentAbility)
     {
-        this.parentAbility = parentAbility;
+        _parentAbility = parentAbility;
     }
 
-    public  override void ApplyUpgrade(UpgradeEffect upgradeEffect)
+    public override void ApplyUpgrade(UpgradeEffect upgradeEffect)
     {
         if (upgradeEffect is ProjectileUpgradeEffect projectileUpgradeEffect)
         {
             switch (projectileUpgradeEffect.upgradeType)
             {
                 case ProjectileUpgradeTypes.projectileDamage:
-                    parentAbility.projData.projectileDamage += Mathf.RoundToInt(projectileUpgradeEffect.amount);
+                    _parentAbility.ProjData.projectileDamage += Mathf.RoundToInt(projectileUpgradeEffect.amount);
                     break;
                 case ProjectileUpgradeTypes.projectileCount:
-                    parentAbility.projData.projectileCount += Mathf.RoundToInt(projectileUpgradeEffect.amount);
+                    _parentAbility.ProjData.projectileCount += Mathf.RoundToInt(projectileUpgradeEffect.amount);
                     break;
                 case ProjectileUpgradeTypes.projectileArc:
-                    parentAbility.projData.firingArc = Mathf.Clamp(parentAbility.projData.firingArc + projectileUpgradeEffect.amount, 0, 360);
+                    _parentAbility.ProjData.firingArc = Mathf.Clamp(_parentAbility.ProjData.firingArc + projectileUpgradeEffect.amount, 0, 360);
                     break;
             }
         }
     }
 }
 
-public class ActiveProjectileData 
+public class ActiveProjectileData
 {
-    //projectile activity --
+    // Projectile activity
     public float projectileSpeed;
     public float projectileLifetime;
     public int projectileDamage;
     public StatAssociation critChance;
-    //projectile firing -- 
+
+    // Projectile firing
     public int projectileCount;
     public float firingArc;
     public float distanceFromCaster;
@@ -64,67 +60,60 @@ public class ActiveProjectileData
 
 public class ProjectileAbility : Ability
 {
-    public  ActiveProjectileData projData;
+    private AbilityContext _caster;
+    public ActiveProjectileData ProjData { get; }
+    private readonly ProjectileAttack _projectileAttack;
+    private List<StatusEffect> _statusEffects;
 
-    private readonly ProjectileAttack projectileAttack;
-    private readonly Transform caster;
-    private readonly Transform projectileSpawnPoint;
-    public CharacterStatsController CharacterStatsController;
-
-    private List<StatusEffect> statusEffects;
-
-    public ProjectileAbility(ProjectileData aData, Transform casterTransform, Transform projectileSpawnPos): base(aData)
+    public ProjectileAbility(ProjectileData aData, AbilityContext caster) : base(aData)
     {
-        projData = new ActiveProjectileData(aData.projectileSpeed, aData.projectileLifetime, aData.projectileDamage, aData.ProjectileCount, aData.firingArc, aData.distanceFromCaster,  aData.critChance);
-
-        statusEffects = aData.effects;
-        projectileAttack = aData.projectilePrefab;
-        caster = casterTransform;
-        projectileSpawnPoint = projectileSpawnPos;
+        _caster = caster;
+        ProjData = new ActiveProjectileData(aData.projectileSpeed, aData.projectileLifetime, aData.projectileDamage, aData.ProjectileCount, aData.firingArc, aData.distanceFromCaster, aData.critChance);
+        _statusEffects = aData.effects;
+        _projectileAttack = aData.projectilePrefab;
         upgradeHandler = new ProjectileUpgradeHandler(this);
-        //need to update the way we handle passing caster data this is dumb
-        CharacterStatsController = caster.gameObject.GetComponent<CharacterStatsController>();
     }
 
-        public override void ApplyUpgrade(UpgradeEffect upgradeEffect)
-        {
-            upgradeHandler.ApplyUpgrade(upgradeEffect);
-        }
+    public override void ApplyUpgrade(UpgradeEffect upgradeEffect)
+    {
+        upgradeHandler.ApplyUpgrade(upgradeEffect);
+    }
 
     public override void CastAbility()
     {
-        if (castTime > cooldown) { adjustCooldowm(castTime); }
+        if (castTime > cooldown) { AdjustCooldown(castTime); }
 
-        for (int i = 0; i < projData.projectileCount; i++)
+        for (int i = 0; i < ProjData.projectileCount; i++)
         {
-            //ignore firing arc for singular projectiles 
-            if (projData.projectileCount == 1)
+            // Ignore firing arc for singular projectiles 
+            if (ProjData.projectileCount == 1)
             {
-                projData.firingArc = 0;
+                ProjData.firingArc = 0;
+            }
+            else
+            {
+                SetFiringRotation(ProjData.firingArc, AbilityUtils.GetFiringArcIncrement(i, ProjData.firingArc, ProjData.projectileCount));
             }
 
-            SetTheFiringRotation(projData.firingArc, AbilityUtils.getFiringArcIncrement(i, projData.firingArc, projData.projectileCount));
-
-            GameObject projectile = Object.Instantiate(projectileAttack.gameObject, AbilityUtils.GetClosestPointToMouse(caster.position, projectileSpawnPoint.position, projData.distanceFromCaster), projectileSpawnPoint.rotation);
+            GameObject projectile = Object.Instantiate(_projectileAttack.gameObject, AbilityUtils.GetClosestPointToMouse(_caster.transform.position, _caster.ProjectileSpawnPos.position, ProjData.distanceFromCaster), _caster.ProjectileSpawnPos.rotation);
             projectile.GetComponent<ProjectileAttack>().Initialize(this);
         }
 
-        //currently global events maybe should be local 
+        // Currently global events maybe should be local 
         PlayerStopMovementEvent stopMovementEvent = new PlayerStopMovementEvent();
         stopMovementEvent.duration = castTime;
         EventManager.Raise(stopMovementEvent);
 
-        SetPlayerFacingDirectionEvent setDirectionEvent = new SetPlayerFacingDirectionEvent(AbilityUtils.getFacingDirection(caster.position), castTime);
+        SetPlayerFacingDirectionEvent setDirectionEvent = new SetPlayerFacingDirectionEvent(AbilityUtils.GetFacingDirection(_caster.transform.position), castTime);
         EventManager.Raise(setDirectionEvent);
     }
 
-
-    void SetTheFiringRotation(float arc, float increment)
+    void SetFiringRotation(float arc, float increment)
     {
-        Vector2 lookDirection = Camera.main.ScreenToWorldPoint(Input.mousePosition) - caster.position;
+        Vector2 lookDirection = Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue()) - _caster.transform.position;
         float lookAngle = (Mathf.Atan2(lookDirection.y, lookDirection.x) * Mathf.Rad2Deg) - (arc / 2);
 
-        projectileSpawnPoint.rotation = Quaternion.Euler(0f, 0f, lookAngle - 90f + increment);
+        _caster.ProjectileSpawnPos.rotation = Quaternion.Euler(0f, 0f, lookAngle - 90f + increment);
     }
 
     public void OnHit(Collider2D collision, ProjectileAttack attack) 
@@ -133,23 +122,23 @@ public class ProjectileAbility : Ability
 
         float randomNumber = Random.Range(0, 1f);
 
-        if (randomNumber < projData.critChance.CalculateModifiedValue(CharacterStatsController))
+        if (randomNumber < ProjData.critChance.CalculateModifiedValue(_caster.CharacterStatsController))
         {
-            hitHealth.ChangeHealth((projData.projectileDamage * 2), true);
+            hitHealth.ChangeHealth((ProjData.projectileDamage * 2), true);
         }
         else 
         {
 
-            hitHealth.ChangeHealth(projData.projectileDamage);
+            hitHealth.ChangeHealth(ProjData.projectileDamage);
         }
 
-        if(statusEffects.Count> 0) 
+        if(_statusEffects.Count> 0) 
         {
             StatusEffectController statusController = collision.GetComponentInParent<StatusEffectController>();
 
-            foreach (var effect in statusEffects) 
+            foreach (var effect in _statusEffects) 
             {
-                effect.ApplyEffect(statusController, caster.gameObject);
+                effect.ApplyEffect(statusController, _caster);
             }
         }
     }

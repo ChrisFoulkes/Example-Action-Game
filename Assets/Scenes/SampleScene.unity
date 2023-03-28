@@ -2744,7 +2744,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
-    m_Mode: 3
+    m_Mode: 0
     m_WrapAround: 0
     m_SelectOnUp: {fileID: 0}
     m_SelectOnDown: {fileID: 0}
@@ -2980,7 +2980,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
-    m_Mode: 3
+    m_Mode: 0
     m_WrapAround: 0
     m_SelectOnUp: {fileID: 0}
     m_SelectOnDown: {fileID: 0}
@@ -3831,16 +3831,24 @@ MonoBehaviour:
   m_GameObject: {fileID: 530070643}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4f231c4fb786f3946a6b90b886c48677, type: 3}
+  m_Script: {fileID: 11500000, guid: 01614664b831546d2ae94a42149d80ac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_HorizontalAxis: Horizontal
-  m_VerticalAxis: Vertical
-  m_SubmitButton: Submit
-  m_CancelButton: Cancel
-  m_InputActionsPerSecond: 10
-  m_RepeatDelay: 0.5
-  m_ForceModuleActive: 0
+  m_MoveRepeatDelay: 0.5
+  m_MoveRepeatRate: 0.1
+  m_ActionsAsset: {fileID: -944628639613478452, guid: ca9f5fa95ffab41fb9a615ab714db018, type: 3}
+  m_PointAction: {fileID: 1054132383583890850, guid: ca9f5fa95ffab41fb9a615ab714db018, type: 3}
+  m_MoveAction: {fileID: 3710738434707379630, guid: ca9f5fa95ffab41fb9a615ab714db018, type: 3}
+  m_SubmitAction: {fileID: 2064916234097673511, guid: ca9f5fa95ffab41fb9a615ab714db018, type: 3}
+  m_CancelAction: {fileID: -1967631576421560919, guid: ca9f5fa95ffab41fb9a615ab714db018, type: 3}
+  m_LeftClickAction: {fileID: 8056856818456041789, guid: ca9f5fa95ffab41fb9a615ab714db018, type: 3}
+  m_MiddleClickAction: {fileID: 3279352641294131588, guid: ca9f5fa95ffab41fb9a615ab714db018, type: 3}
+  m_RightClickAction: {fileID: 3837173908680883260, guid: ca9f5fa95ffab41fb9a615ab714db018, type: 3}
+  m_ScrollWheelAction: {fileID: 4502412055082496612, guid: ca9f5fa95ffab41fb9a615ab714db018, type: 3}
+  m_TrackedDevicePositionAction: {fileID: 4754684134866288074, guid: ca9f5fa95ffab41fb9a615ab714db018, type: 3}
+  m_TrackedDeviceOrientationAction: {fileID: 1025543830046995696, guid: ca9f5fa95ffab41fb9a615ab714db018, type: 3}
+  m_DeselectOnBackgroundClick: 1
+  m_PointerBehavior: 0
 --- !u!114 &530070645
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4549,6 +4557,35 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 589967936}
   m_CullTransparentMesh: 1
+--- !u!1 &598628803 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1585791619931099426, guid: 2f4fccf03f9d0b54cb71b98b46ba134e, type: 3}
+  m_PrefabInstance: {fileID: 1585791621608995834}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &598628805 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1585791619931099425, guid: 2f4fccf03f9d0b54cb71b98b46ba134e, type: 3}
+  m_PrefabInstance: {fileID: 1585791621608995834}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 598628803}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ea063703d296b7a4cb359291a59618ab, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &598628806
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 598628803}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0b86a8e2795c9a4fa489befabdc2c16, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  appliedStatusEffects: []
 --- !u!1 &620806518
 GameObject:
   m_ObjectHideFlags: 0
@@ -4647,6 +4684,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 534c89c70120ec441a4cba280b493fdd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &649220307 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1585791621033175846, guid: 2f4fccf03f9d0b54cb71b98b46ba134e, type: 3}
+  m_PrefabInstance: {fileID: 1585791621608995834}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 649220301}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 754de07eaca8e8947bb4e2ca3d1ad008, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!212 &649220312 stripped
 SpriteRenderer:
   m_CorrespondingSourceObject: {fileID: 1585791621033175860, guid: 2f4fccf03f9d0b54cb71b98b46ba134e, type: 3}
@@ -4667,6 +4715,156 @@ MonoBehaviour:
   trackerPrefab: {fileID: 2106158413291785331, guid: 2ff20bf902fa60947b036544f6bb3273, type: 3}
   buffCanvas: {fileID: 589137487}
   characterStatsController: {fileID: 0}
+--- !u!114 &649220314
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 649220301}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62899f850307741f2a39c98a8b639597, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Actions: {fileID: -944628639613478452, guid: 0fd0a6bf0366c4d4abec401d40db3c63, type: 3}
+  m_NotificationBehavior: 2
+  m_UIInputModule: {fileID: 0}
+  m_DeviceLostEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_DeviceRegainedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ControlsChangedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ActionEvents:
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 649220307}
+        m_TargetAssemblyTypeName: PlayerMovement, Assembly-CSharp
+        m_MethodName: OnMove
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: c05b7c11-7a2a-4844-9c6c-2236c8b6ce03
+    m_ActionName: Player/Move[/Keyboard/w,/Keyboard/upArrow,/Keyboard/s,/Keyboard/downArrow,/Keyboard/a,/Keyboard/leftArrow,/Keyboard/d,/Keyboard/rightArrow]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: e8586538-0ec9-4eb3-ab3a-a07f11686b45
+    m_ActionName: UI/Navigate[/Keyboard/w,/Keyboard/upArrow,/Keyboard/s,/Keyboard/downArrow,/Keyboard/a,/Keyboard/leftArrow,/Keyboard/d,/Keyboard/rightArrow]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: be46f22a-6a38-44a0-96ee-78aef60fd9aa
+    m_ActionName: UI/Submit[/Keyboard/enter]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: c1fc1256-d1e1-44f1-a567-4816fb717d94
+    m_ActionName: UI/Cancel[/Keyboard/escape]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: f3f28ccc-1823-465a-acbf-9c69d930b584
+    m_ActionName: UI/Point[/Mouse/position,/Pen/position]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 15fe28c1-50d5-4f6b-b33c-79287cb3b6d5
+    m_ActionName: UI/Click[/Mouse/leftButton,/Pen/tip]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: f2e69869-4d3b-4d89-aeef-56631d86d24d
+    m_ActionName: UI/ScrollWheel[/Mouse/scroll]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: f10e02b5-4be6-43f5-8225-76dcfa83b334
+    m_ActionName: UI/MiddleClick[/Mouse/middleButton]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: ff5dedba-9c83-4720-9e30-6ff5a0b71ad2
+    m_ActionName: UI/RightClick[/Mouse/rightButton]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 351a795e-0f9c-4ee4-8811-226f655e0250
+    m_ActionName: UI/TrackedDevicePosition
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 3ce4d09d-9d66-4857-82a5-ffac4f73ccaf
+    m_ActionName: UI/TrackedDeviceOrientation
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1050647420}
+        m_TargetAssemblyTypeName: UpgradeManager, Assembly-CSharp
+        m_MethodName: OpenUpgradePanel
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: f7b2e321-7ee0-4d9e-9257-91c953b3995f
+    m_ActionName: Player/OpenUpgradeMenu[/Keyboard/t]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 598628805}
+        m_TargetAssemblyTypeName: PlayerAbilityManager, Assembly-CSharp
+        m_MethodName: AbilityButtonPress
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: b13530ab-466d-4ebf-bdfd-7c439fdf04f5
+    m_ActionName: Player/AbilityUseage[/Keyboard/q,/Keyboard/e,/Keyboard/space]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 598628805}
+        m_TargetAssemblyTypeName: PlayerAbilityManager, Assembly-CSharp
+        m_MethodName: AbilityButtonPress
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 87e03399-e3ec-46c8-8793-50a63e313776
+    m_ActionName: Player/Ability-2[/Keyboard/e]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 598628805}
+        m_TargetAssemblyTypeName: PlayerAbilityManager, Assembly-CSharp
+        m_MethodName: AbilityButtonPress
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 5e5d9ac3-b8f7-463e-9bdb-ae38d661a542
+    m_ActionName: Player/Ability-3[/Keyboard/space]
+  m_NeverAutoSwitchControlSchemes: 0
+  m_DefaultControlScheme: Keyboard&Mouse
+  m_DefaultActionMap: Player
+  m_SplitScreenIndex: -1
+  m_Camera: {fileID: 0}
 --- !u!1 &662060415
 GameObject:
   m_ObjectHideFlags: 0
@@ -34770,8 +34968,10 @@ MonoBehaviour:
   - {fileID: 141492237}
   - {fileID: 1860405380}
   - {fileID: 1561926381}
-  spawnRate: 3
+  spawnRate: 2
+  minimumSpawnRate: 0.5
   isWaveRunning: 1
+  count: 0
 --- !u!1 &1050647419
 GameObject:
   m_ObjectHideFlags: 0
@@ -34802,6 +35002,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 72ae297cc64eab24aba9bcdc0227d70a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  openUpgrade:
+    m_Name: 
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: 
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings: []
   player: {fileID: 649220301}
   pendingUpgradesText: {fileID: 196511729}
   upgradePanel: {fileID: 1770376243}
@@ -36040,10 +36248,10 @@ MonoBehaviour:
   version: 1
   desiredSimulationFPS: 20
   workerThreads: 2
-  doubleBuffering: 0
+  doubleBuffering: 1
   symmetryBreakingBias: 0.0806
   movementPlane: 1
-  drawObstacles: 1
+  drawObstacles: 0
 --- !u!4 &1264136806
 Transform:
   m_ObjectHideFlags: 0
@@ -39813,7 +40021,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 1709.6, y: 49.600006}
+  m_AnchoredPosition: {x: 1709.6, y: 49.599976}
   m_SizeDelta: {x: 119.751114, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1893292788
@@ -42651,7 +42859,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
-    m_Mode: 3
+    m_Mode: 0
     m_WrapAround: 0
     m_SelectOnUp: {fileID: 0}
     m_SelectOnDown: {fileID: 0}
@@ -42874,13 +43082,21 @@ PrefabInstance:
       value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 1585791619931099425, guid: 2f4fccf03f9d0b54cb71b98b46ba134e, type: 3}
+      propertyPath: abilityDataList.Array.data[0]
+      value: 
+      objectReference: {fileID: 11400000, guid: 0dc8b14ec55cbcc4ca411a570a9a7ade, type: 2}
+    - target: {fileID: 1585791619931099425, guid: 2f4fccf03f9d0b54cb71b98b46ba134e, type: 3}
       propertyPath: abilityDataList.Array.data[1]
       value: 
-      objectReference: {fileID: 11400000, guid: 9619d7459bdcab34291dcb47ba12f689, type: 2}
+      objectReference: {fileID: 11400000, guid: f765f598dbae93e4aabaf07e9919341a, type: 2}
     - target: {fileID: 1585791619931099425, guid: 2f4fccf03f9d0b54cb71b98b46ba134e, type: 3}
       propertyPath: abilityDataList.Array.data[2]
       value: 
       objectReference: {fileID: 11400000, guid: ec681d9975fdc004f95a1a46c2edf14c, type: 2}
+    - target: {fileID: 1585791621033175843, guid: 2f4fccf03f9d0b54cb71b98b46ba134e, type: 3}
+      propertyPath: playerMovement
+      value: 
+      objectReference: {fileID: 649220307}
     - target: {fileID: 1585791621033175846, guid: 2f4fccf03f9d0b54cb71b98b46ba134e, type: 3}
       propertyPath: sprite
       value: 

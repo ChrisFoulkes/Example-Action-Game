@@ -64,7 +64,7 @@ public class Enemy : MonoBehaviour, IDeath
             Vector2 randomOffset = Random.insideUnitCircle * gemSpawnRadius;
             Vector3 spawnPosition = transform.position + new Vector3(randomOffset.x, randomOffset.y, 0);
 
-            GameObject createdXpGem = Instantiate(xpGem, spawnPosition, Quaternion.identity);
+            Instantiate(xpGem, spawnPosition, Quaternion.identity);
         }
     }
 

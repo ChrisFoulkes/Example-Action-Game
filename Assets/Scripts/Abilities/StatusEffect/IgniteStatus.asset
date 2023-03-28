@@ -13,10 +13,9 @@ MonoBehaviour:
   m_Name: IgniteStatus
   m_EditorClassIdentifier: 
   statusName: Ignite
-  duration: 3
+  duration: 5
   tickRate: 1
   statusPrefab: {fileID: 3525420400329839086, guid: 7377eb4a33b44cc4084b4c248358f0a0, type: 3}
-  statAssociations: []
   damagePerTick:
     propertyName: DamagePerTick
     baseValue: -1
@@ -24,5 +23,3 @@ MonoBehaviour:
     - {fileID: 11400000, guid: ef354b02ee5e20940a573d8b50bc6991, type: 2}
   chanceToApply: 100
   canMultiApply: 0
-  caster: {fileID: 0}
-  characterStatsController: {fileID: 0}

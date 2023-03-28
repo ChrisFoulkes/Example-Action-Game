@@ -1,7 +1,11 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
+
+// Should the Scriptable Object Damage over time be handling the effects ?
 [CreateAssetMenu(menuName = "Status Effects/Damage Over Time")]
 public class DamageOverTimeEffect : StatusEffect
 {
@@ -9,34 +13,39 @@ public class DamageOverTimeEffect : StatusEffect
     public float chanceToApply;
     public bool canMultiApply = false;
 
-    public GameObject caster;
-    public CharacterStatsController characterStatsController;
 
-    public override void ApplyEffect(StatusEffectController controller, GameObject caster)
+    private AbilityContext _caster;
+
+    public override void ApplyEffect(StatusEffectController controller, AbilityContext caster)
     {
-        this.caster = caster;
-        characterStatsController = caster.GetComponentInChildren<CharacterStatsController>();
+        _caster = caster;
 
-        float randomNumber = Random.Range(0, 100);
+        float randomNumber = UnityEngine.Random.Range(0, 100);
 
         if (randomNumber < chanceToApply)
         {
-            controller.ApplyStatusEffect(this, canMultiApply);
+            controller.TryApplyStatusEffect(this, _caster);
         }
     }
 
+
     public override void RemoveEffect(GameObject target)
     {
-        // Clean up if necessary
+
     }
 
     public override void UpdateEffect(GameObject target, ActiveStatusEffect activeStatusEffect)
     {
-        target.GetComponent<IHealth>().ChangeHealth(damagePerTick.CalculateModifiedValue(characterStatsController), false, FloatingColourType.Ignite);
+        float damage = damagePerTick.CalculateModifiedValue(_caster.CharacterStatsController) * activeStatusEffect.CountInstance;
+        if (activeStatusEffect.BonusEffectActive) 
+        {
+            damage *= 2;
+        }
+        target.GetComponent<IHealth>().ChangeHealth(damage, false, FloatingColourType.Ignite);
 
         GameObject effectPrefab = Instantiate(statusPrefab, target.transform);
 
-        activeStatusEffect.effectAsset = effectPrefab;
+        activeStatusEffect.EffectAsset = effectPrefab;
     }
 }
 

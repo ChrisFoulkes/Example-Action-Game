@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0a476fa8c22d5b94cb3a6961cf8d3ccd, type: 3}
   m_Name: SpeedyBoots
   m_EditorClassIdentifier: 
+  upgradeLimit: 5
   upgradeName: Speedy Boots
   upgradeDescription: Grants you a sizeable speed boost
   upgradeIcon: {fileID: 21300000, guid: 584efbfe0d602154e9587c41381d4293, type: 3}

@@ -21,7 +21,7 @@ MonoBehaviour:
   isBufferable: 0
   meleeDamage:
     propertyName: Melee Damage
-    baseValue: -5
+    baseValue: -1
     associatedStats:
     - {fileID: 11400000, guid: a6219336b88ab074ea899f8cdec7cbcd, type: 2}
   critChance:

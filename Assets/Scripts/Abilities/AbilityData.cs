@@ -7,9 +7,16 @@ public enum AbilityType
     projectile,
     melee,
     buff,
-    movement
+    movement,
+    targetless,
+    mouseTargeted
 }
-public class AbilityData : ScriptableObject
+public interface IAbilityFactory
+{
+    Ability Create(AbilityData abilityData, AbilityContext abilityContext);
+}
+
+public abstract class AbilityData : ScriptableObject
 {
     [Header("Generic Ability")]
     public int AbilityID;
@@ -19,4 +26,6 @@ public class AbilityData : ScriptableObject
     public float cooldown = 0.5f;
     public float castTime = 0.1f;
     public bool isBufferable = false;
+
+    public abstract IAbilityFactory AbilityFactory { get; }
 }

@@ -2,44 +2,81 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
-    public class PlayerAbilityManager : MonoBehaviour
+public class AbilityContext
+{
+    public Transform transform{ get; }
+    public Transform ProjectileSpawnPos { get; }
+    public Rigidbody2D CasterRigidbody { get; }
+    public PlayerMovement PlayerMovement { get; }
+    public CharacterStatsController CharacterStatsController { get; }
+    public PlayerStatusTracker PlayerStatusTracker { get; }
+    public BuffEffectController BuffEffectController { get; }
+
+    public AbilityContext(Transform caster, Transform projectileSpawnPos)
     {
-        [SerializeField] private PlayerCharacter caster;
-        [SerializeField] private List<HotkeySlot> hotkeySlots;
-        private Dictionary<int, HotkeySlot> AbilityIDToHotkeySlot = new Dictionary<int, HotkeySlot>();
+        transform = caster;
+        ProjectileSpawnPos = projectileSpawnPos;
+        CasterRigidbody = caster.GetComponent<Rigidbody2D>();
+        PlayerMovement = caster.GetComponent<PlayerMovement>();
+        CharacterStatsController = caster.GetComponent<CharacterStatsController>();
+        BuffEffectController = caster.GetComponent<BuffEffectController>();
+        PlayerStatusTracker = caster.GetComponentInChildren<PlayerStatusTracker>();
+    }
+}
 
 
-        [SerializeField] private List<AbilityData> abilityDataList = new List<AbilityData>();
-        private Dictionary<int, Ability> abilities = new Dictionary<int, Ability>();
+public class PlayerAbilityManager : MonoBehaviour
+{
+    private AbilityContext abilityCaster;
 
-        public Transform projectileSpawnPos;
+    [SerializeField] private PlayerCharacter caster;
+    [SerializeField] private Transform projectileSpawnPos;
+    [SerializeField] private List<HotkeySlot> hotkeySlots;
+    private Dictionary<int, HotkeySlot> AbilityIDToHotkeySlot = new Dictionary<int, HotkeySlot>();
 
-    public bool isCasting;
+
+    [SerializeField] private List<AbilityData> abilityDataList = new List<AbilityData>();
+    private Dictionary<int, Ability> abilities = new Dictionary<int, Ability>();
+
+
+
+    [SerializeField] private bool isCasting;
     private Ability bufferedAbility;
     private bool hasBufferedAbility = false;
 
     private void Awake()
     {
+        abilityCaster = new AbilityContext(caster.transform, projectileSpawnPos);
+
+        foreach (AbilityData aData in abilityDataList)
+        {
+            Ability newAbility = aData.AbilityFactory.Create(aData, abilityCaster);
+            abilities.Add(aData.AbilityID, newAbility);
+        }
+
+        /*
         foreach (AbilityData aData in abilityDataList)
         {
             if (aData.abilityType == AbilityType.projectile)
             {
-                abilities.Add(aData.AbilityID, new ProjectileAbility((ProjectileData)aData, caster.transform, projectileSpawnPos));
+                abilities.Add(aData.AbilityID, new ProjectileAbility((ProjectileData)aData, abilityCaster));
             }
             if (aData.abilityType == AbilityType.melee)
             {
-                abilities.Add(aData.AbilityID, new MeleeAbility((MeleeData)aData, caster.transform, projectileSpawnPos));
+                abilities.Add(aData.AbilityID, new MeleeAbility((MeleeData)aData, abilityCaster));
             }
             if (aData.abilityType == AbilityType.movement)
             {
-                abilities.Add(aData.AbilityID, new MovementAbility((MovementData)aData, caster.transform));
+                abilities.Add(aData.AbilityID, new MovementAbility((MovementData)aData, abilityCaster));
             }
             if (aData.abilityType == AbilityType.buff)
             {
-                abilities.Add(aData.AbilityID, new BuffAbility((BuffData)aData, this));
+                abilities.Add(aData.AbilityID, new BuffAbility((BuffData)aData, abilityCaster));
             }
         }
+        */
 
         int slotIndex = 0;
         foreach (var abilityEntry in abilities)
@@ -57,27 +94,35 @@ using UnityEngine;
         }
     }
 
-        private void Update()
+    private void Update()
+    {
+        if (!GameManager.Instance.isPaused && !caster.IsDead())
         {
-            if (!GameManager.Instance.isPaused && !caster.IsDead())
+
+        }
+    }
+
+    public void AbilityButtonPress(InputAction.CallbackContext context) 
+    {
+        if (context.performed)
+        {
+            switch (context.action.name)
             {
-                if (Input.GetButtonDown("Fire1"))
-                {
-                    var ability = abilities.Values.ElementAt(0);
-                    CastAbility(ability);
-                }
-                if (Input.GetButtonDown("Fire2"))
-            {
-                    var ability = abilities.Values.ElementAt(1);
-                CastAbility(ability);
-            }
-                if (Input.GetButtonDown("Jump"))
-                {
-                    var ability = abilities.Values.ElementAt(2);
-                    CastAbility(ability);
-                }
+                case "Ability-1":
+                    var ability1 = abilities.Values.ElementAt(0);
+                    CastAbility(ability1);
+                    break;
+                case "Ability-2":
+                    var ability2 = abilities.Values.ElementAt(1);
+                    CastAbility(ability2);
+                    break;
+                case "Ability-3":
+                    var ability3 = abilities.Values.ElementAt(2);
+                    CastAbility(ability3);
+                    break;
             }
         }
+    }
 
     public List<int> GetEquippedAbilities()
     {
@@ -123,11 +168,11 @@ using UnityEngine;
     }
 
     private IEnumerator HandleAbilityCooldown(Ability ability)
-        {
-            ability.SetCoolDown(true);
-            AbilityIDToHotkeySlot[ability.ID].StartCoolDown(ability.cooldown);
-            yield return new WaitForSeconds(ability.cooldown);
-            ability.SetCoolDown(false);
+    {
+        ability.SetCoolDown(true);
+        AbilityIDToHotkeySlot[ability.ID].StartCoolDown(ability.cooldown);
+        yield return new WaitForSeconds(ability.cooldown);
+        ability.SetCoolDown(false);
     }
 
 

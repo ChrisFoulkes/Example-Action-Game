@@ -16,11 +16,11 @@ MonoBehaviour:
   abilityName: Fireball
   abilityIcon: {fileID: 21300000, guid: 5d4f4b894f2892941803d328c0320b2e, type: 3}
   abilityType: 0
-  cooldown: 1.2
-  castTime: 0.3
+  cooldown: 0.5
+  castTime: 0.2
   isBufferable: 1
-  projectileSpeed: 4
-  projectileLifetime: 2
+  projectileSpeed: 6
+  projectileLifetime: 1
   projectileDamage: -1
   critChance:
     propertyName: Crit Chance
@@ -29,7 +29,7 @@ MonoBehaviour:
     - {fileID: 11400000, guid: 65f80ef0b593f3042bebf02e2877640d, type: 2}
   distanceFromCaster: -0.2
   ProjectileCount: 3
-  firingArc: 15
+  firingArc: 25
   projectilePrefab: {fileID: 3555362649575414812, guid: d483441f287e2f546a21e4c74b6a3f21, type: 3}
   effects:
   - {fileID: 11400000, guid: 1da18ba967fcd874e90e0a90a94bc0d1, type: 2}

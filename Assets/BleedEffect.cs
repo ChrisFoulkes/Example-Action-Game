@@ -18,6 +18,6 @@ public class BleedEffect : MonoBehaviour
 
     public void DestoryEffect() 
     {
-        GameObject.Destroy(this);
+        GameObject.Destroy(gameObject);
     }
 }

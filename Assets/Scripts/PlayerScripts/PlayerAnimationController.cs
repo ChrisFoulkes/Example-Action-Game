@@ -5,6 +5,7 @@ using EventCallbacks;
 
 public class PlayerAnimationController : MonoBehaviour
 {
+    public PlayerMovement playerMovement;
     public Animator animator;
     // Start is called before the first frame update
 
@@ -12,8 +13,8 @@ public class PlayerAnimationController : MonoBehaviour
 
     private void Start()
     {
+        playerMovement = GetComponent<PlayerMovement>();
         lastPosition = transform.position;
-
     }
 
     private void OnEnable()
@@ -35,11 +36,7 @@ public class PlayerAnimationController : MonoBehaviour
 
     private void Update()
     {
-
-        float horizontalInput = Input.GetAxisRaw("Horizontal");
-        float verticalInput = Input.GetAxisRaw("Vertical");
-
-        if (horizontalInput != 0 || verticalInput != 0)
+        if (playerMovement.movement.x != 0 || playerMovement.movement.y != 0)
         {
             animator.SetBool("isMovementKey", true);
         }
@@ -47,6 +44,7 @@ public class PlayerAnimationController : MonoBehaviour
         {
             animator.SetBool("isMovementKey", false);
         }
+
         // Calculate the object's movement direction
         Vector2 movement = (Vector2)transform.position - lastPosition;
 

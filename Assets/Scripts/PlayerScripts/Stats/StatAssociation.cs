@@ -55,7 +55,6 @@ public class StatAssociation
             }
         }
 
-        Debug.Log(modifiedValue);
         modifiedValue += modifiedValue * additiveValue;
         modifiedValue *= multiplicativeValue;
 

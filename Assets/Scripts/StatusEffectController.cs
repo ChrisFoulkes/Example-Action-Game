@@ -1,21 +1,39 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[System.Serializable]
 public class ActiveStatusEffect
 {
     public StatusEffect StatusEffect;
-    public Coroutine ActiveCoroutine;
-    public Coroutine ActiveTickCoroutine;
-    public GameObject effectAsset;
+    public AbilityContext AppliedBy;
+
+    public GameObject EffectAsset;
     public float ElapsedTime;
+
+    public AppliedStatus AppliedStatus;
+
+    public StatusEffectController Controller;
+    public Coroutine ActiveCoroutine;
+    public Coroutine TickCoroutine;
+
+    public int CountInstance = 0;
+    public bool BonusEffectActive = false;
+
+    public ActiveStatusEffect(StatusEffectController controller, StatusEffect statusEffect, AbilityContext appliedBy, float time)
+    {
+        Controller = controller;
+        ElapsedTime = time;
+        StatusEffect = statusEffect;
+        AppliedBy = appliedBy;
+    }
 }
 
-public class StatusEffectController : MonoBehaviour
+    public class StatusEffectController : MonoBehaviour
 {
     private IDeath deathController;
-    private List<ActiveStatusEffect> activeEffects = new List<ActiveStatusEffect>();
+
+    public List<ActiveStatusEffect> activeEffects = new List<ActiveStatusEffect>();
 
     private void Awake()
     {
@@ -32,34 +50,49 @@ public class StatusEffectController : MonoBehaviour
         deathController.RemoveListener(OnDeath);
     }
 
-    public void ApplyStatusEffect(StatusEffect statusEffect, bool canHaveMultipleInstances)
+    public void TryApplyStatusEffect(StatusEffect statusEffect, AbilityContext appliedBy)
     {
-        if (deathController.IsDead()) return;
-
-        ActiveStatusEffect existingEffect = null;
-        if (!canHaveMultipleInstances)
+        if (deathController.IsDead())
         {
-            existingEffect = activeEffects.Find(effect => effect.StatusEffect.name == statusEffect.name);
+            return;
         }
+
+        ActiveStatusEffect existingEffect = activeEffects.Find(effect => effect.StatusEffect.name == statusEffect.name);
 
         if (existingEffect != null)
         {
-            // What to do if multiple existing versions 
+            //if status effect already exists reset duration timer 
             existingEffect.ElapsedTime = 0f;
+            existingEffect.CountInstance++;
+            if (existingEffect.CountInstance > 4)
+            {
+                existingEffect.CountInstance = 4;
+                existingEffect.BonusEffectActive = true;
+            }
         }
         else
         {
-            ActiveStatusEffect newEffect = new ActiveStatusEffect { StatusEffect = statusEffect, ElapsedTime = 0f };
-            newEffect.ActiveCoroutine = StartCoroutine(ApplyStatusEffectCoroutine(newEffect));
-            activeEffects.Add(newEffect);
+            ActiveStatusEffect newStatusEffect = new ActiveStatusEffect(this, statusEffect, appliedBy, 0f);
+            AppliedStatus newAppliedStatus = new AppliedStatus(transform, newStatusEffect);
+
+            newStatusEffect.AppliedStatus = newAppliedStatus;
+            appliedBy.PlayerStatusTracker.AddStatusEffect(newAppliedStatus);
+            activeEffects.Add(newStatusEffect);
+            newStatusEffect.ActiveCoroutine = StartCoroutine(ApplyStatusEffectCoroutine(newStatusEffect));
+
+            newStatusEffect.CountInstance = 1;
+            newStatusEffect.BonusEffectActive = false;
+
+
         }
     }
 
     private IEnumerator ApplyStatusEffectCoroutine(ActiveStatusEffect activeStatusEffect)
     {
+
         if (activeStatusEffect.StatusEffect.tickRate > 0)
         {
-            activeStatusEffect.ActiveTickCoroutine = StartCoroutine(ApplyTickEffectCoroutine(activeStatusEffect));
+            activeStatusEffect.TickCoroutine = StartCoroutine(ApplyTickEffectCoroutine(activeStatusEffect));
         }
         else
         {
@@ -71,14 +104,8 @@ public class StatusEffectController : MonoBehaviour
             activeStatusEffect.ElapsedTime += Time.deltaTime;
             yield return null;
         }
-
-        if (activeStatusEffect.ActiveTickCoroutine != null)
-        {
-            StopCoroutine(activeStatusEffect.ActiveTickCoroutine);
-        }
-
-        activeStatusEffect.StatusEffect.RemoveEffect(gameObject);
-        activeEffects.Remove(activeStatusEffect);
+        
+        RemoveStatusEffect(activeStatusEffect);
     }
 
     private IEnumerator ApplyTickEffectCoroutine(ActiveStatusEffect activeStatusEffect)
@@ -90,24 +117,44 @@ public class StatusEffectController : MonoBehaviour
         }
     }
 
-    private void ClearStatusEffects()
+    public void RemoveStatusEffect(ActiveStatusEffect activeStatusEffect)
     {
-        foreach (ActiveStatusEffect activeStatus in activeEffects)
-        {
-            if (activeStatus.ActiveTickCoroutine != null)
-            {
-                StopCoroutine(activeStatus.ActiveTickCoroutine);
-            }
+        // Stop the coroutines
+        StopCoroutine(activeStatusEffect.ActiveCoroutine);
 
-            StopCoroutine(activeStatus.ActiveCoroutine);
-            Destroy(activeStatus.effectAsset);
+        if (activeStatusEffect.StatusEffect.tickRate > 0)
+        {
+            StopCoroutine(activeStatusEffect.TickCoroutine);
         }
 
-        activeEffects.Clear();
+        // Remove the effect asset if available
+        if (activeStatusEffect.EffectAsset != null)
+        {
+            Destroy(activeStatusEffect.EffectAsset);
+        }
+
+        // Remove the ActiveStatusEffect
+        activeStatusEffect.AppliedBy.PlayerStatusTracker.RemoveStatusEffect(activeStatusEffect.AppliedStatus);
+        activeEffects.Remove(activeStatusEffect);
     }
 
     private void OnDeath(GameEvent gameEvent)
     {
-        ClearStatusEffects();
+
+        // Loop through all active status effects
+        foreach (ActiveStatusEffect activeStatusEffect in activeEffects)
+        {
+            // Remove the status effect from the corresponding player's status tracker
+            activeStatusEffect.AppliedBy.PlayerStatusTracker.RemoveStatusEffectsFromTarget(transform);
+
+            // Remove the effect asset if available
+            if (activeStatusEffect.EffectAsset != null)
+            {
+                Destroy(activeStatusEffect.EffectAsset);
+            }
+        }
+
+        // Clear the active effects list
+        activeEffects.Clear();
     }
 }

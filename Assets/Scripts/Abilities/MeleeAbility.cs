@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class MeleeUpgradeHandler : UpgradeHandler
 {
@@ -52,32 +53,28 @@ public class MeleeAbility : Ability
     public ActiveMeleeData meleeData;
 
     private MeleeAttack meleeAttack;
-    private Transform caster;
-    private Transform projectileSpawnPoint;
-    public CharacterStatsController characterStatsController;
+    AbilityContext caster;
 
     private List<StatusEffect> statusEffects;
 
-    public MeleeAbility(MeleeData aData, Transform casterTransform, Transform projectileSpawnPos) : base(aData)
+    public MeleeAbility(MeleeData aData,AbilityContext caster) : base(aData)
     {
         meleeData = new ActiveMeleeData(aData.meleeDamage, aData.castTime, aData.critChance);
         statusEffects = aData.effects;
         meleeAttack = aData.meleePrefab;
         castTime = aData.castTime;
 
-        caster = casterTransform;
-        projectileSpawnPoint = projectileSpawnPos;
+        this.caster = caster;
+
         upgradeHandler = new MeleeUpgradeHandler(this);
-        //need to update the way we handle passing caster data this is dumb
-        characterStatsController = caster.gameObject.GetComponent<CharacterStatsController>();
     }
 
 
     public override void CastAbility()
     {
-        if (castTime > cooldown){ adjustCooldowm(castTime); }
+        if (castTime > cooldown){ AdjustCooldown(castTime); }
 
-        GameObject melee = Object.Instantiate(meleeAttack.gameObject, projectileSpawnPoint.position, SetTheFiringRotation());
+        GameObject melee = Object.Instantiate(meleeAttack.gameObject, caster.ProjectileSpawnPos.position, SetTheFiringRotation());
 
         melee.GetComponent<MeleeAttack>().Initialize(this);
 
@@ -86,7 +83,7 @@ public class MeleeAbility : Ability
         stopMovementEvent.duration = castTime;
         EventManager.Raise(stopMovementEvent); 
 
-        SetPlayerFacingDirectionEvent setDirectionEvent = new SetPlayerFacingDirectionEvent(AbilityUtils.getFacingDirection(caster.position), castTime);
+        SetPlayerFacingDirectionEvent setDirectionEvent = new SetPlayerFacingDirectionEvent(AbilityUtils.GetFacingDirection(caster.transform.position), castTime);
         EventManager.Raise(setDirectionEvent);
     }
     public override void ApplyUpgrade(UpgradeEffect upgradeEffect)
@@ -96,7 +93,7 @@ public class MeleeAbility : Ability
 
     Quaternion SetTheFiringRotation()
     {
-        Vector2 lookDirection = (Camera.main.ScreenToWorldPoint(Input.mousePosition) - caster.position).normalized;
+        Vector2 lookDirection = (Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue()) - caster.transform.position).normalized;
 
         float angle;
         if (lookDirection.y > 0 && Mathf.Abs(lookDirection.x) < lookDirection.y)
@@ -125,12 +122,9 @@ public class MeleeAbility : Ability
 
         float randomNumber = UnityEngine.Random.Range(0f, 1f);
 
-        float damageValue = Mathf.FloorToInt(meleeData.meleeDamage.CalculateModifiedValue(characterStatsController));
+        float damageValue = Mathf.FloorToInt(meleeData.meleeDamage.CalculateModifiedValue(caster.CharacterStatsController));
 
-        Debug.Log(meleeData.critChance.CalculateModifiedValue(characterStatsController));
-        Debug.Log(randomNumber < meleeData.critChance.CalculateModifiedValue(characterStatsController));
-
-        if (randomNumber < meleeData.critChance.CalculateModifiedValue(characterStatsController))
+        if (randomNumber < meleeData.critChance.CalculateModifiedValue(caster.CharacterStatsController))
         {
             hitHealth.ChangeHealth((damageValue * 2), true);
         }
@@ -146,7 +140,7 @@ public class MeleeAbility : Ability
 
             foreach (var effect in statusEffects)
             {
-                effect.ApplyEffect(statusController, caster.gameObject);
+                effect.ApplyEffect(statusController, caster);
             }
         }
 
@@ -157,7 +151,7 @@ public class MeleeAbility : Ability
 
                 if (movementController != null)
                 {
-                    Vector2 knockbackDirection = (collision.transform.position - caster.position).normalized;
+                    Vector2 knockbackDirection = (collision.transform.position - caster.transform.position).normalized;
                     
                     movementController.HandleKnockback(knockbackDirection, attack.knockbackForce, 0.2f);
                 }

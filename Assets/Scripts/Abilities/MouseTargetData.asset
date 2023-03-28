@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d1dc56e7bdff59d46930671d30099b77, type: 3}
+  m_Name: MouseTargetData
+  m_EditorClassIdentifier: 
+  AbilityID: 16
+  abilityName: Meteor
+  abilityIcon: {fileID: 21300000, guid: 59873a38f5d3968449e77dbd59ece75b, type: 3}
+  abilityType: 5
+  cooldown: 0.6
+  castTime: 0.1
+  isBufferable: 1
+  projectileDamage: -10
+  critChance:
+    propertyName: 
+    baseValue: 0
+    associatedStats: []
+  attackPrefab: {fileID: 5227382832242564805, guid: f426758d80849a044910b366080f7a6b, type: 3}
+  effects: []

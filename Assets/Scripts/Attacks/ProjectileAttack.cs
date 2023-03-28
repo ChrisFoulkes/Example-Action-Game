@@ -16,8 +16,8 @@ public class ProjectileAttack : Attack
 
     public void Initialize(ProjectileAbility ability)
     {
-        projectileSpeed = ability.projData.projectileSpeed;
-        projectileLifetime = ability.projData.projectileLifetime;
+        projectileSpeed = ability.ProjData.projectileSpeed;
+        projectileLifetime = ability.ProjData.projectileLifetime;
 
         this.ability = ability;
 

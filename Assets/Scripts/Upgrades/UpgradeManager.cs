@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
 using UnityEngine.UIElements;
 
@@ -23,6 +24,7 @@ public class UpgradeDataWrapper
 
 public class UpgradeManager : MonoBehaviour
 {
+    public InputAction openUpgrade;
     float pendingUpgrades = 0;
     public GameObject player;
     public TextMeshProUGUI pendingUpgradesText;
@@ -97,6 +99,7 @@ public class UpgradeManager : MonoBehaviour
 
     void Update()
     {
+        /*
         if (Input.GetButtonDown("Fire3"))
         {
             if (pendingUpgrades > 0 && !GameManager.Instance.isPaused)
@@ -104,6 +107,7 @@ public class UpgradeManager : MonoBehaviour
                 OpenUpgradePanel();
             }
         }
+        */
     }
 
 
@@ -179,16 +183,19 @@ public class UpgradeManager : MonoBehaviour
     }
 
 
-    void OpenUpgradePanel() 
+    public void OpenUpgradePanel()
     {
-        GameManager.Instance.PauseGameToggle();
-        GenerateAvailableUpgrades(upgradePanels.Count);
-
-        for (int i = 0; i < upgradePanels.Count; i++)
+        if (pendingUpgrades > 0 && !GameManager.Instance.isPaused)
         {
-            upgradePanels[i].SetDisplay(shownUpgrades[i]);
+            GameManager.Instance.PauseGameToggle();
+            GenerateAvailableUpgrades(upgradePanels.Count);
+
+            for (int i = 0; i < upgradePanels.Count; i++)
+            {
+                upgradePanels[i].SetDisplay(shownUpgrades[i]);
+            }
+            upgradePanel.SetActive(true);
         }
-        upgradePanel.SetActive(true);
     }
 
 }

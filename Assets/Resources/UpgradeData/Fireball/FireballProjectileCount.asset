@@ -12,8 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a14dee295b5567d449e889dcb4191c66, type: 3}
   m_Name: FireballProjectileCount
   m_EditorClassIdentifier: 
+  upgradeLimit: -1
   upgradeName: Fireball Projectiles
-  upgradeDescription: adds 1 projectile
+  upgradeDescription: adds 1 projectile but greatly increases the firing arc
   upgradeIcon: {fileID: 21300000, guid: 5d4f4b894f2892941803d328c0320b2e, type: 3}
   baseUpgradeType: 1
   tier: 0

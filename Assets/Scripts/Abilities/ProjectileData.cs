@@ -2,6 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public class ProjectileAbilityFactory : IAbilityFactory
+{
+    public Ability Create(AbilityData abilityData, AbilityContext caster)
+    {
+        return new ProjectileAbility((ProjectileData)abilityData, caster);
+    }
+}
+
 [CreateAssetMenu(fileName = "Projectile", menuName = "Abilities/ProjectileData")]
 public class ProjectileData : AbilityData
 {
@@ -19,4 +27,6 @@ public class ProjectileData : AbilityData
     public ProjectileAttack projectilePrefab;
 
     public List<StatusEffect> effects;
+    public override IAbilityFactory AbilityFactory => new ProjectileAbilityFactory();
+
 }

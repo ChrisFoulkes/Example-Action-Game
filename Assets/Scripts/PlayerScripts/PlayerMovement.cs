@@ -2,6 +2,8 @@ using EventCallbacks;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
+
 
 public class PlayerMovement : MonoBehaviour, IMovement
 {
@@ -12,6 +14,7 @@ public class PlayerMovement : MonoBehaviour, IMovement
     private bool isDead = false;
     public GameObject ghostPrefab;
     public SpriteRenderer sprite;
+    public Vector2 movement { get; private set; }
 
     private void Start()
     {
@@ -50,18 +53,19 @@ public class PlayerMovement : MonoBehaviour, IMovement
             if (moveSpeed > 15) { moveSpeed = 15; }
         }
     }
-
-
-    private void Update()
+    public void OnMove(InputAction.CallbackContext context)
     {
-        float horizontalInput = Input.GetAxisRaw("Horizontal");
-        float verticalInput = Input.GetAxisRaw("Vertical");
-        Vector2 movement = new Vector2(horizontalInput, verticalInput).normalized;
+        movement = context.ReadValue<Vector2>().normalized;
+    }
 
+    private void FixedUpdate()
+    {
         if (canMove)
         {
-            rb.velocity = movement * moveSpeed;
+            Vector2 targetVelocity = movement * moveSpeed;
+            rb.velocity = targetVelocity;
         }
+
     }
 
 

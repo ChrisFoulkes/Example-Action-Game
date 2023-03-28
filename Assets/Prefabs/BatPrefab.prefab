@@ -264,8 +264,6 @@ MonoBehaviour:
   physCollider: {fileID: 6352923334319136679}
   hurtBox: {fileID: 6352923336085114770}
   xpGem: {fileID: 2502383956207357572, guid: 34685b7749b55b9479a2571dc2d96c25, type: 3}
-  minGems: 5
-  maxGems: 10
   gemSpawnRadius: 1
   targetScale: {x: 1.3, y: 1.3, z: 1}
   scaleDuration: 0.5
@@ -573,7 +571,7 @@ MonoBehaviour:
   lockWhenNotMoving: 0
   agentTimeHorizon: 2
   obstacleTimeHorizon: 2
-  maxNeighbours: 10
+  maxNeighbours: 5
   layer: 128
   collidesWith: 195
   wallAvoidForce: 1

@@ -19,7 +19,7 @@ public abstract class Ability
 
     public bool isBufferable = false;
 
-    public void adjustCooldowm(float adjustedValue) 
+    public void AdjustCooldown(float adjustedValue) 
     {
         cooldown = adjustedValue;
 
@@ -30,7 +30,6 @@ public abstract class Ability
     {
         IsAvailable = !isOnCooldown;
         cooldownEndTime = Time.time + cooldown;
-        Debug.Log("Cooldown set: " + cooldown);
     }
     public float RemainingCooldown()
     {
