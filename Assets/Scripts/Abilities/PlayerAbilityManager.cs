@@ -56,28 +56,6 @@ public class PlayerAbilityManager : MonoBehaviour
             abilities.Add(aData.AbilityID, newAbility);
         }
 
-        /*
-        foreach (AbilityData aData in abilityDataList)
-        {
-            if (aData.abilityType == AbilityType.projectile)
-            {
-                abilities.Add(aData.AbilityID, new ProjectileAbility((ProjectileData)aData, abilityCaster));
-            }
-            if (aData.abilityType == AbilityType.melee)
-            {
-                abilities.Add(aData.AbilityID, new MeleeAbility((MeleeData)aData, abilityCaster));
-            }
-            if (aData.abilityType == AbilityType.movement)
-            {
-                abilities.Add(aData.AbilityID, new MovementAbility((MovementData)aData, abilityCaster));
-            }
-            if (aData.abilityType == AbilityType.buff)
-            {
-                abilities.Add(aData.AbilityID, new BuffAbility((BuffData)aData, abilityCaster));
-            }
-        }
-        */
-
         int slotIndex = 0;
         foreach (var abilityEntry in abilities)
         {
@@ -94,32 +72,42 @@ public class PlayerAbilityManager : MonoBehaviour
         }
     }
 
-    private void Update()
+    private void Start()
     {
-        if (!GameManager.Instance.isPaused && !caster.IsDead())
-        {
-
-        }
     }
 
-    public void AbilityButtonPress(InputAction.CallbackContext context) 
+    private void Update()
     {
-        if (context.performed)
+
+
+        
+    }
+
+    public void AbilityButtonPress(InputAction.CallbackContext context)
+{
+        if (!GameManager.Instance.isPaused && !caster.IsDead())
         {
-            switch (context.action.name)
+            if (context.performed)
             {
-                case "Ability-1":
-                    var ability1 = abilities.Values.ElementAt(0);
-                    CastAbility(ability1);
-                    break;
-                case "Ability-2":
-                    var ability2 = abilities.Values.ElementAt(1);
-                    CastAbility(ability2);
-                    break;
-                case "Ability-3":
-                    var ability3 = abilities.Values.ElementAt(2);
-                    CastAbility(ability3);
-                    break;
+                switch (context.action.name)
+                {
+                    case "Ability-1":
+                        var ability1 = abilities.Values.ElementAt(0);
+                        CastAbility(ability1);
+                        break;
+                    case "Ability-2":
+                        var ability2 = abilities.Values.ElementAt(1);
+                        CastAbility(ability2);
+                        break;
+                    case "Ability-3":
+                        var ability3 = abilities.Values.ElementAt(2);
+                        CastAbility(ability3);
+                        break;
+                    case "MovementAbility":
+                        var ability4 = abilities.Values.ElementAt(3);
+                        CastAbility(ability4);
+                        break;
+                }
             }
         }
     }
@@ -174,9 +162,15 @@ public class PlayerAbilityManager : MonoBehaviour
         yield return new WaitForSeconds(ability.cooldown);
         ability.SetCoolDown(false);
     }
+    private IEnumerator AutoCast(Ability ability)
+    {
+        CastAbility(ability);
+        yield return new WaitForSeconds(ability.cooldown);
+        StartCoroutine(AutoCast(ability));
+    }
 
 
-    //Bug (if casting time < 
+    //Bug (if cooldown < casting time 
     private IEnumerator HandleAbilityCasting(Ability ability)
     {
         isCasting = true;

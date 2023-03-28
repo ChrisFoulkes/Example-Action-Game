@@ -122,7 +122,7 @@ public class MeleeAbility : Ability
 
         float randomNumber = UnityEngine.Random.Range(0f, 1f);
 
-        float damageValue = Mathf.FloorToInt(meleeData.meleeDamage.CalculateModifiedValue(caster.CharacterStatsController));
+        float damageValue = Mathf.RoundToInt(meleeData.meleeDamage.CalculateModifiedValue(caster.CharacterStatsController));
 
         if (randomNumber < meleeData.critChance.CalculateModifiedValue(caster.CharacterStatsController))
         {

@@ -10,19 +10,24 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d1dc56e7bdff59d46930671d30099b77, type: 3}
-  m_Name: MouseTargetData
+  m_Name: Meteor
   m_EditorClassIdentifier: 
   AbilityID: 16
   abilityName: Meteor
   abilityIcon: {fileID: 21300000, guid: 59873a38f5d3968449e77dbd59ece75b, type: 3}
   abilityType: 5
-  cooldown: 0.6
+  cooldown: 3
   castTime: 0.1
   isBufferable: 1
-  projectileDamage: -10
+  Damage:
+    propertyName: Damage
+    baseValue: -10
+    associatedStats:
+    - {fileID: 11400000, guid: a6219336b88ab074ea899f8cdec7cbcd, type: 2}
   critChance:
-    propertyName: 
-    baseValue: 0
-    associatedStats: []
+    propertyName: Crit Chance
+    baseValue: 0.4
+    associatedStats:
+    - {fileID: 11400000, guid: 65f80ef0b593f3042bebf02e2877640d, type: 2}
   attackPrefab: {fileID: 5227382832242564805, guid: f426758d80849a044910b366080f7a6b, type: 3}
   effects: []

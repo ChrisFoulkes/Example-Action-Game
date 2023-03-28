@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 6769744201110053635}
   - component: {fileID: 9009238877550713153}
   - component: {fileID: 8865300910472130733}
-  - component: {fileID: 6752127984485367563}
+  - component: {fileID: -8566476398987431178}
   m_Layer: 0
   m_Name: Combustion
   m_TagString: Untagged
@@ -103,7 +103,7 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!114 &6752127984485367563
+--- !u!114 &-8566476398987431178
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -112,6 +112,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 2395197584750880393}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 32f1b7baf3daa3445a2aba4d19b44b4e, type: 3}
+  m_Script: {fileID: 11500000, guid: 22846d18235b8214da396503284fdca2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 

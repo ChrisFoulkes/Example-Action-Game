@@ -86,20 +86,17 @@ public class WaveManager : MonoBehaviour
         while (isWaveRunning)
         {
             count++;
-            if (count < 200)
+            GameObject enemyToSpawn = ChooseEnemyToSpawn(waveData[0]);
+            GameObject spawnedEnemy = enemySpawners[spawnIndex].SpawnEnemy(enemyToSpawn);
+            spawnedEnemy.GetComponentInChildren<EnemyStatController>().InitializeControllers(currentWave);
+
+            if (spawnRate > minimumSpawnRate)
             {
-                GameObject enemyToSpawn = ChooseEnemyToSpawn(waveData[0]);
-                GameObject spawnedEnemy = enemySpawners[spawnIndex].SpawnEnemy(enemyToSpawn);
-                spawnedEnemy.GetComponentInChildren<EnemyStatController>().InitializeControllers(currentWave);
-
-                if (spawnRate > minimumSpawnRate)
-                {
-                    spawnRate = spawnRate - 0.05f;
-                }
-
-                spawnIndex++;
-                if (spawnIndex >= enemySpawners.Count) { spawnIndex = 0; }
+                spawnRate = spawnRate - 0.05f;
             }
+
+           spawnIndex++;
+           if (spawnIndex >= enemySpawners.Count) { spawnIndex = 0; }
             yield return new WaitForSeconds(spawnRate);
 
         }

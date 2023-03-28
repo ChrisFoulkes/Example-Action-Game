@@ -15,7 +15,7 @@ public class MouseTargetAbilityFactory : IAbilityFactory
 public class MouseTargetData : AbilityData
 {
     [Header("Projectile Base Data")]
-    public int projectileDamage;
+    public StatAssociation Damage;
     public StatAssociation critChance;
 
   

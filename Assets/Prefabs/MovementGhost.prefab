@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 3093863941933536161}
   - component: {fileID: 5947623666432409041}
   - component: {fileID: 2429558532575773328}
-  - component: {fileID: 64599629}
+  - component: {fileID: -5821001624157827199}
   m_Layer: 0
   m_Name: MovementGhost
   m_TagString: Untagged
@@ -28,7 +28,7 @@ Transform:
   m_GameObject: {fileID: 3373412250389218338}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -1.4376599, y: 3.8474789, z: 142.27289}
-  m_LocalScale: {x: -1, y: 1, z: 1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -73,7 +73,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: -1549151736782420611, guid: 9d0e19d2ed1cece49a09cc27b86898ba, type: 3}
+  m_Sprite: {fileID: -3522477055284954234, guid: 9d0e19d2ed1cece49a09cc27b86898ba, type: 3}
   m_Color: {r: 0.7688679, g: 1, b: 0.96866006, a: 0.57254905}
   m_FlipX: 0
   m_FlipY: 0
@@ -103,7 +103,7 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!114 &64599629
+--- !u!114 &-5821001624157827199
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -112,6 +112,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 3373412250389218338}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 22846d18235b8214da396503284fdca2, type: 3}
+  m_Script: {fileID: 11500000, guid: 58756c105a2ff944a93d554db50a727c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 

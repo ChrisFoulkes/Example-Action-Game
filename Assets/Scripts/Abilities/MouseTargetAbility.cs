@@ -7,13 +7,13 @@ using static Pathfinding.Util.RetainedGizmos;
 
 public class ActiveMTData
 {
-    public int projectileDamage;
+    public StatAssociation abilityDamage;
     public StatAssociation critChance;
 
 
-    public ActiveMTData(int projectileDamage, StatAssociation critChance)
+    public ActiveMTData(StatAssociation Damage, StatAssociation critChance)
     {
-        this.projectileDamage = projectileDamage;
+        this.abilityDamage = new StatAssociation(Damage);
         this.critChance = new StatAssociation(critChance);
     }
 }
@@ -29,7 +29,7 @@ public class MouseTargetAbility : Ability
     public MouseTargetAbility(MouseTargetData aData, AbilityContext caster) : base(aData)
     {
         _caster = caster;
-        MTData = new ActiveMTData(aData.projectileDamage, aData.critChance);
+        MTData = new ActiveMTData(aData.Damage, aData.critChance);
         _statusEffects = aData.effects;
         _targetAttack = aData.attackPrefab;
     }
@@ -69,16 +69,18 @@ public class MouseTargetAbility : Ability
     public void OnHit(Collider2D collision, TargetAttack attack)
     {
         IHealth hitHealth = collision.GetComponentInParent<IHealth>();
-        float randomNumber = UnityEngine.Random.Range(0f, 1f);
+        float randomNumber = Random.Range(0f, 1f);
+
+        float damageValue = Mathf.RoundToInt(MTData.abilityDamage.CalculateModifiedValue(_caster.CharacterStatsController));
 
         if (randomNumber < MTData.critChance.CalculateModifiedValue(_caster.CharacterStatsController))
         {
-            hitHealth.ChangeHealth((MTData.projectileDamage * 2), true);
+            hitHealth.ChangeHealth(damageValue * 2, true);
         }
         else
         {
 
-            hitHealth.ChangeHealth(MTData.projectileDamage);
+            hitHealth.ChangeHealth(damageValue);
         }
 
 

@@ -100,12 +100,14 @@ public class ProjectileAbility : Ability
         }
 
         // Currently global events maybe should be local 
+        /*
         PlayerStopMovementEvent stopMovementEvent = new PlayerStopMovementEvent();
         stopMovementEvent.duration = castTime;
         EventManager.Raise(stopMovementEvent);
 
         SetPlayerFacingDirectionEvent setDirectionEvent = new SetPlayerFacingDirectionEvent(AbilityUtils.GetFacingDirection(_caster.transform.position), castTime);
         EventManager.Raise(setDirectionEvent);
+        */
     }
 
     void SetFiringRotation(float arc, float increment)

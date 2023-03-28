@@ -44,8 +44,8 @@ public class CombustionAbility : Ability
               
                 hitHealth.ChangeHealth(Mathf.RoundToInt(combustionDamage.CalculateModifiedValue(_caster.CharacterStatsController)), false, FloatingColourType.Ignite);
 
-                Object.Instantiate(effectPrefab, appliedEffect.enemy);
-
+                GameObject combustionEffect = Object.Instantiate(effectPrefab, appliedEffect.enemy);
+                combustionEffect.GetComponent<BurnEffect>().Initialize(0, appliedEffect.effect.BonusEffectActive);
                 Vector2 knockbackDirection = (appliedEffect.enemy.position - _caster.transform.position).normalized;
 
                 appliedEffect.enemy.GetComponent <EnemyMovementController>().HandleKnockback(knockbackDirection, new Vector2(0.5f, 0.5f), 0.2f);

@@ -44,6 +44,14 @@
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": ""
+                },
+                {
+                    "name": "MovementAbility",
+                    "type": "Button",
+                    "id": "868bdfae-3c37-4473-a86f-ebefb6a0ffea",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
                 }
             ],
             "bindings": [
@@ -226,11 +234,22 @@
                 {
                     "name": "",
                     "id": "eb199a50-dea0-4a15-9b0b-f7b4848912ca",
-                    "path": "<Keyboard>/space",
+                    "path": "<Keyboard>/r",
                     "interactions": "",
                     "processors": "",
                     "groups": "Keyboard&Mouse",
                     "action": "Ability-3",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "f373f5d2-80c3-442a-be6d-2e71d248d47f",
+                    "path": "<Keyboard>/space",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "MovementAbility",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

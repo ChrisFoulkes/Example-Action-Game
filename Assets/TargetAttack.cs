@@ -21,9 +21,9 @@ public class TargetAttack : Attack
 
     public void Initialize(MouseTargetAbility ability, Vector3 targetPosition)
     {
-        Debug.Log(ability);
         this.ability = ability;
 
+        //Needs Adjusting
         StartCoroutine(MoveAndScale(targetPosition, 0.5f, 2f, 0.7f));
     }
 
@@ -86,5 +86,9 @@ public class TargetAttack : Attack
         {
             transform.localScale = targetScale;
         }
+    }
+    public void DestoryEffect()
+    {
+        GameObject.Destroy(gameObject);
     }
 }

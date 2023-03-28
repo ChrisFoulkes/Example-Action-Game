@@ -89,6 +89,7 @@ public class EnemyMovementController : MonoBehaviour, IMovement
         }
 
         yield return new WaitForSeconds(delay);
+        Rb2D.velocity = Vector2.zero;
         CanMove(true);
         aiPath.canMove = true;
     }

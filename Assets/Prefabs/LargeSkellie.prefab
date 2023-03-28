@@ -99,6 +99,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   physCollider: {fileID: 8069379036379279855}
   hurtBox: {fileID: 8069379034588094938}
+  xpGem: {fileID: 2502383956207357572, guid: 34685b7749b55b9479a2571dc2d96c25, type: 3}
+  gemSpawnRadius: 1
   targetScale: {x: 1.3, y: 1.3, z: 1}
   scaleDuration: 0.5
   scaleParentTransform: {fileID: 8069379035729091041}
@@ -129,8 +131,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   shouldUpdateHealthBar: 0
-  maximumHealth: 10
-  _currentHP: 10
+  maximumHealth: 300
+  _currentHP: 300
   startColor: {r: 0.735849, g: 0, b: 0, a: 1}
   endColor: {r: 0.21960784, g: 0.7294118, b: 0.23529412, a: 1}
   blendDuration: 0.25
@@ -147,6 +149,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 18e4aa85e03304c449bc1e359bfc3235, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isKnockbackAble: 1
 --- !u!114 &5131820408587940820
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -187,7 +190,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyStats:
-    health: 10
+    health: 300
     healthGrowthFactor: 0.33
     attackDamage: -1
     damageGrowthFactor: 1
@@ -561,7 +564,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 4
   m_Sprite: {fileID: -2064258870146469241, guid: a510b7c4fc9b0534880bff75fbf4dad5, type: 3}
   m_Color: {r: 0.21586864, g: 0.7264151, b: 0.2319122, a: 1}
   m_FlipX: 0

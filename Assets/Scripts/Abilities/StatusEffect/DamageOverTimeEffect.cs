@@ -37,14 +37,10 @@ public class DamageOverTimeEffect : StatusEffect
     public override void UpdateEffect(GameObject target, ActiveStatusEffect activeStatusEffect)
     {
         float damage = damagePerTick.CalculateModifiedValue(_caster.CharacterStatsController) * activeStatusEffect.CountInstance;
-        if (activeStatusEffect.BonusEffectActive) 
-        {
-            damage *= 2;
-        }
         target.GetComponent<IHealth>().ChangeHealth(damage, false, FloatingColourType.Ignite);
 
         GameObject effectPrefab = Instantiate(statusPrefab, target.transform);
-
+        effectPrefab.GetComponent<BurnEffect>().Initialize(activeStatusEffect.CountInstance, activeStatusEffect.BonusEffectActive);
         activeStatusEffect.EffectAsset = effectPrefab;
     }
 }
