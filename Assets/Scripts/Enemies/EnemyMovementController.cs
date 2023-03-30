@@ -1,8 +1,8 @@
+using EventCallbacks;
 using Pathfinding;
 using System.Collections;
-using System.Collections.Generic;
-using System.IO;
 using UnityEngine;
+using static Pathfinding.Util.RetainedGizmos;
 
 public class MovementAnimationState
 {
@@ -18,79 +18,122 @@ public class MovementAnimationState
 
 public class EnemyMovementController : MonoBehaviour, IMovement
 {
-    AIPath aiPath;
-    private Rigidbody2D Rb2D;
+    private AIPath _aiPath;
+    private Rigidbody2D _rb2D;
+    private IDamage _damageController;
 
     public bool isKnockbackAble = true;
     private float baseMovementSpeed = 3f;
-    // Start is called before the first frame update
+
     void Awake()
     {
-        aiPath= GetComponentInParent<AIPath>();
-        Rb2D= GetComponentInParent<Rigidbody2D>();
-
-
+        _aiPath = GetComponentInParent<AIPath>();
+        _rb2D = GetComponentInParent<Rigidbody2D>();
+        _damageController = GetComponent<IDamage>();
     }
 
 
     public void Initialize(float initialMovement)
     {
-        baseMovementSpeed = initialMovement; 
+        baseMovementSpeed = initialMovement;
         SetInitialMoveSpeed();
     }
 
+    public void OnEnable()
+    {
+        _damageController.AddDamageListener(OnDamageEvent);
+    }
+
+    public void OnDisable()
+    {
+
+        _damageController.RemoveDamageListener(OnDamageEvent);
+    }
 
     public MovementAnimationState GetMovementAnimState()
     {
-        bool isMoving = (Mathf.Abs(aiPath.velocity.x) > 0 || Mathf.Abs(aiPath.velocity.y) > 0);
-        return new MovementAnimationState(aiPath.desiredVelocity, isMoving);
+        bool isMoving = (Mathf.Abs(_rb2D.velocity.x) > 0 || Mathf.Abs(_aiPath.velocity.y) > 0);
+        return new MovementAnimationState(_aiPath.desiredVelocity, isMoving);
     }
 
-    void SetInitialMoveSpeed() 
-    { 
-        aiPath.maxSpeed = baseMovementSpeed;
+    void SetInitialMoveSpeed()
+    {
+        _aiPath.maxSpeed = baseMovementSpeed;
     }
 
-    public void CanMove(bool canMove) 
+    public void CanMove(bool canMove)
     {
         if (!canMove)
         {
-            aiPath.maxSpeed = 0f;
+            _aiPath.maxSpeed = 0f;
         }
         else
-
         {
-            aiPath.maxSpeed = baseMovementSpeed;
+            _aiPath.maxSpeed = baseMovementSpeed;
         }
-    
     }
-    public void ChangeSpeed(float amount) 
+
+    public void ChangeSpeed(float amount)
     {
         Debug.Log("Slowing Enemies not implemented!");
     }
 
-    public void HandleKnockback(Vector2 knockbackDirection, Vector2 knockbackForce, float delay) 
+
+    public void HandleKnockback(Vector2 knockbackDirection, Vector2 knockbackForce, float delay)
     {
         if (isKnockbackAble)
         {
-            StartCoroutine(ApplyKnockback(knockbackDirection, knockbackForce, delay));
+            if (_rb2D != null)
+            {
+                StartCoroutine(ApplyKnockback(knockbackDirection, knockbackForce, delay));
+            }
+            else
+            {
+                Debug.LogWarning("Rigidbody2D component not found on the enemy.");
+            }
         }
-    
     }
-    public IEnumerator ApplyKnockback(Vector2 knockbackDirection, Vector2 knockbackForce, float delay)
+
+    private IEnumerator ApplyKnockback(Vector2 knockbackDirection, Vector2 knockbackForce, float duration)
     {
-        aiPath.canMove = false;
+        _aiPath.canMove = false;
         CanMove(false);
 
 
-        if (Rb2D != null)
+        if (_rb2D != null)
         {
-            Rb2D.AddForce(knockbackDirection * knockbackForce, ForceMode2D.Impulse);
+            _rb2D.AddForce(knockbackDirection * knockbackForce, ForceMode2D.Impulse);
         }
 
-        yield return new WaitForSeconds(delay);
-        Rb2D.velocity = Vector2.zero;
+        yield return new WaitForSeconds(duration);
+        _rb2D.velocity = Vector2.zero;
         CanMove(true);
-        aiPath.canMove = true;
+        _aiPath.canMove = true;
+    }
+
+    private void OnDamageEvent(GameEvent dEvent)
+    {
+        EnemyDamageEvent damageEvent = (EnemyDamageEvent)dEvent;
+        KnockbackData knockback = damageEvent.DamageInfo.Knockback;
+
+        if (knockback != null)
+        {
+            if (knockback.shouldKnockback)
+            {
+                Vector2 knockbackDirection;
+
+                if (knockback.knockbackFromEffect)
+                {
+                    knockbackDirection = (transform.position - damageEvent.DamageInfo.EffectPosition).normalized;
+                }
+                else
+                {
+                    knockbackDirection = (transform.position - damageEvent.Caster.transform.position).normalized;
+                }
+
+
+                HandleKnockback(knockbackDirection, knockback.Force, knockback.Duration);
+            }
+        }
     }
 }

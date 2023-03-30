@@ -1,81 +1,53 @@
 using EventCallbacks;
-using JetBrains.Annotations;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using static Pathfinding.Util.RetainedGizmos;
 
 public class BuffUpgradeHandler : UpgradeHandler
 {
-    private BuffAbility parentAbility;
+    private readonly BuffAbility _parentAbility;
 
     public BuffUpgradeHandler(BuffAbility parentAbility)
     {
-        this.parentAbility = parentAbility;
+        _parentAbility = parentAbility;
     }
 
     public override void ApplyUpgrade(UpgradeEffect upgradeEffect)
     {
-        /*
-         * replace once we have upgrades for buffs
-        if (upgradeEffect is MeleeUpgradeEffect meleeUpgradeEffect)
-        {
-            switch (meleeUpgradeEffect.upgradeType)
-            {
-            }
-        }
-        */
-    }
-}
-
-public class ActiveBuffData
-{
-    public int BuffID;
-    public List<AffectStat> affectStats = new List<AffectStat>();
-    public float buffDuration;
-
-    public ActiveBuffData(List<AffectStat> affectStats, float duration, int ID) 
-    {
-        BuffID = ID;
-        buffDuration = duration;
-        this.affectStats = affectStats;
+        // Implement the buff upgrade logic here
     }
 }
 
 public class BuffAbility : Ability
 {
-    public ActiveBuffData buffData;
-    AbilityContext caster;
+    private readonly ActiveBuffData _buffData;
+    private readonly PlayerCasterContext _caster;
 
-    public BuffAbility(BuffData aData, AbilityContext caster) : base(aData)
+    public BuffAbility(BuffAbilityData abilityData, AbilityCasterContext caster) : base(abilityData)
     {
-        this.caster = caster;
+        _caster = (PlayerCasterContext)caster;
+        _buffData = new ActiveBuffData(abilityData.AffectedStats, abilityData.BaseBuffDuration, abilityData.BuffID);
+        CastTime = abilityData.castTime;
 
-        buffData = new ActiveBuffData(aData.affectStats, aData.baseBuffDuration, aData.BuffID);
-        castTime = aData.castTime;
-
-        upgradeHandler = new BuffUpgradeHandler(this);
-
+        AbilityUpgradeHandler = new BuffUpgradeHandler(this);
     }
 
     public override void CastAbility()
     {
-        if (castTime > cooldown) { AdjustCooldown(castTime); }
+        if (CastTime > Cooldown)
+        {
+            AdjustCooldown(CastTime);
+        }
 
-        caster.BuffEffectController.ApplyBuff(buffData);
+        _caster.BuffController.ApplyBuff(_buffData);
 
-
-        //currently global events maybe should be local 
-        PlayerStopMovementEvent stopMovementEvent = new PlayerStopMovementEvent();
-        stopMovementEvent.duration = castTime;
+        // Currently global events, maybe should be local 
+        PlayerStopMovementEvent stopMovementEvent = new PlayerStopMovementEvent { duration = CastTime };
         EventManager.Raise(stopMovementEvent);
 
-        SetPlayerFacingDirectionEvent setDirectionEvent = new SetPlayerFacingDirectionEvent(AbilityUtils.GetFacingDirection(caster.transform.position), castTime);
+        SetPlayerFacingDirectionEvent setDirectionEvent = new SetPlayerFacingDirectionEvent(AbilityUtils.GetFacingDirection(_caster.transform.position), CastTime);
         EventManager.Raise(setDirectionEvent);
     }
 
     public override void ApplyUpgrade(UpgradeEffect upgradeEffect)
     {
-        upgradeHandler.ApplyUpgrade(upgradeEffect);
+        AbilityUpgradeHandler.ApplyUpgrade(upgradeEffect);
     }
 }

@@ -1,7 +1,4 @@
 using EventCallbacks;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine;
 
 public class clickToMove : MonoBehaviour
@@ -46,12 +43,12 @@ public class clickToMove : MonoBehaviour
         }
     }
 
-    void ResetPlayerDestination() 
+    void ResetPlayerDestination()
     {
         gameObject.transform.position = (player.position);
     }
 
-    void OnPauseEvent(GamePauseEvent pauseEvent) 
+    void OnPauseEvent(GamePauseEvent pauseEvent)
     {
         if (pauseEvent.isPaused)
         {

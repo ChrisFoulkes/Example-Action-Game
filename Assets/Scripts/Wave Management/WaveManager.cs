@@ -95,14 +95,14 @@ public class WaveManager : MonoBehaviour
                 spawnRate = spawnRate - 0.05f;
             }
 
-           spawnIndex++;
-           if (spawnIndex >= enemySpawners.Count) { spawnIndex = 0; }
+            spawnIndex++;
+            if (spawnIndex >= enemySpawners.Count) { spawnIndex = 0; }
             yield return new WaitForSeconds(spawnRate);
 
         }
     }
 
-    private void  OnPlayerDeath(PlayerDeathEvent deathEvent) 
+    private void OnPlayerDeath(PlayerDeathEvent deathEvent)
     {
         isWaveRunning = false;
     }

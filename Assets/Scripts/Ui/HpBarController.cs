@@ -1,9 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
+using EventCallbacks;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro;
-using EventCallbacks;
 
 public class HpBarController : MonoBehaviour
 {

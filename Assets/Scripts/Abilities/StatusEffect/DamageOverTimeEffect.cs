@@ -1,7 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 
@@ -14,13 +10,13 @@ public class DamageOverTimeEffect : StatusEffect
     public bool canMultiApply = false;
 
 
-    private AbilityContext _caster;
+    private PlayerCasterContext _caster;
 
-    public override void ApplyEffect(StatusEffectController controller, AbilityContext caster)
+    public override void ApplyEffect(StatusEffectController controller, AbilityCasterContext caster)
     {
-        _caster = caster;
+        _caster = (PlayerCasterContext)caster;
 
-        float randomNumber = UnityEngine.Random.Range(0, 100);
+        float randomNumber = Random.Range(0, 100);
 
         if (randomNumber < chanceToApply)
         {
@@ -37,7 +33,8 @@ public class DamageOverTimeEffect : StatusEffect
     public override void UpdateEffect(GameObject target, ActiveStatusEffect activeStatusEffect)
     {
         float damage = damagePerTick.CalculateModifiedValue(_caster.CharacterStatsController) * activeStatusEffect.CountInstance;
-        target.GetComponent<IHealth>().ChangeHealth(damage, false, FloatingColourType.Ignite);
+
+        target.GetComponent<IDamage>().ApplyDamage(new DamageInfo(damage, false, FloatingColourType.Ignite), _caster);
 
         GameObject effectPrefab = Instantiate(statusPrefab, target.transform);
         effectPrefab.GetComponent<BurnEffect>().Initialize(activeStatusEffect.CountInstance, activeStatusEffect.BonusEffectActive);

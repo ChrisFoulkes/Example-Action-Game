@@ -19,9 +19,15 @@ MonoBehaviour:
   cooldown: 4
   castTime: 0.1
   isBufferable: 1
+  knockbackData:
+    shouldKnockback: 1
+    knockbackFromEffect: 0
+    Force: {x: 0.3, y: 0.3}
+    Duration: 0.45
+  hitStun: 0.45
   combustionDamage:
     propertyName: Combustion Damage
-    baseValue: -8
+    baseValue: -4
     associatedStats:
     - {fileID: 11400000, guid: a6219336b88ab074ea899f8cdec7cbcd, type: 2}
   effectObject: {fileID: 2395197584750880393, guid: c06bac3dab863f348b307ed2ff036abf, type: 3}

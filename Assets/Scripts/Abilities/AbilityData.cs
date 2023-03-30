@@ -1,8 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public enum AbilityType 
+public enum AbilityType
 {
     projectile,
     melee,
@@ -13,7 +11,14 @@ public enum AbilityType
 }
 public interface IAbilityFactory
 {
-    Ability Create(AbilityData abilityData, AbilityContext abilityContext);
+    Ability Create(AbilityData abilityData, AbilityCasterContext abilityContext);
+}
+
+public abstract class HitAbilityData : AbilityData
+{
+    [Header("Knockback Data")]
+    public KnockbackData knockbackData;
+    public float hitStun;
 }
 
 public abstract class AbilityData : ScriptableObject

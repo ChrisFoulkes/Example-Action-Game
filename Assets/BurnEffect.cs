@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class BurnEffect : MonoBehaviour
@@ -14,11 +12,11 @@ public class BurnEffect : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+
     }
     public void Initialize(int Count, bool bonusEffect)
     {
-        if (bonusEffect) 
+        if (bonusEffect)
         {
             _animator.SetBool("BlueFlame", true);
         }
@@ -26,6 +24,6 @@ public class BurnEffect : MonoBehaviour
 
     public void DestoryEffect()
     {
-       GameObject.Destroy(gameObject);
+        GameObject.Destroy(gameObject);
     }
 }

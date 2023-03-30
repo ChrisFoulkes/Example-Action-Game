@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -71,7 +69,7 @@ public static class AbilityUtils
         return closestPoint;
     }
 
-    public static Vector3 GetOffsetMousePosition(Vector2 offset) 
+    public static Vector3 GetOffsetMousePosition(Vector2 offset)
     {
         Vector2 mousePos = Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue());
 

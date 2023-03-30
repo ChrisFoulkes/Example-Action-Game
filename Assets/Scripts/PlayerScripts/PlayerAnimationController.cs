@@ -1,7 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using EventCallbacks;
+using System.Collections;
+using UnityEngine;
 
 public class PlayerAnimationController : MonoBehaviour
 {
@@ -49,7 +48,7 @@ public class PlayerAnimationController : MonoBehaviour
         Vector2 movement = (Vector2)transform.position - lastPosition;
 
         // Set the animator parameters based on the movement direction
-        if (Mathf.Abs(movement.x) > Mathf.Abs(movement.y) *0.75f) //*75% to force diagonals horizontal
+        if (Mathf.Abs(movement.x) > Mathf.Abs(movement.y) * 0.75f) //*75% to force diagonals horizontal
         {
             animator.SetFloat("Horizontal", movement.x);
             animator.SetFloat("Vertical", 0f);
@@ -114,8 +113,8 @@ public class PlayerAnimationController : MonoBehaviour
 
         yield return new WaitForSeconds(stopDuration);
         {
-                animator.SetBool("forceFaceLeft", false);
-                animator.SetBool("forceFaceRight", false);
+            animator.SetBool("forceFaceLeft", false);
+            animator.SetBool("forceFaceRight", false);
         }
     }
 }

@@ -1,7 +1,5 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 
 
 public static class EventManager
@@ -65,6 +63,7 @@ public abstract class GameEvent
     }
 }
 
+//Example Event
 public class MyCustomEvent : GameEvent
 {
     public int SomeValue;

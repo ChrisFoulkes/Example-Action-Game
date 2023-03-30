@@ -1,6 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+using System.Numerics;
 
 namespace EventCallbacks
 {
@@ -16,5 +14,18 @@ namespace EventCallbacks
     public class HealthChangedEvent : GameEvent
     {
         public float ChangeValue;
+    }
+    public class DamageEvent : GameEvent
+    {
+        public DamageInfo DamageInfo;
+        public AbilityCasterContext Caster;
+        public TargetContext Target;
+    }
+
+    public class HealEvent : GameEvent
+    {
+        public HealInfo HealInfo;
+        public TargetContext Target;
+        //public AbilityContext Caster;
     }
 }

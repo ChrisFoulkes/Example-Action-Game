@@ -1,57 +1,56 @@
-
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Transactions;
-using UnityEngine;
 using EventCallbacks;
+using System.Collections;
+using UnityEngine;
 
 public class HealthController : MonoBehaviour, IHealth
 {
-    //needs to be replaced with event syste
     public bool shouldUpdateHealthBar;
 
-    [SerializeField] private float maximumHealth = 20;
+    [SerializeField] private float _maximumHealth = 20;
 
 
-    [SerializeField]
-    private float _currentHP;
-    public Color startColor;
-    public Color endColor;
-    public float blendDuration;
-    public SpriteRenderer sprite;
-    IDeath deathHandler;
+    [SerializeField] private float _currentHP;
 
-    private HealthChangedEvent healthChangedEvent = new HealthChangedEvent();
+    [SerializeField] private Color _startColor;
 
-    public void Awake()
+    [SerializeField] private Color _endColor;
+
+    [SerializeField] private float _blendDuration;
+
+    [SerializeField] private SpriteRenderer _sprite;
+
+    private IDeath _deathHandler;
+
+    private HealthChangedEvent _healthChangedEvent = new HealthChangedEvent();
+
+    protected virtual void Awake()
     {
-        deathHandler = GetComponent<IDeath>();
+        _deathHandler = GetComponent<IDeath>();
     }
 
 
     public void Initialize(float initialHealth)
     {
-        maximumHealth = initialHealth;
-        _currentHP = maximumHealth;
+        _maximumHealth = initialHealth;
+        _currentHP = _maximumHealth;
 
     }
 
     public void AddListener(GameEvent.EventDelegate<GameEvent> listener)
     {
-        healthChangedEvent.AddLocalListener(listener);
+        _healthChangedEvent.AddLocalListener(listener);
     }
 
     public void RemoveListener(GameEvent.EventDelegate<GameEvent> listener)
     {
-        healthChangedEvent.RemoveLocalListener(listener);
+        _healthChangedEvent.RemoveLocalListener(listener);
     }
 
-    public virtual void ChangeHealth(float amount, bool isCriticalHit = false, FloatingColourType colourType = FloatingColourType.Generic)
+    protected void ChangeHealth(float amount, bool isCriticalHit = false, FloatingColourType colourType = FloatingColourType.Generic)
     {
         if (_currentHP > 0)
         {
-            if (isCriticalHit) 
+            if (isCriticalHit)
             {
                 GenerateCombatText(amount, FloatingColourType.levelUp, true);
             }
@@ -63,17 +62,17 @@ public class HealthController : MonoBehaviour, IHealth
 
         _currentHP += amount;
 
-        if(_currentHP > maximumHealth) 
+        if (_currentHP > _maximumHealth)
         {
-            _currentHP = maximumHealth;
+            _currentHP = _maximumHealth;
         }
         if (_currentHP <= 0)
         {
-            deathHandler.StartDeath();
+            _deathHandler.StartDeath();
         }
 
-        healthChangedEvent.ChangeValue = amount;
-        healthChangedEvent.RaiseLocal();
+        _healthChangedEvent.ChangeValue = amount;
+        _healthChangedEvent.RaiseLocal();
 
         FlashColour();
     }
@@ -91,7 +90,7 @@ public class HealthController : MonoBehaviour, IHealth
 
                 FloatingCombatTextController.Instance.CreateFloatingCombatText(Mathf.Abs(amount).ToString(), transform, colourType, false, 0.9f, 0.8f);
             }
-            else 
+            else
             {
                 FloatingCombatTextController.Instance.CreateFloatingCombatText(Mathf.Abs(amount).ToString(), transform, colourType, false);
             }
@@ -100,27 +99,27 @@ public class HealthController : MonoBehaviour, IHealth
 
     public void Kill()
     {
-        _currentHP = 0; 
+        _currentHP = 0;
 
         FlashColour();
 
 
-        deathHandler.CompleteDeath();
+        _deathHandler.CompleteDeath();
     }
 
-    public float CurrentHealth() 
+    public float CurrentHealth()
     {
         return _currentHP;
     }
 
-    public float GetMaxHP() 
+    public float GetMaxHP()
     {
-        return maximumHealth;
+        return _maximumHealth;
     }
 
     private void FlashColour()
     {
-        sprite.color = endColor;
+        _sprite.color = _endColor;
         StopCoroutine(BlendColors());
         StartCoroutine(BlendColors());
     }
@@ -128,20 +127,20 @@ public class HealthController : MonoBehaviour, IHealth
     private IEnumerator BlendColors()
     {
         float elapsedTime = 0f;
-        while (elapsedTime < blendDuration)
+        while (elapsedTime < _blendDuration)
         {
-            sprite.color = Color.Lerp(startColor, endColor, elapsedTime / blendDuration);
+            _sprite.color = Color.Lerp(_startColor, _endColor, elapsedTime / _blendDuration);
             elapsedTime += Time.deltaTime;
             yield return null;
 
-            if (deathHandler.IsDead()) 
+            if (_deathHandler.IsDead())
             {
-                blendDuration = 0f;
-                sprite.color = endColor;
+                _blendDuration = 0f;
+                _sprite.color = _endColor;
             }
         }
 
-        sprite.color = endColor;
+        _sprite.color = _endColor;
     }
 
 }

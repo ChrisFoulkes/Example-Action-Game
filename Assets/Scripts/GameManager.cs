@@ -1,6 +1,4 @@
 using EventCallbacks;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
@@ -25,7 +23,7 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
     public void PauseGameToggle()
@@ -33,12 +31,12 @@ public class GameManager : MonoBehaviour
         isPaused = !isPaused;
         GamePauseEvent pauseEvent = new GamePauseEvent();
         pauseEvent.isPaused = isPaused;
-        
+
         if (isPaused)
         {
             Time.timeScale = 0;
         }
-        else 
+        else
         {
             Time.timeScale = 1;
         }

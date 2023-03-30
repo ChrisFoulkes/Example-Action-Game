@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "MultiplicativestatData", menuName = "Stats/MultiplicativeStat", order = 3)]

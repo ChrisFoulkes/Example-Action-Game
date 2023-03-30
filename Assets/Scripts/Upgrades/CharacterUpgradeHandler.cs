@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class CharacterUpgradeHandler : MonoBehaviour
@@ -8,6 +6,7 @@ public class CharacterUpgradeHandler : MonoBehaviour
     private GameObject player;
     IMovement playerMovement;
     IHealth playerHealth;
+    IHeal playerHealController;
 
     PlayerAbilityManager playerAbilityManager;
 
@@ -17,6 +16,7 @@ public class CharacterUpgradeHandler : MonoBehaviour
     {
         player = playerObject;
         playerHealth = player.GetComponent<IHealth>();
+        playerHealController = player.GetComponent<IHeal>();
         playerMovement = player.GetComponent<IMovement>();
         playerAbilityManager = player.GetComponentInChildren<PlayerAbilityManager>();
         characterStatsController = player.GetComponent<CharacterStatsController>();
@@ -35,7 +35,7 @@ public class CharacterUpgradeHandler : MonoBehaviour
                 ChangeMovementSpeed(amount);
                 break;
             case CharacterUpgradeTypes.heal:
-                playerHealth.ChangeHealth(amount);
+                playerHealController.ApplyHealing(new HealInfo(5f));
                 break;
             case CharacterUpgradeTypes.stat:
                 if (stat != null)
@@ -56,8 +56,8 @@ public class CharacterUpgradeHandler : MonoBehaviour
 
         if (uData is ProjectileUpgradeData projectileUpgradeData)
         {
-            abilityID = projectileUpgradeData.ability.AbilityID; 
-            
+            abilityID = projectileUpgradeData.ability.AbilityID;
+
             foreach (ProjectileUpgradeEffect upgradeEffect in projectileUpgradeData.upgradeEffects)
             {
                 playerAbilityManager.UpgradeAbility(abilityID, upgradeEffect);
@@ -66,7 +66,7 @@ public class CharacterUpgradeHandler : MonoBehaviour
         else if (uData is MeleeUpgradeData meleeUpgradeData)
         {
             abilityID = meleeUpgradeData.ability.AbilityID;
-            
+
             foreach (MeleeUpgradeEffect upgradeEffect in meleeUpgradeData.upgradeEffects)
             {
                 playerAbilityManager.UpgradeAbility(abilityID, upgradeEffect);

@@ -19,6 +19,12 @@ MonoBehaviour:
   cooldown: 0
   castTime: 0.27
   isBufferable: 0
+  knockbackData:
+    shouldKnockback: 1
+    knockbackFromEffect: 0
+    Force: {x: 0.8, y: 0.8}
+    Duration: 0.2
+  hitStun: 0.2
   meleeDamage:
     propertyName: Melee Damage
     baseValue: -8

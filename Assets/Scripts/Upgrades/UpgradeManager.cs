@@ -1,13 +1,9 @@
 using EventCallbacks;
-using Pathfinding;
-using Sirenix.Utilities;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.UI;
-using UnityEngine.UIElements;
 
 [System.Serializable]
 public class UpgradeDataWrapper
@@ -33,7 +29,7 @@ public class UpgradeManager : MonoBehaviour
     public CharacterUpgradeHandler characterUpgradeHandler;
     [SerializeField] private List<UpgradeDataWrapper> upgradeDataWrappers = new List<UpgradeDataWrapper>();
 
-    [SerializeField] private List<UpgradeData> upgradeData= new List<UpgradeData>();
+    [SerializeField] private List<UpgradeData> upgradeData = new List<UpgradeData>();
 
     [SerializeField] private List<UpgradeData> shownUpgrades = new List<UpgradeData>();
 
@@ -51,7 +47,7 @@ public class UpgradeManager : MonoBehaviour
     }
 
     private void PopulateUpgradeData()
-    { 
+    {
         // Clear any existing data
         upgradeData.Clear();
         upgradeDataWrappers.Clear();
@@ -97,24 +93,9 @@ public class UpgradeManager : MonoBehaviour
         EventManager.RemoveGlobalListener<PlayerExperienceEvent>(OnExpEvent);
     }
 
-    void Update()
-    {
-        /*
-        if (Input.GetButtonDown("Fire3"))
-        {
-            if (pendingUpgrades > 0 && !GameManager.Instance.isPaused)
-            {
-                OpenUpgradePanel();
-            }
-        }
-        */
-    }
-
-
-
     void OnExpEvent(PlayerExperienceEvent pXPEvent)
     {
-        if (pXPEvent.isLevelUP) 
+        if (pXPEvent.isLevelUP)
         {
             pendingUpgrades++;
             pendingUpgradesText.text = "+" + pendingUpgrades;
@@ -122,7 +103,7 @@ public class UpgradeManager : MonoBehaviour
         }
     }
 
-    void TogglePendingUpgradesDisplay(bool enable) 
+    void TogglePendingUpgradesDisplay(bool enable)
     {
         pendingUpgradesText.gameObject.SetActive(enable);
     }
@@ -148,7 +129,7 @@ public class UpgradeManager : MonoBehaviour
             udataWrapper.timesChosen++;
 
             // Remove the upgrade if it reaches the limit
-            if (udataWrapper.upgradeData.upgradeLimit > -1 && udataWrapper.timesChosen >=  udataWrapper.upgradeData.upgradeLimit)
+            if (udataWrapper.upgradeData.upgradeLimit > -1 && udataWrapper.timesChosen >= udataWrapper.upgradeData.upgradeLimit)
             {
                 upgradeData.Remove(udataWrapper.upgradeData);
             }

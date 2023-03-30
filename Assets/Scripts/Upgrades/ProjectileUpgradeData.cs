@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -12,7 +11,7 @@ public class ProjectileUpgradeEffect : UpgradeEffect
 
 public enum ProjectileUpgradeTypes
 {
-    projectileCount, 
+    projectileCount,
     projectileArc,
     projectileDamage
 }

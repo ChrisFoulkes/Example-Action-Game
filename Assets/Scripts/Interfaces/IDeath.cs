@@ -1,6 +1,3 @@
-
-using System;
-
 public interface IDeath
 {
     void AddListener(GameEvent.EventDelegate<GameEvent> listener);

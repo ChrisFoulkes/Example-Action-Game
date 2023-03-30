@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -32,7 +31,7 @@ public class StatAssociation
                 {
                     Debug.LogWarning("Caster missing " + stat.name + ": " + stat.ID);
                 }
-                else 
+                else
                 {
                     casterStat = caster.activeStats[stat.ID];
                 }

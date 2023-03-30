@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 public class ProjectileAttack : Attack
 {
@@ -49,6 +48,7 @@ public class ProjectileAttack : Attack
     {
         ability.OnHit(collision, this);
     }
+
     IEnumerator Lifespan(float delay)
     {
         yield return new WaitForSeconds(delay);

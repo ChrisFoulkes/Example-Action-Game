@@ -167,7 +167,7 @@ MonoBehaviour:
   attackController: {fileID: 8134006836442750364}
   movementController: {fileID: 2321829728416958015}
   deathController: {fileID: 6352923336018119446}
-  stateChanged: 0
+  StateChanged: 0
 --- !u!1 &6352923334944159658
 GameObject:
   m_ObjectHideFlags: 0
@@ -222,11 +222,12 @@ GameObject:
   - component: {fileID: 6352923336018119447}
   - component: {fileID: 6352923336018119446}
   - component: {fileID: 7130821996879711668}
-  - component: {fileID: 6352923336018119444}
   - component: {fileID: 2321829728416958015}
   - component: {fileID: 8134006836442750364}
   - component: {fileID: 8727102392494308201}
   - component: {fileID: 2324276239888980591}
+  - component: {fileID: 6177085446323226007}
+  - component: {fileID: 2323361220124767690}
   m_Layer: 7
   m_Name: EnemyController
   m_TagString: Untagged
@@ -280,27 +281,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 57ee7a4890ab2a44a8debff36635b11a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  animController: {fileID: 4132876503904774227}
-  attackController: {fileID: 8134006836442750364}
---- !u!114 &6352923336018119444
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6352923336018119440}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9eb898417566bfa4394c9b7228c8daaa, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  shouldUpdateHealthBar: 0
-  maximumHealth: 10
-  _currentHP: 0
-  startColor: {r: 0.735849, g: 0, b: 0, a: 1}
-  endColor: {r: 1, g: 1, b: 1, a: 1}
-  blendDuration: 0.25
-  sprite: {fileID: 6352923334704716877}
+  _animController: {fileID: 4132876503904774227}
 --- !u!114 &2321829728416958015
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -371,6 +352,37 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7e23e654d17d9a74a82f8001ef21bbb5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &6177085446323226007
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6352923336018119440}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 97637789fc3a6b9419d58921fd7d9f96, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  shouldUpdateHealthBar: 0
+  _maximumHealth: 20
+  _currentHP: 0
+  _startColor: {r: 1, g: 0, b: 0, a: 1}
+  _endColor: {r: 1, g: 1, b: 1, a: 1}
+  _blendDuration: 0.25
+  _sprite: {fileID: 6352923334704716877}
+--- !u!114 &2323361220124767690
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6352923336018119440}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 24c331ffbb4eef048bab26e6c94f2241, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &6352923336085114764

@@ -1,6 +1,5 @@
 using EventCallbacks;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Enemy : MonoBehaviour, IDeath
@@ -68,7 +67,7 @@ public class Enemy : MonoBehaviour, IDeath
         }
     }
 
-    public void CompleteDeath() 
+    public void CompleteDeath()
     {
         GameObject.Destroy(transform.parent.gameObject);
     }

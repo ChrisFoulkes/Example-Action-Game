@@ -4,32 +4,48 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class AbilityContext
+
+public class PlayerCasterContext : AbilityCasterContext
 {
-    public Transform transform{ get; }
     public Transform ProjectileSpawnPos { get; }
     public Rigidbody2D CasterRigidbody { get; }
     public PlayerMovement PlayerMovement { get; }
     public CharacterStatsController CharacterStatsController { get; }
     public PlayerStatusTracker PlayerStatusTracker { get; }
-    public BuffEffectController BuffEffectController { get; }
-
-    public AbilityContext(Transform caster, Transform projectileSpawnPos)
+    public BuffController BuffController { get; }
+    public PlayerCasterContext(Transform caster, Transform projectileSpawnPos) : base(caster)
     {
-        transform = caster;
         ProjectileSpawnPos = projectileSpawnPos;
         CasterRigidbody = caster.GetComponent<Rigidbody2D>();
         PlayerMovement = caster.GetComponent<PlayerMovement>();
         CharacterStatsController = caster.GetComponent<CharacterStatsController>();
-        BuffEffectController = caster.GetComponent<BuffEffectController>();
+        BuffController = caster.GetComponent<BuffController>();
         PlayerStatusTracker = caster.GetComponentInChildren<PlayerStatusTracker>();
     }
 }
 
+public class EnemyCasterContext : AbilityCasterContext
+{
+    public EnemyCasterContext(Transform caster) : base(caster)
+    {
+
+    }
+}
+
+public abstract class AbilityCasterContext
+{
+    public Transform transform { get; }
+
+
+    public AbilityCasterContext(Transform caster)
+    {
+        transform = caster;
+    }
+}
 
 public class PlayerAbilityManager : MonoBehaviour
 {
-    private AbilityContext abilityCaster;
+    private PlayerCasterContext abilityCaster;
 
     [SerializeField] private PlayerCharacter caster;
     [SerializeField] private Transform projectileSpawnPos;
@@ -48,7 +64,7 @@ public class PlayerAbilityManager : MonoBehaviour
 
     private void Awake()
     {
-        abilityCaster = new AbilityContext(caster.transform, projectileSpawnPos);
+        abilityCaster = new PlayerCasterContext(caster.transform, projectileSpawnPos);
 
         foreach (AbilityData aData in abilityDataList)
         {
@@ -61,7 +77,7 @@ public class PlayerAbilityManager : MonoBehaviour
         {
             if (slotIndex < hotkeySlots.Count)
             {
-                hotkeySlots[slotIndex].Icon.sprite = abilityEntry.Value.sprite;
+                hotkeySlots[slotIndex].Icon.sprite = abilityEntry.Value.Sprite;
                 AbilityIDToHotkeySlot.Add(abilityEntry.Key, hotkeySlots[slotIndex]);
                 slotIndex++;
             }
@@ -72,19 +88,8 @@ public class PlayerAbilityManager : MonoBehaviour
         }
     }
 
-    private void Start()
-    {
-    }
-
-    private void Update()
-    {
-
-
-        
-    }
-
     public void AbilityButtonPress(InputAction.CallbackContext context)
-{
+    {
         if (!GameManager.Instance.isPaused && !caster.IsDead())
         {
             if (context.performed)
@@ -135,7 +140,7 @@ public class PlayerAbilityManager : MonoBehaviour
         else if (ability.RemainingCooldown() <= 1)
         {
             // Buffer the ability if another ability is not being cast and cooldown is 1 second or lower
-            if (ability.isBufferable)
+            if (ability.IsBufferable)
             {
                 bufferedAbility = ability;
                 hasBufferedAbility = true;
@@ -158,14 +163,14 @@ public class PlayerAbilityManager : MonoBehaviour
     private IEnumerator HandleAbilityCooldown(Ability ability)
     {
         ability.SetCoolDown(true);
-        AbilityIDToHotkeySlot[ability.ID].StartCoolDown(ability.cooldown);
-        yield return new WaitForSeconds(ability.cooldown);
+        AbilityIDToHotkeySlot[ability.ID].StartCoolDown(ability.Cooldown);
+        yield return new WaitForSeconds(ability.Cooldown);
         ability.SetCoolDown(false);
     }
     private IEnumerator AutoCast(Ability ability)
     {
         CastAbility(ability);
-        yield return new WaitForSeconds(ability.cooldown);
+        yield return new WaitForSeconds(ability.Cooldown);
         StartCoroutine(AutoCast(ability));
     }
 
@@ -174,7 +179,7 @@ public class PlayerAbilityManager : MonoBehaviour
     private IEnumerator HandleAbilityCasting(Ability ability)
     {
         isCasting = true;
-        yield return new WaitForSeconds(ability.castTime);
+        yield return new WaitForSeconds(ability.CastTime);
         isCasting = false;
     }
     private IEnumerator HandleBufferedAbility()

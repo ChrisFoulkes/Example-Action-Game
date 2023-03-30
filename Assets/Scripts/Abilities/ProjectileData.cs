@@ -1,17 +1,16 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class ProjectileAbilityFactory : IAbilityFactory
 {
-    public Ability Create(AbilityData abilityData, AbilityContext caster)
+    public Ability Create(AbilityData abilityData, AbilityCasterContext caster)
     {
         return new ProjectileAbility((ProjectileData)abilityData, caster);
     }
 }
 
 [CreateAssetMenu(fileName = "Projectile", menuName = "Abilities/ProjectileData")]
-public class ProjectileData : AbilityData
+public class ProjectileData : HitAbilityData
 {
     [Header("Projectile Base Data")]
     public float projectileSpeed;

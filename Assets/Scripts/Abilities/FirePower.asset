@@ -19,8 +19,8 @@ MonoBehaviour:
   cooldown: 3
   castTime: 0.1
   isBufferable: 1
-  BuffID: 10
-  affectStats:
-  - stat: {fileID: 11400000, guid: a6219336b88ab074ea899f8cdec7cbcd, type: 2}
-    amount: 1
-  baseBuffDuration: 5
+  <BuffID>k__BackingField: 19
+  <AffectedStats>k__BackingField:
+  - Stat: {fileID: 11400000, guid: a6219336b88ab074ea899f8cdec7cbcd, type: 2}
+    Amount: 0.5
+  <BaseBuffDuration>k__BackingField: 5

@@ -1,19 +1,18 @@
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
-using static Pathfinding.Util.RetainedGizmos;
 
-public class CombustionAbility : Ability
+public class CombustionAbility : HitAbility
 {
-    private AbilityContext _caster;
+    private PlayerCasterContext _caster;
     public StatAssociation combustionDamage;
     private GameObject effectPrefab;
 
-    public CombustionAbility(CombustionData aData, AbilityContext caster) : base(aData)
+    public CombustionAbility(CombustionData aData, AbilityCasterContext caster) : base(aData)
     {
         combustionDamage = aData.combustionDamage;
-        _caster = caster;
+        hitStun = aData.hitStun;
+        knockbackData = aData.knockbackData;
+        _caster = (PlayerCasterContext)caster;
         effectPrefab = aData.effectObject;
     }
 
@@ -29,7 +28,7 @@ public class CombustionAbility : Ability
         {
             if (appliedEffect.effect.StatusEffect is DamageOverTimeEffect)
             {
-                IHealth hitHealth = appliedEffect.enemy.GetComponent<IHealth>();
+                IDamage damageController = appliedEffect.enemy.GetComponent<IDamage>();
 
                 float remainingDuration = appliedEffect.effect.StatusEffect.duration - appliedEffect.effect.ElapsedTime;
                 float remainingTicks = remainingDuration / appliedEffect.effect.StatusEffect.tickRate;
@@ -41,14 +40,14 @@ public class CombustionAbility : Ability
                 }
 
                 combustionDamage.baseValue = -finalDamage;
-              
-                hitHealth.ChangeHealth(Mathf.RoundToInt(combustionDamage.CalculateModifiedValue(_caster.CharacterStatsController)), false, FloatingColourType.Ignite);
+
+                damageController.ApplyDamage(new DamageInfo(Mathf.RoundToInt(combustionDamage.CalculateModifiedValue(_caster.CharacterStatsController)), false, FloatingColourType.Ignite, hitStun, knockbackData), _caster);
 
                 GameObject combustionEffect = Object.Instantiate(effectPrefab, appliedEffect.enemy);
                 combustionEffect.GetComponent<BurnEffect>().Initialize(0, appliedEffect.effect.BonusEffectActive);
                 Vector2 knockbackDirection = (appliedEffect.enemy.position - _caster.transform.position).normalized;
 
-                appliedEffect.enemy.GetComponent <EnemyMovementController>().HandleKnockback(knockbackDirection, new Vector2(0.5f, 0.5f), 0.2f);
+                appliedEffect.enemy.GetComponent<EnemyMovementController>().HandleKnockback(knockbackDirection, new Vector2(0.5f, 0.5f), 0.3f);
 
 
                 // Add the effect to the list of effects to remove
@@ -67,7 +66,7 @@ public class CombustionAbility : Ability
 
     public override void ApplyUpgrade(UpgradeEffect upgradeEffect)
     {
-        upgradeHandler.ApplyUpgrade(upgradeEffect);
+        AbilityUpgradeHandler.ApplyUpgrade(upgradeEffect);
     }
 
 }

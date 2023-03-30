@@ -1,6 +1,5 @@
 using EventCallbacks;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -29,17 +28,17 @@ public class PlayerMovement : MonoBehaviour, IMovement
     }
 
     private void OnDisable()
-    {   
+    {
 
         EventManager.RemoveGlobalListener<PlayerStopMovementEvent>(OnStopMovement);
         EventManager.RemoveGlobalListener<PlayerDeathEvent>(OnDeath);
     }
 
-    public void CanMove(bool Move) 
+    public void CanMove(bool Move)
     {
         canMove = Move;
 
-        if(!canMove)
+        if (!canMove)
         {
 
             rb.velocity = Vector3.zero;
@@ -86,9 +85,9 @@ public class PlayerMovement : MonoBehaviour, IMovement
         CanMove(false);
         yield return new WaitForSeconds(stopDuration);
         {
-            if(!isDead)
+            if (!isDead)
                 CanMove(true);
-            
+
         }
     }
     public IEnumerator ApplyMovement(Vector2 inputDirection, float movementSpeed, float movementDuration)
@@ -105,8 +104,8 @@ public class PlayerMovement : MonoBehaviour, IMovement
         float nextGhostSpawnTime = Time.time;
         while (Time.time - startTime < movementDuration)
         {
-            rb.velocity = inputDirection * movementSpeed;        
-            
+            rb.velocity = inputDirection * movementSpeed;
+
             // Spawn ghost sprite
             if (Time.time >= nextGhostSpawnTime)
             {

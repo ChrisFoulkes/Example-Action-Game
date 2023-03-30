@@ -1,6 +1,4 @@
 using EventCallbacks;
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
@@ -23,7 +21,7 @@ public class WaveCountUi : MonoBehaviour
     }
 
 
-    public void OnWaveComplete(WaveCompleteEvent waveEvent) 
+    public void OnWaveComplete(WaveCompleteEvent waveEvent)
     {
         textObj.text = "Wave: " + (waveEvent.completedWave);
     }

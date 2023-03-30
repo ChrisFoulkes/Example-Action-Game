@@ -1,19 +1,14 @@
-using Pathfinding;
 using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using UnityEditor;
 using UnityEngine;
-using static UnityEngine.GraphicsBuffer;
 
 public class AttackAnimationDirection
 {
     public Vector2 difference;
     public bool yAxis = false;
 
-    public AttackAnimationDirection(Vector2 diff, bool axis) 
+    public AttackAnimationDirection(Vector2 diff, bool axis)
     {
-        difference= diff;
+        difference = diff;
         yAxis = axis;
     }
 }
@@ -52,7 +47,7 @@ public class EnemyAttackController : MonoBehaviour
         isAvailable = true;
     }
 
-    public void Initialize(float initialDamage) 
+    public void Initialize(float initialDamage)
     {
         damage = initialDamage;
     }
@@ -108,13 +103,13 @@ public class EnemyAttackController : MonoBehaviour
 
     }
 
-    public bool IsAttacking() 
+    public bool IsAttacking()
     {
         return isInAttack;
     }
 
 
-    public bool CanAttack() 
+    public bool CanAttack()
     {
         if (isInRange && isAvailable)
         {
@@ -124,7 +119,7 @@ public class EnemyAttackController : MonoBehaviour
         return false;
     }
 
-    public void StartEnemyAttack() 
+    public void StartEnemyAttack()
     {
         hasHit = false;
         StartCoroutine(StartAttack(attackDuration));
@@ -155,7 +150,7 @@ public class EnemyAttackController : MonoBehaviour
         Gizmos.DrawWireSphere(transform.position, attackRange);
     }
 
-    private IEnumerator SpawnHitBox() 
+    private IEnumerator SpawnHitBox()
     {
         yield return new WaitForSeconds(attackStartup);
         hitbox = Instantiate(prefabHitbox, transform.position, Quaternion.identity, gameObject.transform);
@@ -175,10 +170,10 @@ public class EnemyAttackController : MonoBehaviour
     public void OnHit(Collider2D collision)
     {
         IHealth player = collision.GetComponent<IHealth>();
-
+        IDamage damageController = collision.GetComponent<IDamage>();
         if (player.CurrentHealth() > 0 && !hasHit)
         {
-            player.ChangeHealth(damage);
+            damageController.ApplyDamage(new DamageInfo(damage, false, FloatingColourType.Generic), new EnemyCasterContext(transform));
             hasHit = true;
         }
 

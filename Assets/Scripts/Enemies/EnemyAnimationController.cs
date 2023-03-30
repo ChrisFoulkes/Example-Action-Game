@@ -7,18 +7,19 @@ public class EnemyAnimationController : MonoBehaviour
         Idle,
         Move,
         Attack,
+        Hurt,
         Die
     }
 
     public Animator animator;
 
-    [SerializeField]private EnemyState currentState;
+    [SerializeField] private EnemyState currentState;
     public EnemyAttackController attackController;
     public EnemyMovementController movementController;
 
     public Enemy deathController;
 
-    public bool stateChanged = false;   
+    public bool StateChanged = false;
 
     void Awake()
     {
@@ -30,15 +31,13 @@ public class EnemyAnimationController : MonoBehaviour
 
     public void SetState(EnemyState newState)
     {
-        stateChanged = (currentState != newState);
-
         currentState = newState;
         UpdateAnimation();
     }
 
     public void FixedUpdate()
     {
-        if (currentState == EnemyState.Move) 
+        if (currentState == EnemyState.Move)
         {
             SetMovementDirection();
         }
@@ -53,26 +52,51 @@ public class EnemyAnimationController : MonoBehaviour
     {
         animator.SetBool("Moving", false);
         animator.SetBool("IsAttacking", false);
+        animator.SetBool("IsHurt", false);
 
         switch (currentState)
         {
             case EnemyState.Idle:
-                animator.SetBool("Moving", false);
+                UpdateIdleState();
                 break;
             case EnemyState.Move:
-                animator.SetBool("Moving", true);
+                UpdateMoveState();
                 break;
             case EnemyState.Attack:
-                if (stateChanged)
-                {
-                    SetAttackingDirection();
-                }
-                animator.SetBool("IsAttacking", true);
+                UpdateAttackState();
+                break;
+            case EnemyState.Hurt:
+                UpdateHurtState();
                 break;
             case EnemyState.Die:
-                animator.SetBool("IsDead", true);
+                UpdateDieState();
                 break;
         }
+
+    }
+
+    private void UpdateIdleState()
+    {
+        animator.SetBool("Moving", false);
+    }
+    private void UpdateHurtState()
+    {
+        animator.SetBool("IsHurt", true);
+    }
+    private void UpdateMoveState()
+    {
+        animator.SetBool("Moving", true);
+    }
+
+    private void UpdateAttackState()
+    {
+        SetAttackingDirection();
+        animator.SetBool("IsAttacking", true);
+    }
+
+    private void UpdateDieState()
+    {
+        animator.SetBool("IsDead", true);
     }
 
 
@@ -86,7 +110,6 @@ public class EnemyAnimationController : MonoBehaviour
 
     public void SetAttackingDirection()
     {
-        stateChanged = false;
         AttackAnimationDirection attackDirection = attackController.GetAnimAttackingDirection();
         animator.SetBool("AttackingY", attackDirection.yAxis);
         animator.SetFloat("AttackingDirectionY", attackDirection.difference.y);

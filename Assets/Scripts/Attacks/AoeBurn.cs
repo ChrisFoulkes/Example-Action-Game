@@ -14,47 +14,49 @@ public class AoeBurn : MonoBehaviour
 
     //called when somet$$anonymous$$ng enters the trigger
     private void OnTriggerEnter2D(Collider2D other)
+    {
+        //if the object is not already in the list
+        if (!TriggerList.Contains(other))
         {
-            //if the object is not already in the list
-            if (!TriggerList.Contains(other))
-            {
-                //add the object to the list
-                TriggerList.Add(other);
-            }
+            //add the object to the list
+            TriggerList.Add(other);
         }
+    }
 
     //called when somet$$anonymous$$ng exits the trigger
     private void OnTriggerExit2D(Collider2D other)
+    {
+        //if the object is in the list
+        if (TriggerList.Contains(other))
         {
-            //if the object is in the list
-            if (TriggerList.Contains(other))
-            {
-                //remove it from the list
-                TriggerList.Remove(other);
-            }
+            //remove it from the list
+            TriggerList.Remove(other);
         }
+    }
 
     public void FixedUpdate()
     {
-        if (IsAvailable) 
+        if (IsAvailable)
         {
             for (int i = 0; i < TriggerList.Count; ++i)
             {
-                if (TriggerList[i] != null) {
+                if (TriggerList[i] != null)
+                {
                     if (TriggerList[i].CompareTag("Enemy"))
                     {
 
                         IHealth enemy = TriggerList[i].GetComponentInParent<IHealth>();
                         if (enemy.CurrentHealth() > 0)
                         {
-                            enemy.ChangeHealth(damage);
+                            //Non-functional test 
+                            //enemy.ChangeHealth(damage);
                         }
                     }
                 }
             }
 
             StartCoroutine(StartTickCooldown());
-        }              
+        }
     }
 
     public IEnumerator StartTickCooldown()

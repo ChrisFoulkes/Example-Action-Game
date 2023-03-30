@@ -1,7 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using EventCallbacks;
+using UnityEngine;
 
 public class DeathUiHandler : MonoBehaviour
 {

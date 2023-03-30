@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,7 +5,7 @@ using UnityEngine;
 public class ActiveStatusEffect
 {
     public StatusEffect StatusEffect;
-    public AbilityContext AppliedBy;
+    public PlayerCasterContext AppliedBy;
 
     public GameObject EffectAsset;
     public float ElapsedTime;
@@ -20,16 +19,16 @@ public class ActiveStatusEffect
     public int CountInstance = 0;
     public bool BonusEffectActive = false;
 
-    public ActiveStatusEffect(StatusEffectController controller, StatusEffect statusEffect, AbilityContext appliedBy, float time)
+    public ActiveStatusEffect(StatusEffectController controller, StatusEffect statusEffect, AbilityCasterContext appliedBy, float time)
     {
         Controller = controller;
         ElapsedTime = time;
         StatusEffect = statusEffect;
-        AppliedBy = appliedBy;
+        AppliedBy = (PlayerCasterContext)appliedBy;
     }
 }
 
-    public class StatusEffectController : MonoBehaviour
+public class StatusEffectController : MonoBehaviour
 {
     private IDeath deathController;
 
@@ -50,7 +49,7 @@ public class ActiveStatusEffect
         deathController.RemoveListener(OnDeath);
     }
 
-    public void TryApplyStatusEffect(StatusEffect statusEffect, AbilityContext appliedBy)
+    public void TryApplyStatusEffect(StatusEffect statusEffect, PlayerCasterContext appliedBy)
     {
         if (deathController.IsDead())
         {
@@ -104,7 +103,7 @@ public class ActiveStatusEffect
             activeStatusEffect.ElapsedTime += Time.deltaTime;
             yield return null;
         }
-        
+
         RemoveStatusEffect(activeStatusEffect);
     }
 

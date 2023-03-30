@@ -112,9 +112,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f495c735a7144fa4a99c2e05be8e5d2c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 0}
-  attractSpeed: 3
-  speedIncreaseMultiplier: 6
-  initialDelay: 0.35
-  minDestroyDistance: 0.2
-  maxAttractSpeed: 30
+  _targetPlayer: {fileID: 0}
+  _initialAttractSpeed: 3
+  _attractSpeedIncreaseFactor: 1.5
+  _initialDelay: 0.3
+  _minDestroyDistance: 0.1
+  _maxAttractSpeed: 30
+  _archDistance: {x: 0, y: 2, z: 0}

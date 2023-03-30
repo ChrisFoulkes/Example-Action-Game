@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 //Quick and dirty heal globe
@@ -39,7 +38,8 @@ public class HealthGlobe : MonoBehaviour
             {
                 player = collision.gameObject;
             }
-            player.GetComponentInParent<HealthController>().ChangeHealth(5, false, FloatingColourType.Heal);
+            //Non functional test - fix
+            //player.GetComponentInParent<HealthController>().ChangeHealth(5, false, FloatingColourType.Heal);
 
             Destroy(gameObject);
         }

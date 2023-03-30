@@ -1,6 +1,4 @@
 using EventCallbacks;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerExperienceController : MonoBehaviour
@@ -57,7 +55,7 @@ public class PlayerExperienceController : MonoBehaviour
     }
 
     public void LevelUp()
-    {            
+    {
         // Level up
         currentXP -= CalculateXPForLevel(currentLevel);
         currentLevel++;

@@ -1,8 +1,7 @@
-using EventCallbacks;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using EventCallbacks;
 
 public class ProjectileUpgradeHandler : UpgradeHandler
 {
@@ -58,87 +57,88 @@ public class ActiveProjectileData
     }
 }
 
-public class ProjectileAbility : Ability
+public class ProjectileAbility : HitAbility
 {
-    private AbilityContext _caster;
+    private PlayerCasterContext _caster;
     public ActiveProjectileData ProjData { get; }
     private readonly ProjectileAttack _projectileAttack;
     private List<StatusEffect> _statusEffects;
 
-    public ProjectileAbility(ProjectileData aData, AbilityContext caster) : base(aData)
+    public ProjectileAbility(ProjectileData aData, AbilityCasterContext caster) : base(aData)
     {
-        _caster = caster;
+        _caster = (PlayerCasterContext)caster;
         ProjData = new ActiveProjectileData(aData.projectileSpeed, aData.projectileLifetime, aData.projectileDamage, aData.ProjectileCount, aData.firingArc, aData.distanceFromCaster, aData.critChance);
         _statusEffects = aData.effects;
         _projectileAttack = aData.projectilePrefab;
-        upgradeHandler = new ProjectileUpgradeHandler(this);
+        AbilityUpgradeHandler = new ProjectileUpgradeHandler(this);
     }
 
     public override void ApplyUpgrade(UpgradeEffect upgradeEffect)
     {
-        upgradeHandler.ApplyUpgrade(upgradeEffect);
+        AbilityUpgradeHandler.ApplyUpgrade(upgradeEffect);
     }
 
     public override void CastAbility()
     {
-        if (castTime > cooldown) { AdjustCooldown(castTime); }
+        if (CastTime > Cooldown) { AdjustCooldown(CastTime); }
 
         for (int i = 0; i < ProjData.projectileCount; i++)
         {
-            // Ignore firing arc for singular projectiles 
-            if (ProjData.projectileCount == 1)
-            {
-                ProjData.firingArc = 0;
-            }
-            else
-            {
-                SetFiringRotation(ProjData.firingArc, AbilityUtils.GetFiringArcIncrement(i, ProjData.firingArc, ProjData.projectileCount));
-            }
-
+            SetFiringRotation(ProjData.firingArc, AbilityUtils.GetFiringArcIncrement(i, ProjData.firingArc, ProjData.projectileCount));
             GameObject projectile = Object.Instantiate(_projectileAttack.gameObject, AbilityUtils.GetClosestPointToMouse(_caster.transform.position, _caster.ProjectileSpawnPos.position, ProjData.distanceFromCaster), _caster.ProjectileSpawnPos.rotation);
             projectile.GetComponent<ProjectileAttack>().Initialize(this);
         }
 
-        // Currently global events maybe should be local 
-        /*
+
         PlayerStopMovementEvent stopMovementEvent = new PlayerStopMovementEvent();
-        stopMovementEvent.duration = castTime;
+        stopMovementEvent.duration = CastTime;
         EventManager.Raise(stopMovementEvent);
 
-        SetPlayerFacingDirectionEvent setDirectionEvent = new SetPlayerFacingDirectionEvent(AbilityUtils.GetFacingDirection(_caster.transform.position), castTime);
+        SetPlayerFacingDirectionEvent setDirectionEvent = new SetPlayerFacingDirectionEvent(AbilityUtils.GetFacingDirection(_caster.transform.position), CastTime);
         EventManager.Raise(setDirectionEvent);
-        */
     }
 
     void SetFiringRotation(float arc, float increment)
     {
+        if (ProjData.projectileCount == 1)
+        {
+            arc = 0;
+        }
+
         Vector2 lookDirection = Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue()) - _caster.transform.position;
         float lookAngle = (Mathf.Atan2(lookDirection.y, lookDirection.x) * Mathf.Rad2Deg) - (arc / 2);
 
+  
         _caster.ProjectileSpawnPos.rotation = Quaternion.Euler(0f, 0f, lookAngle - 90f + increment);
     }
 
-    public void OnHit(Collider2D collision, ProjectileAttack attack) 
+    public void OnHit(Collider2D collision, ProjectileAttack attack)
     {
-        IHealth hitHealth = collision.GetComponentInParent<IHealth>();
+        IDamage damageController = collision.GetComponentInParent<IDamage>();
 
-        float randomNumber = Random.Range(0, 1f);
 
-        if (randomNumber < ProjData.critChance.CalculateModifiedValue(_caster.CharacterStatsController))
+
+
+        float critRoll = Random.Range(0, 1f);
+        int finalDamage = ProjData.projectileDamage;
+        bool isCrit = false;
+
+        if (critRoll < ProjData.critChance.CalculateModifiedValue(_caster.CharacterStatsController))
         {
-            hitHealth.ChangeHealth((ProjData.projectileDamage * 2), true);
-        }
-        else 
-        {
-
-            hitHealth.ChangeHealth(ProjData.projectileDamage);
+            finalDamage *= 2;
+            isCrit = true;
         }
 
-        if(_statusEffects.Count> 0) 
+        DamageInfo damageInfo = new DamageInfo(finalDamage, isCrit, FloatingColourType.Generic, hitStun, knockbackData);
+
+        damageController.ApplyDamage(damageInfo, _caster);
+
+        //Potentially damage event should include status effects applied etc.
+        if (_statusEffects.Count > 0)
         {
             StatusEffectController statusController = collision.GetComponentInParent<StatusEffectController>();
 
-            foreach (var effect in _statusEffects) 
+            foreach (var effect in _statusEffects)
             {
                 effect.ApplyEffect(statusController, _caster);
             }

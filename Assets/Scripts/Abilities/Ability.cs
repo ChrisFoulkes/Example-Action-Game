@@ -1,69 +1,78 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+
+public abstract class HitAbility : Ability
+{
+    public float hitStun;
+    public KnockbackData knockbackData;
+
+    public HitAbility(HitAbilityData aData) : base(aData)
+    {
+        hitStun = aData.hitStun;
+        knockbackData= aData.knockbackData;
+    }
+}
 
 public abstract class Ability
 {
-    public UpgradeHandler upgradeHandler;
+    public UpgradeHandler AbilityUpgradeHandler;
 
-    //cooldown --
-    private bool IsAvailable = true;
-    public float cooldown { get; private set; }
-    public float cooldownEndTime;
-    public float castTime = 0.1f; 
+    // Cooldown properties
+    private bool IsAvailable { get; set; } = true;
+    public float Cooldown { get; private set; }
+    public float CooldownEndTime { get; private set; }
+    public float CastTime;
 
-    public Sprite sprite { get; private set; }
+    // Ability properties
+    public Sprite Sprite { get; private set; }
     public int ID { get; private set; }
+    public AbilityType AbilityType { get; private set; }
+    public bool IsBufferable { get; private set; }
 
-    public AbilityType abilityType { get; private set; }
-
-    public bool isBufferable = false;
-
-    public void AdjustCooldown(float adjustedValue) 
+    public void AdjustCooldown(float adjustedValue)
     {
-        cooldown = adjustedValue;
+        Cooldown = adjustedValue;
 
     }
     public abstract void ApplyUpgrade(UpgradeEffect upgradeEffect);
 
-    public void SetCoolDown(bool isOnCooldown) 
+    public void SetCoolDown(bool isOnCooldown)
     {
         IsAvailable = !isOnCooldown;
-        cooldownEndTime = Time.time + cooldown;
+        CooldownEndTime = Time.time + Cooldown;
     }
     public float RemainingCooldown()
     {
         if (!IsAvailable)
         {
-            return cooldownEndTime - Time.time;
+            return CooldownEndTime - Time.time;
         }
         return 0;
     }
 
-    public Ability(AbilityData aData) 
+    public Ability(AbilityData aData)
     {
-        cooldown = aData.cooldown;
-        abilityType = aData.abilityType;
-        sprite = aData.abilityIcon;
+        Cooldown = aData.cooldown;
+        AbilityType = aData.abilityType;
+        Sprite = aData.abilityIcon;
         ID = aData.AbilityID;
-        castTime = aData.castTime;
-        isBufferable = aData.isBufferable;
+        CastTime = aData.castTime;
+        IsBufferable = aData.isBufferable;
 
 
-}
+    }
     public abstract void CastAbility();
 
 
-    public bool IsCastable() 
+    public bool IsCastable()
     {
-        if (IsAvailable) 
+        if (IsAvailable)
         {
             return true;
         }
-        else 
+        else
         {
             return false;
-        } 
+        }
     }
 
 }

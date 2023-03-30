@@ -1,7 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using Pathfinding;
+using UnityEngine;
 
 public class EnemyTarget : AIDestinationSetter
 {
@@ -12,7 +10,7 @@ public class EnemyTarget : AIDestinationSetter
         {
             target = player.transform;
         }
-        else 
+        else
         {
             target = null;
         }

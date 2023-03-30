@@ -15,9 +15,9 @@ MonoBehaviour:
   waveEnemyCounts:
   - EnemyPrefab: {fileID: 8652212903993137680, guid: 2f1ad7c4531080b429afcc5fbcbabd0a, type: 3}
     enemyCount: 0
-    spawnChance: 0.9
+    spawnChance: 0.8
   - EnemyPrefab: {fileID: 6352923336266398879, guid: 6d4b3e74da3a86a448d516e21d3160ab, type: 3}
     enemyCount: 0
-    spawnChance: 0.1
+    spawnChance: 0.2
   spawnRate: 0.5
   splitSpawn: 0

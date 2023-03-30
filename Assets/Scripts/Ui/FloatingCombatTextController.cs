@@ -2,8 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UIElements;
-using static UnityEngine.UI.Image;
 
 
 [System.Serializable]
@@ -71,8 +69,8 @@ public class FloatingCombatTextController : MonoBehaviour
         {
             numOfInstances++;
             lastTimeByOrigin[origin] = Time.time + (bufferTime * numOfInstances);
-            StartCoroutine(SpawnText(text, origin, GetDamageTypeColour(colourType),(bufferTime * numOfInstances), destroyTime, shouldAttachToSelf, numOfInstances, scaleValue));
-         
+            StartCoroutine(SpawnText(text, origin, GetDamageTypeColour(colourType), (bufferTime * numOfInstances), destroyTime, shouldAttachToSelf, numOfInstances, scaleValue));
+
         }
 
         StartCoroutine(RemoveOriginAfterBuffer(origin, bufferTime));
@@ -110,7 +108,7 @@ public class FloatingCombatTextController : MonoBehaviour
             Vector3 spawnPosition = origin.position + randomizedOffset;
 
             Transform parentTransform = shouldAttachToSelf ? origin : null;
-     
+
 
             Quaternion spawnRotation = Quaternion.identity;
 

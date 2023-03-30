@@ -1,19 +1,17 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Rendering;
+using UnityEngine.UIElements;
 
 namespace EventCallbacks
 {
     public class PlayerDeathEvent : GameEvent
-        {
+    {
         /*
         Info about cause of death, our killer, etc...
         */
     }
 
     public class DisplayDeathUiEvent : GameEvent
-    { 
+    {
     }
 
     public class PlayerStopMovementEvent : GameEvent
@@ -29,7 +27,7 @@ namespace EventCallbacks
         {
             this.direction = direction;
             duration = time;
-        }   
+        }
     }
 
     public class EnemyKilledEvent : GameEvent
@@ -51,5 +49,14 @@ namespace EventCallbacks
             RequiredExperience = reqXP;
             currentExperience = xp;
         }
+    }
+
+    public class PlayerDamageEvent : DamageEvent
+    {
+        public new EnemyCasterContext Caster;
+    }
+
+    public class PlayerHealEvent : HealEvent
+    {
     }
 }

@@ -156,4 +156,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   animator: {fileID: 0}
   hitCooldown: 1
-  disableRepeatedHits: 0
+  disableRepeatedHits: 1

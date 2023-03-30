@@ -19,6 +19,12 @@ MonoBehaviour:
   cooldown: 3
   castTime: 0.1
   isBufferable: 1
+  knockbackData:
+    shouldKnockback: 1
+    knockbackFromEffect: 1
+    Force: {x: 8, y: 8}
+    Duration: 0.3
+  hitStun: 0.3
   Damage:
     propertyName: Damage
     baseValue: -10

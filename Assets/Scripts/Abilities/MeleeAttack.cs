@@ -1,18 +1,13 @@
-using Pathfinding;
-using System.Collections;
 using UnityEngine;
 
 public class MeleeAttack : Attack
 {
     MeleeAbility ability;
-    public Vector2 knockbackForce = new Vector2(10f, 10f);
 
-    public bool shouldKnockback = false;
-
-    public  void Initialize(MeleeAbility ability)
+    public void Initialize(MeleeAbility ability)
     {
         this.ability = ability;
-        animator.SetFloat("AnimMulti", ability.meleeData.originalCastTime / ability.castTime);
+        animator.SetFloat("AnimMulti", ability.meleeData.originalCastTime / ability.CastTime);
     }
 
     private void OnTriggerStay2D(Collider2D collision)

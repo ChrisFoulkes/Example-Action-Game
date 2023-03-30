@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -10,10 +9,10 @@ public class CharacterUpgradeEffect : UpgradeEffect
     public StatData statData = null;
 }
 
-public enum CharacterUpgradeTypes 
+public enum CharacterUpgradeTypes
 {
     speed,
-    heal, 
+    heal,
     stat
 }
 [CreateAssetMenu(fileName = "CharacterUpgrade", menuName = "ScriptableObjects/CharacterUpgrade")]

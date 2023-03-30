@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class CameraController : MonoBehaviour
@@ -10,7 +8,8 @@ public class CameraController : MonoBehaviour
     private Vector3 velocity = Vector3.zero;
     private void LateUpdate()
     {
-        if (target != null) {
+        if (target != null)
+        {
             Vector3 targetPosition = target.position + offset;
             transform.position = Vector3.SmoothDamp(transform.position, targetPosition, ref velocity, smoothTime);
         }

@@ -1,12 +1,8 @@
-using Pathfinding;
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Security.Cryptography;
 using UnityEngine;
 
 [Serializable]
-public class MovementController: MonoBehaviour, IMovement
+public class MovementController : MonoBehaviour, IMovement
 {
     float currentMaxSpeed = 5;
 
@@ -22,7 +18,7 @@ public class MovementController: MonoBehaviour, IMovement
     {
         aiPath.canMove = canMove;
 
-        if (!canMove) 
+        if (!canMove)
         {
             aiPath.OnTargetReached();
         }
@@ -33,10 +29,10 @@ public class MovementController: MonoBehaviour, IMovement
     }
 
     public void SetMovementSpeed(float speed)
-    { 
+    {
         currentMaxSpeed = speed;
     }
-    public void ChangeSpeed(float amount) 
+    public void ChangeSpeed(float amount)
     {
         currentMaxSpeed += amount;
         aiPath.maxSpeed = currentMaxSpeed;

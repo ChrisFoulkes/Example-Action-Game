@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class TargetAttack : Attack
@@ -16,7 +15,7 @@ public class TargetAttack : Attack
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
     public void Initialize(MouseTargetAbility ability, Vector3 targetPosition)

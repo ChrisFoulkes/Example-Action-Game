@@ -1,9 +1,7 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using static Pathfinding.Util.RetainedGizmos;
 
-public enum StatType 
+public enum StatType
 {
     baseValue,
     additive,
@@ -74,7 +72,7 @@ public class CharacterStatsController : MonoBehaviour
         ActiveStat affectedStat = null;
         if (!activeStats.ContainsKey(Id))
         {
-            Debug.LogWarning("Upgrade Failed missing : " +  "Stat.id " + Id);
+            Debug.LogWarning("Upgrade Failed missing : " + "Stat.id " + Id);
         }
         else
         {

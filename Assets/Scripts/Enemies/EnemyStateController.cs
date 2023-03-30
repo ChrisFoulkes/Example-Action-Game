@@ -1,44 +1,64 @@
+using EventCallbacks;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class EnemyStateController : MonoBehaviour
 {
-    public IHealth healthController;
-    public IDeath deathController;
-    public IMovement movementController;
-    public EnemyAnimationController animController;
-    public EnemyAttackController attackController;
+    private IDeath _deathController;
+    private IMovement _movementController;
+    public EnemyAnimationController _animController;
+    private EnemyAttackController _attackController;
+    private IDamage _damageController;
+    private bool _isHurt = false; 
+    private float _hitStunDuration = 0f;
 
-    void Start()
+    void Awake()
     {
-        // Assuming the EnemyHealthController and EnemyMovementController are attached to the same GameObject
-        healthController = GetComponent<IHealth>();
-        movementController = GetComponent<IMovement>();
-        deathController = GetComponent<IDeath>();
+        _attackController = GetComponent<EnemyAttackController>();
+        _movementController = GetComponent<IMovement>();
+        _deathController = GetComponent<IDeath>();
+        _damageController = GetComponent<IDamage>();
+
+    }
+
+    public void OnEnable()
+    {
+        _damageController.AddDamageListener(OnDamageEvent);
+    }
+
+    public void OnDisable()
+    {
+
+        _damageController.RemoveDamageListener(OnDamageEvent);
     }
 
     void FixedUpdate()
     {
-        movementController.CanMove(false);
-        if (deathController.IsDead())
+        _movementController.CanMove(false);
+
+        if (IsDead())
         {
-            animController.SetState(EnemyAnimationController.EnemyState.Die);
+            _animController.SetState(EnemyAnimationController.EnemyState.Die);
             return;
         }
 
-        if (IsAttacking())
+        if (IsHurt())
         {
-            animController.SetState(EnemyAnimationController.EnemyState.Attack);
+            _animController.SetState(EnemyAnimationController.EnemyState.Hurt);
+        }
+        else if (IsAttacking())
+        {
+            _animController.SetState(EnemyAnimationController.EnemyState.Attack);
         }
         else if (IsMoving())
         {
-            animController.SetState(EnemyAnimationController.EnemyState.Move);
-            movementController.CanMove(true);
+            _animController.SetState(EnemyAnimationController.EnemyState.Move);
+            _movementController.CanMove(true);
         }
         else
         {
-            animController.SetState(EnemyAnimationController.EnemyState.Idle);
+            //enemies currently can't idle
+            _animController.SetState(EnemyAnimationController.EnemyState.Idle);
         }
     }
 
@@ -51,17 +71,57 @@ public class EnemyStateController : MonoBehaviour
 
     bool IsAttacking()
     {
-        if (attackController.CanAttack()) 
+        if (_attackController.CanAttack())
         {
-            attackController.StartEnemyAttack();
+            _attackController.StartEnemyAttack();
             return true;
         }
-        if (attackController.IsAttacking())
+        if (_attackController.IsAttacking())
         {
             return true;
         }
-        // Implement logic to determine if the enemy is attacking.
-        // For example, you can check the distance to the player or an attack timer.
         return false;
+    }
+
+    bool IsDead()
+    {
+        return _deathController.IsDead();
+    }
+
+    bool IsHurt()
+    {
+        return _isHurt;
+    }
+
+    public void SetHurtState(bool value)
+    {
+        _isHurt = value;
+    }
+    public IEnumerator ResetHurtState(float duration)
+    {
+        _hitStunDuration += duration;
+
+        while (_hitStunDuration > 0)
+        {
+            _hitStunDuration -= Time.deltaTime;
+            yield return null;
+        }
+
+        SetHurtState(false);
+        _animController.SetState(EnemyAnimationController.EnemyState.Idle);
+    }
+
+    private void OnDamageEvent(GameEvent dEvent)
+    {
+        EnemyDamageEvent damageEvent = (EnemyDamageEvent)dEvent;
+
+        float hitStun = damageEvent.DamageInfo.HitStun;
+
+        if (hitStun > 0)
+        {
+            SetHurtState(true);
+            StopCoroutine(nameof(ResetHurtState));
+            StartCoroutine(ResetHurtState(damageEvent.DamageInfo.HitStun));
+        }
     }
 }

@@ -1,8 +1,5 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using static EnemyAnimationController;
 
 [Serializable]
 public class EnemyStats
@@ -36,7 +33,7 @@ public class EnemyStatController : MonoBehaviour
     {
         healthController.Initialize(enemyStats.health + (enemyStats.health * (enemyStats.healthGrowthFactor * waveCount)));
         attackController.Initialize(enemyStats.attackDamage + (enemyStats.attackDamage * (enemyStats.damageGrowthFactor * waveCount)));
-        movementController.Initialize(enemyStats.movementSpeed + (enemyStats.movementSpeed  * (enemyStats.movementSpeedGrowthFactor * waveCount)));
+        movementController.Initialize(enemyStats.movementSpeed + (enemyStats.movementSpeed * (enemyStats.movementSpeedGrowthFactor * waveCount)));
 
         scaleParentTransform.localScale = new Vector3(1f + (waveCount * 0.05f), 1f + (waveCount * 0.05f), 0);
     }

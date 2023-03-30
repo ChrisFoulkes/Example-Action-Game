@@ -1,10 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class MovementAbilityFactory : IAbilityFactory
 {
-    public Ability Create(AbilityData abilityData, AbilityContext caster)
+    public Ability Create(AbilityData abilityData, AbilityCasterContext caster)
     {
         return new MovementAbility((MovementData)abilityData, caster);
     }

@@ -1,7 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using EventCallbacks;
+using UnityEngine;
 
 public class EnemySpawner : MonoBehaviour
 {
@@ -27,7 +25,7 @@ public class EnemySpawner : MonoBehaviour
     {
     }
 
-    public bool IsSpawnActive() 
+    public bool IsSpawnActive()
     {
         return spawnActive;
     }
@@ -48,11 +46,11 @@ public class EnemySpawner : MonoBehaviour
             count++;
             if (count > 100)  // no valid spawn location found
                 Debug.LogWarning("NO VALID SPAWN RADIUS TOO HIGH MOD DENSITY IN SPAWN!!!!");
-                break;
+            break;
         }
         var enemyobj = Instantiate(enemyPrefab, spawnPosition, Quaternion.identity, gameObject.transform);
 
-        enemyobj.name = "enemy-" + count; 
+        enemyobj.name = "enemy-" + count;
         count++;
 
         return enemyobj;

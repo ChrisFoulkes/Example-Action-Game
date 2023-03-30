@@ -1,7 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using EventCallbacks;
+using UnityEngine;
 
 public class PlayerCharacter : MonoBehaviour, IDeath
 {
@@ -23,12 +21,12 @@ public class PlayerCharacter : MonoBehaviour, IDeath
     {
         pDeathEvent.RemoveLocalListener(listener);
     }
-    public bool IsDead() 
+    public bool IsDead()
     {
         return isDead;
     }
 
-    public void StartDeath() 
+    public void StartDeath()
     {
         isDead = true;
         GetComponent<Rigidbody2D>().simulated = false;

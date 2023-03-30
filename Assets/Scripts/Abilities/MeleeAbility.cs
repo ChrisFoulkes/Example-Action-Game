@@ -1,8 +1,5 @@
 using EventCallbacks;
-using Microsoft.Win32.SafeHandles;
-using System.Collections;
 using System.Collections.Generic;
-using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -25,7 +22,7 @@ public class MeleeUpgradeHandler : UpgradeHandler
                     parentAbility.meleeData.meleeDamage.baseValue += Mathf.RoundToInt(meleeUpgradeEffect.amount);
                     break;
                 case MeleeUpgradeTypes.meleeCastSpeed:
-                    parentAbility.castTime = Mathf.Max(parentAbility.castTime + meleeUpgradeEffect.amount, (parentAbility.meleeData.originalCastTime * 0.70f));
+                    parentAbility.CastTime = Mathf.Max(parentAbility.CastTime + meleeUpgradeEffect.amount, (parentAbility.meleeData.originalCastTime * 0.70f));
                     break;
             }
         }
@@ -48,52 +45,53 @@ public class ActiveMeleeData
     }
 
 }
-public class MeleeAbility : Ability
+public class MeleeAbility : HitAbility
 {
     public ActiveMeleeData meleeData;
 
     private MeleeAttack meleeAttack;
-    AbilityContext caster;
+    PlayerCasterContext _caster;
 
     private List<StatusEffect> statusEffects;
 
-    public MeleeAbility(MeleeData aData,AbilityContext caster) : base(aData)
+    public MeleeAbility(MeleeData aData, AbilityCasterContext caster) : base(aData)
     {
         meleeData = new ActiveMeleeData(aData.meleeDamage, aData.castTime, aData.critChance);
+
         statusEffects = aData.effects;
         meleeAttack = aData.meleePrefab;
-        castTime = aData.castTime;
+        CastTime = aData.castTime;
 
-        this.caster = caster;
+        this._caster = (PlayerCasterContext)caster;
 
-        upgradeHandler = new MeleeUpgradeHandler(this);
+        AbilityUpgradeHandler = new MeleeUpgradeHandler(this);
     }
 
 
     public override void CastAbility()
     {
-        if (castTime > cooldown){ AdjustCooldown(castTime); }
+        if (CastTime > Cooldown) { AdjustCooldown(CastTime); }
 
-        GameObject melee = Object.Instantiate(meleeAttack.gameObject, caster.ProjectileSpawnPos.position, SetTheFiringRotation());
+        GameObject melee = Object.Instantiate(meleeAttack.gameObject, _caster.ProjectileSpawnPos.position, SetTheFiringRotation());
 
         melee.GetComponent<MeleeAttack>().Initialize(this);
 
         //currently global events maybe should be local 
         PlayerStopMovementEvent stopMovementEvent = new PlayerStopMovementEvent();
-        stopMovementEvent.duration = castTime;
-        EventManager.Raise(stopMovementEvent); 
+        stopMovementEvent.duration = CastTime;
+        EventManager.Raise(stopMovementEvent);
 
-        SetPlayerFacingDirectionEvent setDirectionEvent = new SetPlayerFacingDirectionEvent(AbilityUtils.GetFacingDirection(caster.transform.position), castTime);
+        SetPlayerFacingDirectionEvent setDirectionEvent = new SetPlayerFacingDirectionEvent(AbilityUtils.GetFacingDirection(_caster.transform.position), CastTime);
         EventManager.Raise(setDirectionEvent);
     }
     public override void ApplyUpgrade(UpgradeEffect upgradeEffect)
     {
-        upgradeHandler.ApplyUpgrade(upgradeEffect);
+        AbilityUpgradeHandler.ApplyUpgrade(upgradeEffect);
     }
 
     Quaternion SetTheFiringRotation()
     {
-        Vector2 lookDirection = (Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue()) - caster.transform.position).normalized;
+        Vector2 lookDirection = (Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue()) - _caster.transform.position).normalized;
 
         float angle;
         if (lookDirection.y > 0 && Mathf.Abs(lookDirection.x) < lookDirection.y)
@@ -118,21 +116,20 @@ public class MeleeAbility : Ability
 
     public void OnHit(Collider2D collision, MeleeAttack attack)
     {
-        IHealth hitHealth = collision.GetComponentInParent<IHealth>();
+        IDamage damageController = collision.GetComponentInParent<IDamage>();
 
-        float randomNumber = UnityEngine.Random.Range(0f, 1f);
+        float randomNumber = Random.Range(0f, 1f);
 
-        float damageValue = Mathf.RoundToInt(meleeData.meleeDamage.CalculateModifiedValue(caster.CharacterStatsController));
-
-        if (randomNumber < meleeData.critChance.CalculateModifiedValue(caster.CharacterStatsController))
+        float damageValue = Mathf.RoundToInt(meleeData.meleeDamage.CalculateModifiedValue(_caster.CharacterStatsController));
+        bool isCrit = false;
+        if (randomNumber < meleeData.critChance.CalculateModifiedValue(_caster.CharacterStatsController))
         {
-            hitHealth.ChangeHealth((damageValue * 2), true);
+            isCrit = true;
+            damageValue *= 2;
         }
-        else
-        {
 
-            hitHealth.ChangeHealth(damageValue);
-        }
+        damageController.ApplyDamage(new DamageInfo(damageValue, isCrit, FloatingColourType.Generic, hitStun, knockbackData), _caster);
+
 
         if (statusEffects.Count > 0)
         {
@@ -140,21 +137,8 @@ public class MeleeAbility : Ability
 
             foreach (var effect in statusEffects)
             {
-                effect.ApplyEffect(statusController, caster);
+                effect.ApplyEffect(statusController, _caster);
             }
-        }
-
-        // relies on hard code data in the attack script needs to be shifted into data and maybe even some onhit list of effects 
-        if (attack.shouldKnockback)
-        {
-                EnemyMovementController movementController = collision.GetComponentInParent<EnemyMovementController>();
-
-                if (movementController != null)
-                {
-                    Vector2 knockbackDirection = (collision.transform.position - caster.transform.position).normalized;
-                    
-                    movementController.HandleKnockback(knockbackDirection, attack.knockbackForce, 0.2f);
-                }
         }
     }
 }

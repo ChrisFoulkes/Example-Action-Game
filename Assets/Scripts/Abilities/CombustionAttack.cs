@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class CombustionAttack : Attack
@@ -33,8 +31,11 @@ public class CombustionAttack : Attack
 
     protected override void OnHit(Collider2D collision)
     {
-        IHealth hitHealth = collision.GetComponentInParent<IHealth>();
+        IDamage damageController = collision.GetComponentInParent<IDamage>();
 
-        hitHealth.ChangeHealth(-4);
+        /*
+         * non functional needs further support
+        damageController.ApplyDamage(new DamageInfo(-4, false, FloatingColourType.Ignite) _caster);
+        */
     }
 }
