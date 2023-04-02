@@ -42,13 +42,14 @@ public class EnemyStateController : MonoBehaviour
             return;
         }
 
-        if (IsHurt())
-        {
-            _animController.SetState(EnemyAnimationController.EnemyState.Hurt);
-        }
-        else if (IsAttacking())
+        if (IsAttacking())
         {
             _animController.SetState(EnemyAnimationController.EnemyState.Attack);
+        }
+        else if (IsHurt())
+        {
+            _animController.SetState(EnemyAnimationController.EnemyState.Hurt);
+           
         }
         else if (IsMoving())
         {

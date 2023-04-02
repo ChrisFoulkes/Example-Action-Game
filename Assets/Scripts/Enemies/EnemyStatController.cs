@@ -27,6 +27,13 @@ public class EnemyStatController : MonoBehaviour
         healthController = GetComponent<HealthController>();
         attackController = GetComponent<EnemyAttackController>();
         movementController = GetComponent<EnemyMovementController>();
+
+    }
+
+    private void Start()
+    {
+
+        InitializeControllers(1);
     }
 
     public void InitializeControllers(int waveCount)

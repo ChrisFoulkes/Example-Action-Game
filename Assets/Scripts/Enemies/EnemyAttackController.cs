@@ -29,18 +29,18 @@ public class EnemyAttackController : MonoBehaviour
     public LayerMask playerLayerMask;
 
     [SerializeField]
-    private bool isAvailable = true;
+    protected bool isAvailable = true;
 
     [SerializeField]
-    private bool isInRange = false;
+    protected bool isInRange = false;
 
     [SerializeField]
-    private bool isInAttack = false;
+    protected bool isInAttack = false;
 
     public GameObject prefabHitbox;
     private GameObject hitbox;
 
-    Vector3 closestTargetPosition;
+    public Vector3 closestTargetPosition;
     // Start is called before the first frame update
     void Start()
     {
@@ -55,7 +55,6 @@ public class EnemyAttackController : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
-
         if (!isInAttack)
         {
             CheckTargetInRange();
@@ -68,13 +67,18 @@ public class EnemyAttackController : MonoBehaviour
 
         if (hitObjects.Length > 0)
         {
-            if (hitObjects[0].CompareTag("Player"))
+            isInRange = false;
+            foreach (Collider2D hitbox in hitObjects)
             {
-                closestTargetPosition = hitObjects[0].transform.position;
-                isInRange = true;
+                if (hitbox.CompareTag("Player"))
+                {
+                    Debug.Log("TESTING");
+                    closestTargetPosition = hitbox.transform.position;
+                    isInRange = true;
+                }
             }
         }
-        else
+        else 
         {
             isInRange = false;
         }
@@ -120,7 +124,7 @@ public class EnemyAttackController : MonoBehaviour
     }
 
     public void StartEnemyAttack()
-    {
+    {  
         hasHit = false;
         StartCoroutine(StartAttack(attackDuration));
         StartCoroutine(StartTickCooldown());
@@ -134,9 +138,13 @@ public class EnemyAttackController : MonoBehaviour
         isAvailable = true;
     }
 
-    private IEnumerator StartAttack(float animDuration)
+    protected virtual IEnumerator StartAttack(float animDuration)
     {
         isInAttack = true;
+
+        // Update the target position before spawning the hitbox
+        CheckTargetInRange();
+
         StartCoroutine(SpawnHitBox());
         yield return new WaitForSeconds(animDuration);
         isInAttack = false;
@@ -150,11 +158,14 @@ public class EnemyAttackController : MonoBehaviour
         Gizmos.DrawWireSphere(transform.position, attackRange);
     }
 
-    private IEnumerator SpawnHitBox()
+    protected virtual IEnumerator SpawnHitBox()
     {
         yield return new WaitForSeconds(attackStartup);
         hitbox = Instantiate(prefabHitbox, transform.position, Quaternion.identity, gameObject.transform);
+
+        // not needed for a projectile attack
         AttackAnimationDirection animDirection = GetAnimAttackingDirection();
+
         if (animDirection.yAxis)
         {
             hitbox.GetComponent<Animator>().SetFloat("DirectionY", GetAnimAttackingDirection().difference.y);
@@ -165,6 +176,7 @@ public class EnemyAttackController : MonoBehaviour
             hitbox.GetComponent<Animator>().SetFloat("DirectionX", GetAnimAttackingDirection().difference.x);
             hitbox.GetComponent<Animator>().SetFloat("DirectionY", 0);
         }
+        //--
     }
 
     public void OnHit(Collider2D collision)

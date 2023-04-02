@@ -35,6 +35,7 @@ public class EnemyMovementController : MonoBehaviour, IMovement
 
     public void Initialize(float initialMovement)
     {
+        Debug.Log("Test: " + initialMovement);
         baseMovementSpeed = initialMovement;
         SetInitialMoveSpeed();
     }
