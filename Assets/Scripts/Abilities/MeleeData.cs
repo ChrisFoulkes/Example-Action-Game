@@ -1,3 +1,4 @@
+using Sirenix.OdinInspector;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -15,12 +16,14 @@ public class MeleeData : HitAbilityData
 {
     [Header("Melee Base Data")]
     public StatAssociation meleeDamage;
-    public StatAssociation critChance;
+    public StatAssociation critChance; 
 
-    public float distanceFromCaster = -0.2f;
+    [Header("On Hit Effects")]
+    public List<StatusEffect> statusEffects;
+    [InlineEditor(InlineEditorModes.FullEditor)]
+    public List<BuffData> buffEffects;
 
+    [Header("Effect Asset")]
     public MeleeAttack meleePrefab;
-
-    public List<StatusEffect> effects;
     public override IAbilityFactory AbilityFactory => new MeleeAbilityFactory();
 }

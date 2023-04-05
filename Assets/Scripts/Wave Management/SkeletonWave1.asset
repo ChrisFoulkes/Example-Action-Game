@@ -19,5 +19,9 @@ MonoBehaviour:
   - EnemyPrefab: {fileID: 6352923336266398879, guid: 6d4b3e74da3a86a448d516e21d3160ab, type: 3}
     enemyCount: 0
     spawnChance: 0.2
+  BossEnemyCounts:
+  - EnemyPrefab: {fileID: 7875406553322931275, guid: 3cc804c3fd4995d46a07e10542a7b5bc, type: 3}
+    enemyCount: 0
+    spawnChance: 1
   spawnRate: 0.5
   splitSpawn: 0

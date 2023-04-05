@@ -17,23 +17,17 @@ public class EnemyStatController : MonoBehaviour
 {
     public EnemyStats enemyStats;
 
-    private HealthController healthController;
+    private EnemyHealthController healthController;
     private EnemyAttackController attackController;
     private EnemyMovementController movementController;
     public Transform scaleParentTransform;
 
     private void Awake()
     {
-        healthController = GetComponent<HealthController>();
+        healthController = GetComponent<EnemyHealthController>();
         attackController = GetComponent<EnemyAttackController>();
         movementController = GetComponent<EnemyMovementController>();
 
-    }
-
-    private void Start()
-    {
-
-        InitializeControllers(1);
     }
 
     public void InitializeControllers(int waveCount)

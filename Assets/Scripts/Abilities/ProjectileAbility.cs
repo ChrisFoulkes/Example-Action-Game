@@ -80,8 +80,6 @@ public class ProjectileAbility : HitAbility
 
     public override void CastAbility()
     {
-        if (CastTime > Cooldown) { AdjustCooldown(CastTime); }
-
         for (int i = 0; i < ProjData.projectileCount; i++)
         {
             SetFiringRotation(ProjData.firingArc, AbilityUtils.GetFiringArcIncrement(i, ProjData.firingArc, ProjData.projectileCount));

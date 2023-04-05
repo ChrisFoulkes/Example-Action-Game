@@ -16,7 +16,7 @@ MonoBehaviour:
   abilityName: Fire Sword Slash
   abilityIcon: {fileID: 21300000, guid: 853e7f57af798974ca495f86aa89f131, type: 3}
   abilityType: 1
-  cooldown: 0
+  cooldown: 0.27
   castTime: 0.27
   isBufferable: 0
   knockbackData:
@@ -35,6 +35,8 @@ MonoBehaviour:
     baseValue: 0
     associatedStats:
     - {fileID: 11400000, guid: 65f80ef0b593f3042bebf02e2877640d, type: 2}
-  distanceFromCaster: -0.4
+  statusEffects:
+  - {fileID: 11400000, guid: 1da18ba967fcd874e90e0a90a94bc0d1, type: 2}
+  buffEffects:
+  - {fileID: 11400000, guid: de9c69b92bd199a4bac21996c5ba4a30, type: 2}
   meleePrefab: {fileID: 4924048172239069443, guid: ca18c01b29f7d424ab54f0f2536d62a1, type: 3}
-  effects: []

@@ -18,7 +18,9 @@ public abstract class Ability
 
     // Cooldown properties
     private bool IsAvailable { get; set; } = true;
-    public float Cooldown { get; private set; }
+
+
+    public float Cooldown{get;  private set;}
     public float CooldownEndTime { get; private set; }
     public float CastTime;
 
@@ -31,6 +33,10 @@ public abstract class Ability
     public void AdjustCooldown(float adjustedValue)
     {
         Cooldown = adjustedValue;
+        if (CastTime > Cooldown) 
+        {
+            Debug.Log("Adjusting Ability: " + ID + " Cooldown below cast time");
+            Cooldown = CastTime; }
 
     }
     public abstract void ApplyUpgrade(UpgradeEffect upgradeEffect);
@@ -60,8 +66,6 @@ public abstract class Ability
 
 
     }
-    public abstract void CastAbility();
-
 
     public bool IsCastable()
     {
@@ -74,5 +78,19 @@ public abstract class Ability
             return false;
         }
     }
+
+    public bool IsCriticalHit(float critChance)
+    {
+        float randomNumber = Random.Range(0f, 1f);
+
+        if (randomNumber < critChance)
+        {
+            return true;
+        }
+        
+        return false;
+    }
+    public abstract void CastAbility();
+
 
 }

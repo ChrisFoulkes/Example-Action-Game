@@ -53,12 +53,18 @@ public class MeleeAbility : HitAbility
     PlayerCasterContext _caster;
 
     private List<StatusEffect> statusEffects;
-
+    private List<ActiveBuffData> buffEffects = new List<ActiveBuffData>();
     public MeleeAbility(MeleeData aData, AbilityCasterContext caster) : base(aData)
     {
         meleeData = new ActiveMeleeData(aData.meleeDamage, aData.castTime, aData.critChance);
 
-        statusEffects = aData.effects;
+        statusEffects = aData.statusEffects;
+
+        foreach (BuffData data in aData.buffEffects)
+        {
+            buffEffects.Add(new ActiveBuffData(data.AffectedStats, data.BuffDuration, data.BuffID));
+        }
+
         meleeAttack = aData.meleePrefab;
         CastTime = aData.castTime;
 
@@ -70,7 +76,6 @@ public class MeleeAbility : HitAbility
 
     public override void CastAbility()
     {
-        if (CastTime > Cooldown) { AdjustCooldown(CastTime); }
 
         GameObject melee = Object.Instantiate(meleeAttack.gameObject, _caster.ProjectileSpawnPos.position, SetTheFiringRotation());
 
@@ -114,15 +119,17 @@ public class MeleeAbility : HitAbility
         return Quaternion.Euler(0, 0, angle);
     }
 
+    //Again collision isnt perfect need a way of getting an enemy Context ? onHit query the target perhaps
     public void OnHit(Collider2D collision, MeleeAttack attack)
     {
         IDamage damageController = collision.GetComponentInParent<IDamage>();
 
-        float randomNumber = Random.Range(0f, 1f);
-
+       
         float damageValue = Mathf.RoundToInt(meleeData.meleeDamage.CalculateModifiedValue(_caster.CharacterStatsController));
+
+        //Not super happy with this sending down the calculatedValue need to unify critical hits across all abilities to make the calculation inside ability.cs
         bool isCrit = false;
-        if (randomNumber < meleeData.critChance.CalculateModifiedValue(_caster.CharacterStatsController))
+        if (IsCriticalHit(meleeData.critChance.CalculateModifiedValue(_caster.CharacterStatsController)))
         {
             isCrit = true;
             damageValue *= 2;
@@ -130,6 +137,21 @@ public class MeleeAbility : HitAbility
 
         damageController.ApplyDamage(new DamageInfo(damageValue, isCrit, FloatingColourType.Generic, hitStun, knockbackData), _caster);
 
+        ApplyBuffEffects();
+        ApplyStatusEffects(collision);
+    }
+
+    public void ApplyBuffEffects() 
+    {
+        foreach (ActiveBuffData buff in buffEffects)
+        {
+            _caster.BuffController.ApplyBuff(buff);
+        }
+    }
+
+
+    public void ApplyStatusEffects(Collider2D collision) 
+    {
 
         if (statusEffects.Count > 0)
         {

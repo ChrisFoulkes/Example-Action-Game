@@ -72,7 +72,6 @@ public class EnemyAttackController : MonoBehaviour
             {
                 if (hitbox.CompareTag("Player"))
                 {
-                    Debug.Log("TESTING");
                     closestTargetPosition = hitbox.transform.position;
                     isInRange = true;
                 }

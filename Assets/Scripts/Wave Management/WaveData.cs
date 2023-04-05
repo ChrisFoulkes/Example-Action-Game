@@ -21,6 +21,8 @@ public class WaveData : ScriptableObject
 {
     public List<WaveEnemyCount> waveEnemyCounts = new List<WaveEnemyCount>();
 
+    public List<WaveEnemyCount> BossEnemyCounts = new List<WaveEnemyCount>();
+
     public float spawnRate;
 
     public bool splitSpawn = false;

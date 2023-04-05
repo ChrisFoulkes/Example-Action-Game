@@ -52,7 +52,6 @@ public class BossAttackController : EnemyAttackController
         Vector2 direction = target - casterPosition;
         float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
 
-        Debug.Log("Angle: " + angle);
         // Calculate the Y component of the closest point based on the angle
         yOffset = 0f; 
         xOffset = 0f;

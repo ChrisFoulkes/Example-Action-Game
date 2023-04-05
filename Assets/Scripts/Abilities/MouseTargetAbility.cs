@@ -32,8 +32,6 @@ public class MouseTargetAbility : HitAbility
     }
     public override void CastAbility()
     {
-        if (CastTime > Cooldown) { AdjustCooldown(CastTime); }
-
         var direction = AbilityUtils.GetLeftOrRightDirection(_caster.transform.position);
         if (direction > 0)
         {

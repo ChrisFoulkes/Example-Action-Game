@@ -5,8 +5,8 @@ using UnityEngine.UI;
 
 public class HpBarController : MonoBehaviour
 {
-    private float maxValue;
-    private float currentValue;
+    [SerializeField] private float maxValue;
+    [SerializeField] private float currentValue;
 
     public Image amountSprite;
     public TextMeshProUGUI hpText;
@@ -15,7 +15,10 @@ public class HpBarController : MonoBehaviour
 
     void OnEnable()
     {
-        healthController.AddListener(OnHealthChange);
+        if (healthController != null)
+        {
+            healthController.AddListener(OnHealthChange);
+        }
     }
 
     void OnDisable()
@@ -25,6 +28,19 @@ public class HpBarController : MonoBehaviour
 
     private void Start()
     {
+        if (healthController != null)
+        {
+            maxValue = healthController.GetMaxHP();
+            currentValue = healthController.CurrentHealth();
+            hpText.text = currentValue + "/" + maxValue;
+        }
+    }
+
+    public void Setup()
+    {
+        
+        Debug.Log(healthController.transform.parent.name + ": " + healthController + " A " + healthController.CurrentHealth());
+        healthController.AddListener(OnHealthChange);
 
         maxValue = healthController.GetMaxHP();
         currentValue = healthController.CurrentHealth();

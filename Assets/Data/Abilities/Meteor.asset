@@ -16,8 +16,8 @@ MonoBehaviour:
   abilityName: Meteor
   abilityIcon: {fileID: 21300000, guid: 59873a38f5d3968449e77dbd59ece75b, type: 3}
   abilityType: 5
-  cooldown: 3
-  castTime: 0.1
+  cooldown: 7
+  castTime: 0.4
   isBufferable: 1
   knockbackData:
     shouldKnockback: 1

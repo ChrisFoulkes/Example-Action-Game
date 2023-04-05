@@ -19,8 +19,7 @@ public class BuffAbilityFactory : IAbilityFactory
 [CreateAssetMenu(fileName = "BuffData", menuName = "Abilities/Buff")]
 public class BuffAbilityData : AbilityData
 {
-    [field: SerializeField] public int BuffID { get; private set; }
-    [field: SerializeField] public List<AffectedStat> AffectedStats { get; private set; } = new List<AffectedStat>();
-    [field: SerializeField] public float BaseBuffDuration { get; private set; }
+
+    public List<BuffData> BuffData = new List<BuffData>();
     public override IAbilityFactory AbilityFactory => new BuffAbilityFactory();
 }

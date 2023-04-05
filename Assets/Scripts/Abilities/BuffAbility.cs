@@ -1,4 +1,6 @@
 using EventCallbacks;
+using System.Collections.Generic;
+
 
 public class BuffUpgradeHandler : UpgradeHandler
 {
@@ -17,13 +19,18 @@ public class BuffUpgradeHandler : UpgradeHandler
 
 public class BuffAbility : Ability
 {
-    private readonly ActiveBuffData _buffData;
+    private List<ActiveBuffData> _buffData = new List<ActiveBuffData>();
     private readonly PlayerCasterContext _caster;
 
     public BuffAbility(BuffAbilityData abilityData, AbilityCasterContext caster) : base(abilityData)
     {
         _caster = (PlayerCasterContext)caster;
-        _buffData = new ActiveBuffData(abilityData.AffectedStats, abilityData.BaseBuffDuration, abilityData.BuffID);
+
+        foreach (BuffData data in abilityData.BuffData) 
+        {
+            _buffData.Add(new ActiveBuffData(data.AffectedStats, data.BuffDuration, data.BuffID));
+        }
+
         CastTime = abilityData.castTime;
 
         AbilityUpgradeHandler = new BuffUpgradeHandler(this);
@@ -31,12 +38,11 @@ public class BuffAbility : Ability
 
     public override void CastAbility()
     {
-        if (CastTime > Cooldown)
-        {
-            AdjustCooldown(CastTime);
-        }
 
-        _caster.BuffController.ApplyBuff(_buffData);
+        foreach (ActiveBuffData buff in _buffData) 
+        {
+            _caster.BuffController.ApplyBuff(buff);
+        }
 
         // Currently global events, maybe should be local 
         PlayerStopMovementEvent stopMovementEvent = new PlayerStopMovementEvent { duration = CastTime };
