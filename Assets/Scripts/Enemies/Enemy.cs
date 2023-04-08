@@ -14,7 +14,7 @@ public class Enemy : MonoBehaviour, IDeath
     public float gemSpawnRadius = 1f;
 
 
-    [SerializeField] private Vector3 targetScale = new Vector3(5f, 5f, 1);
+    [SerializeField] private Vector3 deathScale = new Vector3(5f, 5f, 1);
     [SerializeField] private float scaleDuration = 0.5f;
 
     public Transform scaleParentTransform;
@@ -47,6 +47,7 @@ public class Enemy : MonoBehaviour, IDeath
     {
         StartCoroutine(ScaleCoroutine());
         isDead = true;
+        killedEvent.killedEnemy = this;
         EventManager.Raise(killedEvent);
 
         SpawnXpGemFountain();
@@ -89,10 +90,10 @@ public class Enemy : MonoBehaviour, IDeath
         {
             elapsedTime += Time.deltaTime;
             float progress = elapsedTime / scaleDuration;
-            scaleParentTransform.localScale = Vector3.Lerp(initialScale, targetScale, progress);
+            scaleParentTransform.localScale = Vector3.Lerp(initialScale, deathScale, progress);
             yield return null;
         }
 
-        scaleParentTransform.localScale = targetScale;
+        scaleParentTransform.localScale = deathScale;
     }
 }

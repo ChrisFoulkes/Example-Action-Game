@@ -90,6 +90,7 @@ public class PlayerMovement : MonoBehaviour, IMovement
 
         }
     }
+
     public IEnumerator ApplyMovement(Vector2 inputDirection, float movementSpeed, float movementDuration)
     {
         // Store the original moveSpeed
@@ -101,7 +102,8 @@ public class PlayerMovement : MonoBehaviour, IMovement
         rb.velocity = inputDirection * movementSpeed;
 
         float startTime = Time.time;
-        float nextGhostSpawnTime = Time.time;
+        float nextGhostSpawnTime = Time.time; 
+
         while (Time.time - startTime < movementDuration)
         {
             rb.velocity = inputDirection * movementSpeed;

@@ -33,7 +33,13 @@ public class HealthController : MonoBehaviour, IHealth
     {
         _maximumHealth = initialHealth;
         _currentHP = _maximumHealth;
+    }
 
+    public void Enrage(float newMaximum) 
+    {
+        _currentHP = Mathf.RoundToInt(_currentHP * (newMaximum / _maximumHealth)); 
+        _maximumHealth = Mathf.RoundToInt(newMaximum);
+        _healthChangedEvent.RaiseLocal();
     }
 
     public void AddListener(GameEvent.EventDelegate<GameEvent> listener)

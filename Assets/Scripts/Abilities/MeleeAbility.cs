@@ -1,4 +1,5 @@
 using EventCallbacks;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -139,9 +140,16 @@ public class MeleeAbility : HitAbility
 
         ApplyBuffEffects();
         ApplyStatusEffects(collision);
+        SpawnHitEffect(collision);
     }
 
-    public void ApplyBuffEffects() 
+    public void SpawnHitEffect(Collider2D collision)
+    {
+        Transform enemyTransform = collision.transform;
+        Vector2 collisionPoint = collision.ClosestPoint(enemyTransform.position);
+        HitEffectSpawner.Instance.SpawnHitEffect(collisionPoint, enemyTransform);
+    }
+    public void ApplyBuffEffects()
     {
         foreach (ActiveBuffData buff in buffEffects)
         {
@@ -163,4 +171,5 @@ public class MeleeAbility : HitAbility
             }
         }
     }
+
 }

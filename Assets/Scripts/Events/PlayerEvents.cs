@@ -30,11 +30,6 @@ namespace EventCallbacks
         }
     }
 
-    public class EnemyKilledEvent : GameEvent
-    {
-        public float xpValue = 1;
-    }
-
     public class PlayerExperienceEvent : GameEvent
     {
         public float currentExperience;

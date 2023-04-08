@@ -1,44 +1,93 @@
 using EventCallbacks;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class BossUIManager : MonoBehaviour
 {
-    public GameObject BossHealthBarParent;
-    public HpBarController hpBar;
-    public IDeath deathController;
-    public EnemyHealthController enemyHealth;
-    // Start is called before the first frame update
-    void Start()
+    [SerializeField] private GameObject bossHealthBarPrefab;
+    [SerializeField] private GameObject bossHealthBarParent;
+
+    [System.Serializable]
+    public class BossHealthBarData
     {
-        
+        public GameObject healthBar;
+        public IDeath deathController;
     }
 
-    // Update is called once per frame
-    void Update()
+    [SerializeField] private List<BossHealthBarData> activeBossHealthBars = new List<BossHealthBarData>();
+
+    private void OnEnable()
     {
-        
+        EventManager.AddGlobalListener<PlayerDeathEvent>(OnPlayerDeath);
     }
 
-    public void StartBoss(GameObject boss) 
+    private void OnDisable()
     {
-        BossHealthBarParent.SetActive(true);
-        enemyHealth = boss.GetComponentInChildren<EnemyHealthController>();
-        deathController = boss.GetComponentInChildren<IDeath>();
-        deathController.AddListener(OnDeathEvent);
-        hpBar.healthController = enemyHealth;
-        hpBar.Setup();
+        EventManager.RemoveGlobalListener<PlayerDeathEvent>(OnPlayerDeath);
     }
 
-
-    private void OnDeathEvent(GameEvent dEvent)
+    public void AddBoss(GameObject boss)
     {
-        EnemyKilledEvent killedEvent = (EnemyKilledEvent)dEvent;
+        if (activeBossHealthBars.Count >= 3) return;
 
+        SpawnBossHealthBar(boss);
+    }
 
-        BossHealthBarParent.SetActive(false);
+    private void SpawnBossHealthBar(GameObject boss)
+    {
+        GameObject newBossHealthBar = Instantiate(bossHealthBarPrefab, bossHealthBarParent.transform);
 
-        deathController.RemoveListener(OnDeathEvent);
+        HpBarController hpBarController = newBossHealthBar.GetComponentInChildren<HpBarController>();
+        EnemyHealthController enemyHealthController = boss.GetComponentInChildren<EnemyHealthController>();
+
+        if (enemyHealthController == null)
+        {
+            Debug.LogError("EnemyHealthController component not found on the boss GameObject.");
+            return;
+        }
+
+        IDeath deathController = boss.GetComponentInChildren<IDeath>();
+        deathController.AddListener(OnBossDeathEvent);
+
+        hpBarController.Initialize(enemyHealthController, boss);
+
+        activeBossHealthBars.Add(new BossHealthBarData { healthBar = newBossHealthBar, deathController = deathController });
+    }
+
+    private void OnBossDeathEvent(GameEvent gameEvent)
+    {
+        EnemyKilledEvent killedEvent = (EnemyKilledEvent)gameEvent;
+        GameObject killedBoss = killedEvent.killedEnemy.transform.parent.gameObject;
+
+        RemoveBossHealthBar(killedBoss);
+    }
+
+    private void RemoveBossHealthBar(GameObject killedBoss)
+    {
+        for (int i = activeBossHealthBars.Count - 1; i >= 0; i--)
+        {
+            HpBarController barController = activeBossHealthBars[i].healthBar.GetComponentInChildren<HpBarController>();
+
+            if (barController.Boss == killedBoss)
+            {
+                activeBossHealthBars[i].deathController.RemoveListener(OnBossDeathEvent);
+                Destroy(activeBossHealthBars[i].healthBar);
+                activeBossHealthBars.RemoveAt(i);
+            }
+        }
+    }
+
+    private void OnPlayerDeath(PlayerDeathEvent deathEvent)
+    {
+        ClearBossHealthBars();
+    }
+
+    private void ClearBossHealthBars()
+    {
+        foreach (BossHealthBarData healthBarData in activeBossHealthBars)
+        {
+            Destroy(healthBarData.healthBar);
+        }
+        activeBossHealthBars.Clear();
     }
 }

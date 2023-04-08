@@ -36,6 +36,14 @@ public class EnemyStatController : MonoBehaviour
         attackController.Initialize(enemyStats.attackDamage + (enemyStats.attackDamage * (enemyStats.damageGrowthFactor * waveCount)));
         movementController.Initialize(enemyStats.movementSpeed + (enemyStats.movementSpeed * (enemyStats.movementSpeedGrowthFactor * waveCount)));
 
-        scaleParentTransform.localScale = new Vector3(1f + (waveCount * 0.05f), 1f + (waveCount * 0.05f), 0);
+        Vector3 currentScale = scaleParentTransform.localScale;
+        scaleParentTransform.localScale = new Vector3(currentScale.x + (waveCount * 0.05f), currentScale.y + (waveCount * 0.05f), 0);
+    }
+
+
+    //Currently flat value needs some data component needs to visual display
+    public void EnrageControllers() 
+    {
+        healthController.Enrage(healthController.GetMaxHP() * 1.5f);
     }
 }

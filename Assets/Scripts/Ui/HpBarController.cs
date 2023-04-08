@@ -5,15 +5,26 @@ using UnityEngine.UI;
 
 public class HpBarController : MonoBehaviour
 {
-    [SerializeField] private float maxValue;
-    [SerializeField] private float currentValue;
+    [SerializeField] private Image amountSprite;
+    [SerializeField] private TextMeshProUGUI hpText;
 
-    public Image amountSprite;
-    public TextMeshProUGUI hpText;
+    [SerializeField]  private HealthController healthController;
+    private GameObject boss;
 
-    public HealthController healthController;
+    public GameObject Boss
+    {
+        get { return boss; }
+    }
 
-    void OnEnable()
+    private void Start()
+    {
+        if (healthController != null)
+        {
+            UpdateHealthBar();
+        }
+    }
+
+    private void OnEnable()
     {
         if (healthController != null)
         {
@@ -21,48 +32,37 @@ public class HpBarController : MonoBehaviour
         }
     }
 
-    void OnDisable()
-    {
-        healthController.RemoveListener(OnHealthChange);
-    }
-
-    private void Start()
+    private void OnDisable()
     {
         if (healthController != null)
         {
-            maxValue = healthController.GetMaxHP();
-            currentValue = healthController.CurrentHealth();
-            hpText.text = currentValue + "/" + maxValue;
+            healthController.RemoveListener(OnHealthChange);
         }
     }
 
-    public void Setup()
+    public void Initialize(HealthController healthController, GameObject boss)
     {
-        
-        Debug.Log(healthController.transform.parent.name + ": " + healthController + " A " + healthController.CurrentHealth());
+        this.healthController = healthController;
+        this.boss = boss;
+
         healthController.AddListener(OnHealthChange);
-
-        maxValue = healthController.GetMaxHP();
-        currentValue = healthController.CurrentHealth();
-        hpText.text = currentValue + "/" + maxValue;
-    }
-
-    void OnHealthChange(GameEvent changeEvent)
-    {
-        HealthChangedEvent healthEvent = changeEvent as HealthChangedEvent;
-
-        currentValue = healthController.CurrentHealth();
-        maxValue = healthController.GetMaxHP();
-
-        hpText.text = currentValue + "/" + maxValue;
         UpdateHealthBar();
     }
 
-
-    void UpdateHealthBar()
+    private void OnHealthChange(GameEvent changeEvent)
     {
+        HealthChangedEvent healthEvent = changeEvent as HealthChangedEvent;
+        UpdateHealthBar();
+    }
+
+    private void UpdateHealthBar()
+    {
+        float currentValue = healthController.CurrentHealth();
+        float maxValue = healthController.GetMaxHP();
+        hpText.text = $"{currentValue}/{maxValue}";
+
         float fillAmount = Mathf.Clamp(currentValue / maxValue, 0, 1);
-        Vector3 xpScale = amountSprite.transform.localScale;
-        amountSprite.transform.localScale = new Vector3(fillAmount, xpScale.y, xpScale.z);
+        Vector3 scale = amountSprite.transform.localScale;
+        amountSprite.transform.localScale = new Vector3(fillAmount, scale.y, scale.z);
     }
 }
