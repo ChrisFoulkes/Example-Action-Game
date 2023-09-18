@@ -6,6 +6,8 @@ public abstract class DamageController : MonoBehaviour, IDamage, IHeal
     protected abstract DamageEvent DamageEvent { get; }
     protected abstract HealEvent HealEvent { get; }
 
+    private TargetContext Context;
+
 
     public abstract void AddDamageListener(GameEvent.EventDelegate<GameEvent> listener);
 
@@ -17,8 +19,12 @@ public abstract class DamageController : MonoBehaviour, IDamage, IHeal
     public abstract void RemoveHealListener(GameEvent.EventDelegate<GameEvent> listener);
 
 
-    public abstract void ApplyDamage(DamageInfo damageInfo, AbilityCasterContext caster);
+    public abstract void ApplyDamage(DamageInfo damageInfo, CasterContext caster);
 
+    public void Start()
+    {
+        Context = new TargetContext(transform);
+    }
 
     public virtual void ApplyHealing(HealInfo healInfo)
     {
@@ -35,5 +41,11 @@ public abstract class DamageController : MonoBehaviour, IDamage, IHeal
     {
         DamageInfo AdjustedDamage = damageInfo;
         return AdjustedDamage;
+    }
+
+    public virtual TargetContext GetContext() 
+    {
+
+        return Context;
     }
 }

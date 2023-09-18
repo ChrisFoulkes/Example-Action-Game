@@ -19,6 +19,8 @@ MonoBehaviour:
   cooldown: 0.3
   castTime: 0.25
   isBufferable: 0
+  shouldStopMovementOnCast: 1
+  shouldForceCastingDirection: 1
   knockbackData:
     shouldKnockback: 1
     knockbackFromEffect: 0
@@ -37,4 +39,5 @@ MonoBehaviour:
   ProjectileCount: 1
   firingArc: 90
   projectilePrefab: {fileID: 3149921272826868142, guid: 523bf09d88816e649b8ef26ccf50a279, type: 3}
-  effects: []
+  statusEffects: []
+  buffEffects: []

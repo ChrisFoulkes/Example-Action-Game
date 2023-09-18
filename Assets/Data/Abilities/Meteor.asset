@@ -19,6 +19,8 @@ MonoBehaviour:
   cooldown: 7
   castTime: 0.4
   isBufferable: 1
+  shouldStopMovementOnCast: 1
+  shouldForceCastingDirection: 1
   knockbackData:
     shouldKnockback: 1
     knockbackFromEffect: 1
@@ -36,4 +38,5 @@ MonoBehaviour:
     associatedStats:
     - {fileID: 11400000, guid: 65f80ef0b593f3042bebf02e2877640d, type: 2}
   attackPrefab: {fileID: 5227382832242564805, guid: f426758d80849a044910b366080f7a6b, type: 3}
-  effects: []
+  statusEffects: []
+  buffEffects: []

@@ -18,7 +18,7 @@ namespace EventCallbacks
     public class DamageEvent : GameEvent
     {
         public DamageInfo DamageInfo;
-        public AbilityCasterContext Caster;
+        public CasterContext Caster;
         public TargetContext Target;
     }
 

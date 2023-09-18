@@ -12,7 +12,7 @@ public class DamageOverTimeEffect : StatusEffect
 
     private PlayerCasterContext _caster;
 
-    public override void ApplyEffect(StatusEffectController controller, AbilityCasterContext caster)
+    public override void ApplyEffect(StatusEffectController controller, CasterContext caster)
     {
         _caster = (PlayerCasterContext)caster;
 

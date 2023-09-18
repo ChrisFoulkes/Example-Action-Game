@@ -27,7 +27,7 @@ public class EnemyDamageController : DamageController
         _healEvent.RemoveLocalListener(listener);
     }
 
-    public override void ApplyDamage(DamageInfo damageInfo, AbilityCasterContext caster)
+    public override void ApplyDamage(DamageInfo damageInfo, CasterContext caster)
     {
         DamageInfo AdjustedDamage = ApplyDefense(damageInfo);
 

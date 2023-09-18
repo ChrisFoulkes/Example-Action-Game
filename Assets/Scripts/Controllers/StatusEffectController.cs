@@ -19,7 +19,7 @@ public class ActiveStatusEffect
     public int CountInstance = 0;
     public bool BonusEffectActive = false;
 
-    public ActiveStatusEffect(StatusEffectController controller, StatusEffect statusEffect, AbilityCasterContext appliedBy, float time)
+    public ActiveStatusEffect(StatusEffectController controller, StatusEffect statusEffect, CasterContext appliedBy, float time)
     {
         Controller = controller;
         ElapsedTime = time;

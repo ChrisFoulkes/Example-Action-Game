@@ -10,6 +10,7 @@ public abstract class Attack : MonoBehaviour
 
     protected virtual void Awake()
     {
+
         animator = GetComponent<Animator>();
         hitTimeDict = new Dictionary<Collider2D, float>();
     }

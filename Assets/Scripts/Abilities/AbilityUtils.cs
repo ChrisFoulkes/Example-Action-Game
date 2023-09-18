@@ -89,4 +89,31 @@ public static class AbilityUtils
         return index * arc / (count - 1);
 
     }
+
+
+    public static Quaternion GetMeleeFiringRotation(Vector3 casterPosition)
+    {
+        Vector2 lookDirection = (Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue()) - casterPosition).normalized;
+
+        float angle;
+        if (lookDirection.y > 0 && Mathf.Abs(lookDirection.x) < lookDirection.y)
+        {
+            angle = 0;
+        }
+        else if (lookDirection.y < 0 && Mathf.Abs(lookDirection.x) < -lookDirection.y)
+        {
+            angle = 180;
+        }
+        else if (lookDirection.x > 0)
+        {
+            angle = -90;
+        }
+        else
+        {
+            angle = 90;
+        }
+
+        return Quaternion.Euler(0, 0, angle);
+    }
+
 }

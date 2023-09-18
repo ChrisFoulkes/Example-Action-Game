@@ -1,0 +1,41 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 088a13f3e8435654da90d8798778a545, type: 3}
+  m_Name: ShieldSlam
+  m_EditorClassIdentifier: 
+  AbilityID: 20
+  abilityName: ShieldBlock
+  abilityIcon: {fileID: 21300000, guid: 94fc64fc424abe94fa382237810ea4b2, type: 3}
+  abilityType: 1
+  cooldown: 1
+  castTime: 0.6
+  isBufferable: 0
+  shouldStopMovementOnCast: 1
+  shouldForceCastingDirection: 0
+  knockbackData:
+    shouldKnockback: 1
+    knockbackFromEffect: 0
+    Force: {x: 20, y: 20}
+    Duration: 0.4
+  hitStun: 0.45
+  meleeDamage:
+    propertyName: Shield Damage
+    baseValue: -3
+    associatedStats:
+    - {fileID: 11400000, guid: a6219336b88ab074ea899f8cdec7cbcd, type: 2}
+  critChance:
+    propertyName: Crit
+    baseValue: 0.01
+    associatedStats: []
+  statusEffects: []
+  buffEffects: []
+  meleePrefab: {fileID: 1117897486444717418, guid: 6e4bc1453bf00994eaa65a917694476d, type: 3}

@@ -1,47 +1,9 @@
+using EventCallbacks;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.InputSystem;
-
-
-public class PlayerCasterContext : AbilityCasterContext
-{
-    public Transform ProjectileSpawnPos { get; }
-    public Rigidbody2D CasterRigidbody { get; }
-    public PlayerMovement PlayerMovement { get; }
-    public CharacterStatsController CharacterStatsController { get; }
-    public PlayerStatusTracker PlayerStatusTracker { get; }
-    public BuffController BuffController { get; }
-    public PlayerCasterContext(Transform caster, Transform projectileSpawnPos) : base(caster)
-    {
-        ProjectileSpawnPos = projectileSpawnPos;
-        CasterRigidbody = caster.GetComponent<Rigidbody2D>();
-        PlayerMovement = caster.GetComponent<PlayerMovement>();
-        CharacterStatsController = caster.GetComponent<CharacterStatsController>();
-        BuffController = caster.GetComponent<BuffController>();
-        PlayerStatusTracker = caster.GetComponentInChildren<PlayerStatusTracker>();
-    }
-}
-
-public class EnemyCasterContext : AbilityCasterContext
-{
-    public EnemyCasterContext(Transform caster) : base(caster)
-    {
-
-    }
-}
-
-public abstract class AbilityCasterContext
-{
-    public Transform transform { get; }
-
-
-    public AbilityCasterContext(Transform caster)
-    {
-        transform = caster;
-    }
-}
 
 public class PlayerAbilityManager : MonoBehaviour
 {
@@ -55,8 +17,12 @@ public class PlayerAbilityManager : MonoBehaviour
 
     [SerializeField] private List<AbilityData> abilityDataList = new List<AbilityData>();
     private Dictionary<int, Ability> abilities = new Dictionary<int, Ability>();
-
-
+    private Dictionary<string, int> abilityNameToIndex = new Dictionary<string, int> {
+        { "Ability-1", 0 },
+        { "Ability-2", 1 },
+        { "Ability-3", 2 },
+        { "MovementAbility", 3 }
+    };
 
     [SerializeField] private bool isCasting;
     private Ability bufferedAbility;
@@ -94,24 +60,11 @@ public class PlayerAbilityManager : MonoBehaviour
         {
             if (context.performed)
             {
-                switch (context.action.name)
+                string actionName = context.action.name;
+                if (abilityNameToIndex.ContainsKey(actionName))
                 {
-                    case "Ability-1":
-                        var ability1 = abilities.Values.ElementAt(0);
-                        CastAbility(ability1);
-                        break;
-                    case "Ability-2":
-                        var ability2 = abilities.Values.ElementAt(1);
-                        CastAbility(ability2);
-                        break;
-                    case "Ability-3":
-                        var ability3 = abilities.Values.ElementAt(2);
-                        CastAbility(ability3);
-                        break;
-                    case "MovementAbility":
-                        var ability4 = abilities.Values.ElementAt(3);
-                        CastAbility(ability4);
-                        break;
+                    var ability = abilities.Values.ElementAt(abilityNameToIndex[actionName]);
+                    TryCastAbility(ability);
                 }
             }
         }
@@ -129,13 +82,11 @@ public class PlayerAbilityManager : MonoBehaviour
         return equippedAbilityIDs;
     }
 
-    private void CastAbility(Ability ability)
+    private void TryCastAbility(Ability ability)
     {
         if (ability.IsCastable() && !isCasting)
         {
-            ability.CastAbility();
-            StartCoroutine(HandleAbilityCooldown(ability));
-            StartCoroutine(HandleAbilityCasting(ability));
+            CastAbility(ability);
         }
         else if (ability.RemainingCooldown() <= 1)
         {
@@ -147,6 +98,26 @@ public class PlayerAbilityManager : MonoBehaviour
                 StartCoroutine(HandleBufferedAbility());
             }
         }
+    }
+
+    public void CastAbility(Ability ability) 
+    {
+        ability.CastAbility();
+        StartCoroutine(HandleAbilityCooldown(ability));
+        StartCoroutine(HandleAbilityCasting(ability));
+
+        if (ability.ShouldStopMovementOnCast) 
+        {
+            PlayerStopMovementEvent stopMovementEvent = new PlayerStopMovementEvent{duration = ability.CastTime };
+            EventManager.Raise(stopMovementEvent);
+        }
+
+        if (ability.ShouldForceCastingDirection) 
+        {
+            SetPlayerFacingDirectionEvent setDirectionEvent = new SetPlayerFacingDirectionEvent(AbilityUtils.GetFacingDirection(caster.transform.position), ability.CastTime);
+            EventManager.Raise(setDirectionEvent);
+        }
+
     }
 
     public void UpgradeAbility(int abilityID, UpgradeEffect upgradeEffect)
@@ -167,15 +138,7 @@ public class PlayerAbilityManager : MonoBehaviour
         yield return new WaitForSeconds(ability.Cooldown);
         ability.SetCoolDown(false);
     }
-    private IEnumerator AutoCast(Ability ability)
-    {
-        CastAbility(ability);
-        yield return new WaitForSeconds(ability.Cooldown);
-        StartCoroutine(AutoCast(ability));
-    }
 
-
-    //Bug (if cooldown < casting time 
     private IEnumerator HandleAbilityCasting(Ability ability)
     {
         isCasting = true;
@@ -195,6 +158,15 @@ public class PlayerAbilityManager : MonoBehaviour
             {
                 yield return null; // Wait for the next frame before checking again
             }
+        }
+    }
+
+    private IEnumerator AutoCast(Ability ability) //Testing Tool
+    {
+        while (true)
+        {
+            CastAbility(ability);
+            yield return new WaitForSeconds(ability.Cooldown);
         }
     }
 }

@@ -5475,6 +5475,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 91dbe1ae8ebd68247a046e5d8f855ca4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &649220316
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 649220301}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7e23e654d17d9a74a82f8001ef21bbb5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &662060415
 GameObject:
   m_ObjectHideFlags: 0
@@ -44079,11 +44091,11 @@ PrefabInstance:
     - target: {fileID: 1585791619931099425, guid: 2f4fccf03f9d0b54cb71b98b46ba134e, type: 3}
       propertyPath: abilityDataList.Array.data[0]
       value: 
-      objectReference: {fileID: 11400000, guid: 0dc8b14ec55cbcc4ca411a570a9a7ade, type: 2}
+      objectReference: {fileID: 11400000, guid: 9c8175d0110fd2645a24ecb208ca6031, type: 2}
     - target: {fileID: 1585791619931099425, guid: 2f4fccf03f9d0b54cb71b98b46ba134e, type: 3}
       propertyPath: abilityDataList.Array.data[1]
       value: 
-      objectReference: {fileID: 11400000, guid: 9c8175d0110fd2645a24ecb208ca6031, type: 2}
+      objectReference: {fileID: 11400000, guid: 1204253c2d006f944900505e44507c85, type: 2}
     - target: {fileID: 1585791619931099425, guid: 2f4fccf03f9d0b54cb71b98b46ba134e, type: 3}
       propertyPath: abilityDataList.Array.data[2]
       value: 

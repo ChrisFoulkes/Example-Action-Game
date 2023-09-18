@@ -48,7 +48,6 @@ namespace EventCallbacks
 
     public class PlayerDamageEvent : DamageEvent
     {
-        public new EnemyCasterContext Caster;
     }
 
     public class PlayerHealEvent : HealEvent
