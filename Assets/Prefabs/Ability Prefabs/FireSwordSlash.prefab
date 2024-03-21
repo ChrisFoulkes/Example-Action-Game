@@ -118,7 +118,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   animator: {fileID: 1820052897036519956}
-  hitCooldown: 0.01
+  hitCooldown: 0.05
   disableRepeatedHits: 1
 --- !u!50 &8533877508382327353
 Rigidbody2D:

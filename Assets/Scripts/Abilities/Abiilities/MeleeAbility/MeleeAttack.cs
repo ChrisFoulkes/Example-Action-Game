@@ -12,7 +12,6 @@ public class MeleeAttack : Attack
 
     private void OnTriggerStay2D(Collider2D collision)
     {
-        Debug.LogWarning("HITTING!");
         if (disableRepeatedHits)
         {
             if (!hitTimeDict.ContainsKey(collision))

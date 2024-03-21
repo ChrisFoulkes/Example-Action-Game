@@ -77,8 +77,8 @@ public class MeleeAbility : HitAbility
 
     protected override void OnCast()
     {
-        // GameObject melee = Object.Instantiate(_meleeAttack.gameObject, _caster.AttackSpawnPos.position, AbilityUtils.GetMeleeFiringRotation(_caster.transform.position));
-        GameObject melee = Object.Instantiate(_meleeAttack.gameObject, _caster.AttackSpawnPos.position, _meleeAttack.gameObject.transform.rotation);
+        GameObject melee = Object.Instantiate(_meleeAttack.gameObject, _caster.AttackSpawnPos.position, AbilityUtils.GetMeleeFiringRotation(_caster.transform.position));
+       // GameObject melee = Object.Instantiate(_meleeAttack.gameObject, _caster.AttackSpawnPos.position, _meleeAttack.gameObject.transform.rotation);
 
         melee.GetComponent<MeleeAttack>().Initialize(this);
     }

@@ -38,6 +38,8 @@ public class HealthGlobe : MonoBehaviour
             {
                 player = collision.gameObject;
             }
+
+
             //Non functional test - fix
             //player.GetComponentInParent<HealthController>().ChangeHealth(5, false, FloatingColourType.Heal);
 
