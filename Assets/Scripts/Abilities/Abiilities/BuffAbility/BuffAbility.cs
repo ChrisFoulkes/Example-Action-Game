@@ -28,7 +28,7 @@ public class BuffAbility : Ability
 
         foreach (BuffData data in abilityData.BuffData) 
         {
-            _buffData.Add(new ActiveBuffData(data.AffectedStats, data.BuffDuration, data.BuffID));
+            _buffData.Add(new ActiveBuffData(data.AffectedStats, data.BuffDuration, data.BuffID, data.isStackable, data.maxStacks));
         }
 
         CastTime = abilityData.castTime;

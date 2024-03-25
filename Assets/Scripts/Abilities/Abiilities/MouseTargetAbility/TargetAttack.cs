@@ -88,7 +88,7 @@ public class TargetAttack : Attack
             transform.localScale = targetScale;
         }
     }
-    public void DestoryEffect()
+    public void DestroyEffect()
     {
         GameObject.Destroy(gameObject);
     }

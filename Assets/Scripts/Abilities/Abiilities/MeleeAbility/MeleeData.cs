@@ -16,7 +16,10 @@ public class MeleeData : HitAbilityData
 {
     [Header("Melee Base Data")]
     public StatAssociation meleeDamage;
-    public StatAssociation critChance; 
+    public StatAssociation critChance;
+
+    [Header("Experimental Skill Aoe")]
+    public StatAssociation baseAoe;
 
     [Header("On Hit Effects")]
     public List<StatusEffect> statusEffects;

@@ -8,6 +8,7 @@ public class MeleeAttack : Attack
     {
         this.ability = ability;
         animator.SetFloat("AnimMulti", ability.MeleeData.originalCastTime / ability.CastTime);
+        this.transform.localScale = new Vector3(this.transform.localScale.x * ability.AbilityScale, this.transform.localScale.y * ability.AbilityScale, this.transform.localScale.z);
     }
 
     private void OnTriggerStay2D(Collider2D collision)

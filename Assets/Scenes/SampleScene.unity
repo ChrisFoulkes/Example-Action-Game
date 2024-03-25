@@ -37967,17 +37967,17 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1433464106}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 89.990456, y: 89.990456, z: 89.990456}
+  m_LocalScale: {x: 90, y: 90, z: 90}
   m_Children: []
   m_Father: {fileID: 447503291}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.133, y: 0.94636995}
-  m_AnchorMax: {x: 0.39900002, y: 0.9953699}
-  m_AnchoredPosition: {x: 2.5, y: 0.77996826}
-  m_SizeDelta: {x: -505, y: -52.359966}
+  m_AnchorMin: {x: 0.162, y: 0.94323426}
+  m_AnchorMax: {x: 0.4164792, y: 1}
+  m_AnchoredPosition: {x: -51.71997, y: 0}
+  m_SizeDelta: {x: -482.36, y: -60.63}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1433464108
 MonoBehaviour:
@@ -43266,7 +43266,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2104183188}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -0.15, y: 0.08, z: 0}
   m_LocalScale: {x: 5, y: 5, z: 1}
   m_Children: []
   m_Father: {fileID: 141492236}
@@ -43311,7 +43311,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: -1
+  m_SortingOrder: 0
   m_Sprite: {fileID: -2413806693520163455, guid: ebe73ca9363db456bacf42c025bb4847, type: 3}
   m_Color: {r: 0.735849, g: 0, b: 0, a: 0.20392157}
   m_FlipX: 0
@@ -43840,7 +43840,7 @@ PrefabInstance:
     - target: {fileID: 1585791619931099425, guid: 2f4fccf03f9d0b54cb71b98b46ba134e, type: 3}
       propertyPath: abilityDataList.Array.data[0]
       value: 
-      objectReference: {fileID: 11400000, guid: 30ef6173ac0689a439799b1332e66a0d, type: 2}
+      objectReference: {fileID: 11400000, guid: 9c8175d0110fd2645a24ecb208ca6031, type: 2}
     - target: {fileID: 1585791619931099425, guid: 2f4fccf03f9d0b54cb71b98b46ba134e, type: 3}
       propertyPath: abilityDataList.Array.data[1]
       value: 
@@ -43848,11 +43848,11 @@ PrefabInstance:
     - target: {fileID: 1585791619931099425, guid: 2f4fccf03f9d0b54cb71b98b46ba134e, type: 3}
       propertyPath: abilityDataList.Array.data[2]
       value: 
-      objectReference: {fileID: 11400000, guid: f765f598dbae93e4aabaf07e9919341a, type: 2}
+      objectReference: {fileID: 11400000, guid: ec681d9975fdc004f95a1a46c2edf14c, type: 2}
     - target: {fileID: 1585791619931099425, guid: 2f4fccf03f9d0b54cb71b98b46ba134e, type: 3}
       propertyPath: abilityDataList.Array.data[3]
       value: 
-      objectReference: {fileID: 11400000, guid: ec681d9975fdc004f95a1a46c2edf14c, type: 2}
+      objectReference: {fileID: 11400000, guid: 30ef6173ac0689a439799b1332e66a0d, type: 2}
     - target: {fileID: 1585791621033175843, guid: 2f4fccf03f9d0b54cb71b98b46ba134e, type: 3}
       propertyPath: playerMovement
       value: 
@@ -43911,12 +43911,16 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1585791621033175850, guid: 2f4fccf03f9d0b54cb71b98b46ba134e, type: 3}
       propertyPath: Stats.Array.size
-      value: 3
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 1585791621033175850, guid: 2f4fccf03f9d0b54cb71b98b46ba134e, type: 3}
       propertyPath: Stats.Array.data[2]
       value: 
       objectReference: {fileID: 11400000, guid: a6219336b88ab074ea899f8cdec7cbcd, type: 2}
+    - target: {fileID: 1585791621033175850, guid: 2f4fccf03f9d0b54cb71b98b46ba134e, type: 3}
+      propertyPath: Stats.Array.data[3]
+      value: 
+      objectReference: {fileID: 11400000, guid: 62f3f5eb8666f164094e7a36e1e84207, type: 2}
     - target: {fileID: 1585791621033175860, guid: 2f4fccf03f9d0b54cb71b98b46ba134e, type: 3}
       propertyPath: m_SortingOrder
       value: 4

@@ -10,4 +10,6 @@ public class BuffData : ScriptableObject
     public int BuffID;
     public List<AffectedStat> AffectedStats;
     public float BuffDuration;
+    public bool isStackable = false;
+    public int maxStacks = 1; 
 }

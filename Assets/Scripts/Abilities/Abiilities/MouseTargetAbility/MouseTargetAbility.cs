@@ -35,7 +35,7 @@ public class MouseTargetAbility : HitAbility
         
         foreach (BuffData data in aData.buffEffects)
         {
-            _buffEffects.Add(new ActiveBuffData(data.AffectedStats, data.BuffDuration, data.BuffID));
+            _buffEffects.Add(new ActiveBuffData(data.AffectedStats, data.BuffDuration, data.BuffID, data.isStackable, data.maxStacks));
         }
 
         _targetAttack = aData.attackPrefab;

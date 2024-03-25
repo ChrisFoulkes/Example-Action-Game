@@ -38,6 +38,7 @@ public abstract class Ability
     public float Cooldown{get;  private set;}
     public float CooldownEndTime { get; private set; }
     public float CastTime;
+    public float AbilityScale = 1;
 
     // Ability properties
     public Sprite Sprite { get; private set; }

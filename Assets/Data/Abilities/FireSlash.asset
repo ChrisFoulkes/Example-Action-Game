@@ -16,8 +16,8 @@ MonoBehaviour:
   abilityName: Fire Sword Slash
   abilityIcon: {fileID: 21300000, guid: 853e7f57af798974ca495f86aa89f131, type: 3}
   abilityType: 1
-  cooldown: 0.5
-  castTime: 0.45
+  cooldown: 0.4
+  castTime: 0.2
   isBufferable: 0
   shouldStopMovementOnCast: 1
   shouldForceCastingDirection: 1
@@ -29,15 +29,20 @@ MonoBehaviour:
   hitStun: 0.4
   meleeDamage:
     propertyName: Melee Damage
-    baseValue: -8
+    baseValue: -1
     associatedStats:
     - {fileID: 11400000, guid: a6219336b88ab074ea899f8cdec7cbcd, type: 2}
   critChance:
     propertyName: Crit Chance
-    baseValue: 0
+    baseValue: 0.01
     associatedStats:
     - {fileID: 11400000, guid: 65f80ef0b593f3042bebf02e2877640d, type: 2}
+  baseAoe:
+    propertyName: Aoe Scale
+    baseValue: 1
+    associatedStats:
+    - {fileID: 11400000, guid: 62f3f5eb8666f164094e7a36e1e84207, type: 2}
   statusEffects: []
   buffEffects:
-  - {fileID: 11400000, guid: de9c69b92bd199a4bac21996c5ba4a30, type: 2}
+  - {fileID: 11400000, guid: 9119c5889da6b6f4bbda36641e87dcf2, type: 2}
   meleePrefab: {fileID: 4924048172239069443, guid: ca18c01b29f7d424ab54f0f2536d62a1, type: 3}

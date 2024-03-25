@@ -8,12 +8,17 @@ public class ActiveBuff
     public int BuffID { get; private set; }
     public float Duration;
     public List<AffectedStat> AffectedStats;
+    public bool IsStackable;
+    public float MaxStacks;
+    public float StackCount = 0;
 
-    public ActiveBuff(int id, float duration, List<AffectedStat> affectedStats)
+    public ActiveBuff(int id, float duration, List<AffectedStat> affectedStats, bool isStackable, float maxStacks)
     {
         this.BuffID = id;
         this.Duration = duration;
         this.AffectedStats = affectedStats;
+        this.IsStackable = isStackable;
+        this.MaxStacks = maxStacks;
 
     }
 }
@@ -38,11 +43,31 @@ public class BuffController : MonoBehaviour
         if (activeBuff != null)
         {
             activeBuff.Duration = buffData.BuffDuration;
+
+            if (activeBuff.IsStackable && activeBuff.StackCount < activeBuff.MaxStacks)
+            {
+                foreach (AffectedStat affectedStat in buffData.AffectedStats)
+                {
+                    Debug.Log("STACK: " + activeBuff.StackCount);
+                    _characterStatsController.AlterStat(affectedStat.Stat.ID, -affectedStat.Amount * activeBuff.StackCount);
+                }
+
+                activeBuff.StackCount++; 
+                
+                foreach (AffectedStat affectedStat in buffData.AffectedStats)
+                {
+                    Debug.Log("STACK: " + activeBuff.StackCount);
+                    _characterStatsController.AlterStat(affectedStat.Stat.ID, affectedStat.Amount * activeBuff.StackCount);
+                }
+            }
         }
         else
         {
-            ActiveBuff newActiveBuff = new ActiveBuff(buffData.BuffID, buffData.BuffDuration, buffData.AffectedStats);
+            ActiveBuff newActiveBuff = new ActiveBuff(buffData.BuffID, buffData.BuffDuration, buffData.AffectedStats, buffData.IsStackable, buffData.MaxStacks);
+            newActiveBuff.StackCount++;
             StartCoroutine(HandleBuff(newActiveBuff, buffData));
+
+            
         }
     }
 
@@ -55,6 +80,7 @@ public class BuffController : MonoBehaviour
 
         foreach (AffectedStat affectedStat in buffData.AffectedStats)
         {
+            Debug.Log("STACK: " + activeBuff.StackCount);
             _characterStatsController.AlterStat(affectedStat.Stat.ID, affectedStat.Amount);
         }
 
@@ -78,6 +104,7 @@ public class BuffController : MonoBehaviour
         if (buffToRemove != null)
         {
             RemoveActiveBuff(buffToRemove);
+            
         }
         else
         {
@@ -89,11 +116,12 @@ public class BuffController : MonoBehaviour
     {
         foreach (AffectedStat affectedStat in activeBuff.AffectedStats)
         {
-            _characterStatsController.AlterStat(affectedStat.Stat.ID, -affectedStat.Amount);
+            _characterStatsController.AlterStat(affectedStat.Stat.ID, -affectedStat.Amount * activeBuff.StackCount);
         }
 
         BuffTracker buffTracker = _effectDisplay[activeBuff];
         _effectDisplay.Remove(activeBuff);
         Destroy(buffTracker.gameObject);
+        activeBuff.StackCount = 0;
     }
 }

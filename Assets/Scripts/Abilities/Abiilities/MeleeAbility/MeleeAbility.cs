@@ -1,8 +1,8 @@
 using EventCallbacks;
 using System.Collections;
 using System.Collections.Generic;
+using System.Xml.Linq;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 public class MeleeUpgradeHandler : UpgradeHandler
 {
@@ -34,14 +34,17 @@ public class ActiveMeleeData
 {
     public StatAssociation meleeDamage;
     public StatAssociation critChance;
+    public StatAssociation baseAoe;
     public float originalCastTime;
 
-    public ActiveMeleeData(StatAssociation meleeDamage, float castTime, StatAssociation critChance)
+    public ActiveMeleeData(StatAssociation meleeDamage, float castTime, StatAssociation critChance, StatAssociation baseAoe)
     {
         this.critChance = new StatAssociation(critChance);
         this.critChance.associatedStats = critChance.associatedStats;
         this.meleeDamage = new StatAssociation(meleeDamage);
         this.meleeDamage.associatedStats = meleeDamage.associatedStats;
+        this.baseAoe = new StatAssociation(baseAoe);
+        this.baseAoe.associatedStats = baseAoe.associatedStats;
         this.originalCastTime = castTime;
     }
 
@@ -53,18 +56,19 @@ public class MeleeAbility : HitAbility
     private MeleeAttack _meleeAttack;
     PlayerCasterContext _caster;
 
+
     private List<StatusEffect> _statusEffects;
     private List<ActiveBuffData> _buffEffects = new List<ActiveBuffData>();
 
     public MeleeAbility(MeleeData aData, CasterContext caster) : base(aData)
     {
-        MeleeData = new ActiveMeleeData(aData.meleeDamage, aData.castTime, aData.critChance);
+        MeleeData = new ActiveMeleeData(aData.meleeDamage, aData.castTime, aData.critChance, aData.baseAoe);
 
         _statusEffects = aData.statusEffects;
 
         foreach (BuffData data in aData.buffEffects)
         {
-            _buffEffects.Add(new ActiveBuffData(data.AffectedStats, data.BuffDuration, data.BuffID));
+            _buffEffects.Add(new ActiveBuffData(data.AffectedStats, data.BuffDuration, data.BuffID, data.isStackable, data.maxStacks));
         }
 
         _meleeAttack = aData.meleePrefab;
@@ -77,6 +81,9 @@ public class MeleeAbility : HitAbility
 
     protected override void OnCast()
     {
+
+        AbilityScale = MeleeData.baseAoe.CalculateModifiedValue(_caster.CharacterStatsController);
+
         GameObject melee = Object.Instantiate(_meleeAttack.gameObject, _caster.AttackSpawnPos.position, AbilityUtils.GetMeleeFiringRotation(_caster.transform.position));
        // GameObject melee = Object.Instantiate(_meleeAttack.gameObject, _caster.AttackSpawnPos.position, _meleeAttack.gameObject.transform.rotation);
 
